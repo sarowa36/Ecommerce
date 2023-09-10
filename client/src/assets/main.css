@@ -1,0 +1,29 @@
+@import './base.css';
+
+button.btn.theme_btn{
+  border-radius: 3px;
+border: 2px solid #224F34;
+background-color: transparent;
+color: #224F34;
+font-size: 18px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+}
+button.btn.theme_filled_btn{
+  border: 0px;
+  color: white;
+  border-radius: 3px;
+background: #224F34;
+box-shadow: 6px 33px 59px 0px rgba(0, 0, 0, 0.30);
+font-size: 20px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+}
+.theme_bg{
+  background: #C2EFD4;
+}
+.theme_bg_2{
+  background: #224F34;
+}

@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins");
+@import url("https://fonts.googleapis.com/css?family=Rufina");
+@import url("https://fonts.googleapis.com/css?family=Roboto+Slab");
+@font-face {
+  font-family: Elephant;
+  src: url("./Elephant.ttf");
+}
+*:not(svg,path){
+  font-family: Poppins;
+  color: #224F34;
+}
+a{
+  text-decoration: none !important;
+}
+img{
+  max-width: 100%;
+}
