@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 </script>
 
@@ -79,8 +78,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 <style scoped>
 .footer_bottom_links > a{
-    color: #FFF;
-font-family: Poppins;
+    color: var(--white-color);
+font-family: var(--first-font);
 font-size: 18px;
 font-style: normal;
 font-weight: 500;
@@ -89,7 +88,7 @@ text-transform: capitalize;
     padding-right: 15px;
 }
 .footer_bottom_border{
-    border: 1px solid #A3F3BE;
+    border: 1px solid var(--seventh-color);
     height: 0;
 }
 .mail_subscription{
@@ -99,18 +98,19 @@ text-transform: capitalize;
 .mail_subscription > input{
     width: 70%;
   background-color: transparent;
-  color: white;
+  color: var(--white-color);
   padding: 9px 17px;
   border-radius: 3px  0px  0px 3px;
-border: 2px solid #A3F3BE;
+border: 2px solid var(--seventh-color);
+outline: none;
 }
 .mail_subscription > input::placeholder{
     opacity: 1;
 }
 .mail_subscription > button{
     width:30%;
-    background: #A3F3BE;
-    border: 2px solid #A3F3BE;
+    background: var(--seventh-color);
+    border: 2px solid var(--seventh-color);
 }
 .footer_link_list{
   display: flex;
@@ -120,8 +120,8 @@ border: 2px solid #A3F3BE;
   padding-top: 12px;
 }
 .footer_link_list > a{
-  color: #C2EFD4;
-font-family: Poppins;
+  color: var(--sixth-color);
+font-family: var(--first-font);
 font-size: 19px;
 font-style: normal;
 font-weight: 500;
@@ -130,15 +130,15 @@ text-transform: capitalize;
 padding-bottom: 12px;
 }
 .social_list>svg {
-  color: #C2EFD4;
+  color: var(--sixth-color);
   width: 20px;
   height: 20px;
   padding-right: 10px;
 }
 
 .footer_title {
-  color: #FFF;
-  font-family: Roboto Slab;
+  color: var(--white-color);
+  font-family: var(--first-title-font);
   font-size: 22px;
   font-style: normal;
   font-weight: 500;
@@ -146,8 +146,8 @@ padding-bottom: 12px;
 }
 
 .logo {
-  color: #224F34;
-  font-family: Elephant;
+  color: var(--first-color);
+  font-family: var(--logo-font);
   font-size: 33px;
   font-style: normal;
   font-weight: 400;
@@ -155,8 +155,8 @@ padding-bottom: 12px;
 }
 
 .logo_white {
-  color: #FFF;
-  font-family: Elephant;
+  color: var(--white-color);
+  font-family: var(--logo-font);
   font-size: 50px;
   font-style: normal;
   font-weight: 400;
@@ -169,8 +169,8 @@ padding-bottom: 12px;
 }
 
 .navigation>a {
-  color: #224F34;
-  font-family: Poppins;
+  color: var(--first-color);
+  font-family: var(--first-font);
   font-size: 19px;
   font-style: normal;
   font-weight: 500;
@@ -185,7 +185,7 @@ padding-bottom: 12px;
 }
 
 .nav_user>svg {
-  color: #224F34;
+  color: var(--first-color);
   width: 20px;
   height: 20px;
 }

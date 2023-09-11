@@ -100,16 +100,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 <style scoped>
 
 .introduce_title {
-    color: #224F34;
-    font-family: Rufina;
+    font-family: var(--second-title-font);
     font-size: 86px;
-    font-style: normal;
     font-weight: 700;
-    line-height: normal;
 }
 
 .introduce_desc {
-    color: #267D49;
+    color: var(--second-color);
     font-size: 24px;
     font-style: normal;
     font-weight: 500;
@@ -128,7 +125,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 }
 
 .section_title {
-    font-family: Roboto Slab;
+    font-family: var(--first-title-font);
     font-size: 64px;
     font-style: normal;
     font-weight: 500;
@@ -145,7 +142,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 }
 
 .bs_title {
-    color: #373737;
+    color: var(--third-color);
     text-align: center;
     font-size: 21px;
     font-style: normal;
@@ -154,8 +151,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 }
 
 .bs_price {
-    color: #454545;
-    font-family: Poppins;
+    color: var(--third-color);
+    font-family: var(--first-font);
     font-size: 19px;
     font-style: normal;
     font-weight: 500;
@@ -164,7 +161,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 }
 
 .bs_star {
-    color: #454545;
+    color: var(--third-color);
     font-size: 19px;
     font-style: normal;
     font-weight: 500;
@@ -184,7 +181,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 }
 
 .ellipse_group::before {
-    background-color: #DFFBEA;
+    background-color: var(--fifth-color);
     content: '';
     position: absolute;
     height: 100%;
@@ -197,7 +194,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     padding: 3px;
     width: fit-content;
     clip-path: ellipse();
-    background-color: #328B56;
+    background-color: var(--fourth-color);
 }
 
 .ellipse_group+img {
@@ -205,16 +202,16 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     margin-left: 60px;
 }
 .offer_title{
-    color: #224F34;
-font-family: Roboto Slab;
+    color: var(--first-color);
+font-family: var(--first-title-font);
 font-size: 46px;
 font-style: normal;
 font-weight: 700;
 line-height: normal;
 }
 .offer_desc{
-    color: #224F34;
-font-family: Poppins;
+    color: var(--first-color);
+font-family: var(--first-font);
 font-size: 22px;
 font-style: normal;
 font-weight: 500;
@@ -225,9 +222,8 @@ line-height: 167%;
 gap: 35px;
 }
 .offer_timer > div{
-    color: #224F34;
     padding: 16px 29px;
-background-color: white;
+background-color: var(--white-color);
 border-radius: 3px;
 box-shadow: 0px 7px 30px 0px rgba(0, 0, 0, 0.05);
 }
@@ -240,27 +236,23 @@ font-size: 16px;
 font-weight: 500;
 }
 .product_filters>a{
-    color: #454545;
-font-family: Poppins;
+    color: var(--third-color);
 font-size: 22px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-text-transform: uppercase;
+transition: 0.3s;
 border-bottom: 1px solid transparent;
 }
 .product_filters>a:where(.active, :hover){
-    color: #224F34;
-    border-bottom: 1px solid #224F34;
+    color: var(--first-color);
+    border-bottom: 1px solid var(--first-color);
 }</style>
 <script>
 export default {
     data() {
         return {
             bestSellingProducts: [
-                { img: "src/assets/woman1.png", title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" },
-                { img: "src/assets/woman2.png", title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" },
-                { img: "src/assets/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }
+                { img: "http://img.sarowa36.com.tr/woman1.png", title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" },
+                { img: "http://img.sarowa36.com.tr/woman2.png", title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" },
+                { img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }
             ]
         }
     }

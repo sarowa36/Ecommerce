@@ -5,9 +5,23 @@
   font-family: Elephant;
   src: url("./Elephant.ttf");
 }
+:root{
+  --white-color:#fff;
+  --first-color:#224F34;
+  --second-color:#267D49;
+  --third-color:#454545;
+  --fourth-color:#328B56;
+  --fifth-color:#DFFBEA;
+  --sixth-color:#C2EFD4;
+  --seventh-color:#A3F3BE;
+  --first-title-font:Roboto Slab;
+  --second-title-font:Rufina;
+  --first-font:Poppins;
+  --logo-font:Elephant;
+}
 *:not(svg,path){
-  font-family: Poppins;
-  color: #224F34;
+  font-family: var(--first-font);
+  color: var(--first-color);
 }
 a{
   text-decoration: none !important;
