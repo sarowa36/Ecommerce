@@ -1,6 +1,7 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
+import ProductComponent from '../components/ProductComponent.vue';
+import { ProductModel } from '../models/ProductModel';
 
 </script>
 
@@ -31,12 +32,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
             <span class="col-12 section_desc">Get in on the trend with our curated selection of best-selling styles.</span>
         </div>
         <div class="row pt-3 bs_products">
-            <div class="col-4 d-flex flex-wrap text-center" v-for="pr in bestSellingProducts">
-                <img :src="pr.img" alt="" class="col-12">
-                <span class="col-12 mt-4 bs_title">{{ pr.title }}</span>
-                <span class="col-6 bs_price">${{ pr.price }}</span>
-                <span class="col-6 bs_star">{{ pr.star }} <FontAwesomeIcon icon="star"></FontAwesomeIcon></span>
-            </div>
+            <ProductComponent v-for="pr in bestSellingProducts.slice(0,3)" :model="new ProductModel(pr)" class="col-4"> </ProductComponent>
         </div>
         <div class="row pt-5 justify-content-center">
             <button class="btn theme_btn col-2">See All</button>
@@ -88,12 +84,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
                 <a href="#">New Arrivals</a>
                 <a href="#">Accessories</a></div>
            
-           <div class="col-3 d-flex flex-wrap text-center" v-for="pr in bestSellingProducts">
-                <img :src="pr.img" alt="" class="col-12">
-                <span class="col-12 mt-4 bs_title">{{ pr.title }}</span>
-                <span class="col-6 bs_price">${{ pr.price }}</span>
-                <span class="col-6 bs_star">{{ pr.star }} <FontAwesomeIcon icon="star"></FontAwesomeIcon></span>
-            </div>
+                <ProductComponent v-for="pr in bestSellingProducts" :model="new ProductModel(pr)" class="col-3"> </ProductComponent>
         </div>
     </section>
 </template>
@@ -141,32 +132,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     text-align: center;
 }
 
-.bs_title {
-    color: var(--third-color);
-    text-align: center;
-    font-size: 21px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-}
-
-.bs_price {
-    color: var(--third-color);
-    font-family: var(--first-font);
-    font-size: 19px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    border-right: 1px solid black;
-}
-
-.bs_star {
-    color: var(--third-color);
-    font-size: 19px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-}
 
 .ellipse_group {
     display: grid;
@@ -252,6 +217,7 @@ export default {
             bestSellingProducts: [
                 { img: "http://img.sarowa36.com.tr/woman1.png", title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" },
                 { img: "http://img.sarowa36.com.tr/woman2.png", title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" },
+                { img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" },
                 { img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }
             ]
         }

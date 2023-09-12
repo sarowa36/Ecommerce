@@ -3,8 +3,8 @@ Im creating a side project about E-Commerce. Frontend design based from [This De
 
 # Features Im Working On
 Im currently building only frontend side. I will add backend after than almost done frontend.
-- Clean css code.
 - More page
+- Mobile design
 - UI/UX improvments
 
 # Dependencies 

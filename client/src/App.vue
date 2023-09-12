@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
         </div>
         <div class="col-6 navigation">
           <RouterLink to="/">Home</RouterLink>
-          <RouterLink to="/">Shop</RouterLink>
+          <RouterLink to="/ProductList">Shop</RouterLink>
           <RouterLink to="/">Features</RouterLink>
           <RouterLink to="/">Contact</RouterLink>
         </div>
