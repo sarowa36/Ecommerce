@@ -1,41 +1,13 @@
 @import './base.css';
 
-button, .btn{
-  transition: 0.3s;
-}
-
-button.btn.theme_btn{
-  border-radius: 3px;
-border: 2px solid var(--first-color);
-background-color: transparent;
-color: var(--first-color);
-font-size: 18px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-}
-button.btn.theme_btn:where(:hover,.active,:focus){
-  background-color: var(--first-color);
-  color: var(--white-color);
-}
-button.btn.theme_filled_btn{
-  border: 0px;
-  color: var(--white-color);
-  border-radius: 3px;
-background: var(--first-color);
-box-shadow: 6px 33px 59px 0px rgba(0, 0, 0, 0.30);
-font-size: 20px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-}
-button.btn.theme_filled_btn:where(:hover,.active,:focus){
-  background-color: var(--white-color);
-  color: var(--first-color);
-}
-.theme_bg{
+.theme_bg {
   background: var(--sixth-color);
 }
-.theme_bg_2{
+
+.theme_bg_2 {
   background: var(--first-color);
+}
+
+.smooth_shadow {
+  box-shadow: 0px 0px 80px rgba(0, 0, 0, 0.15);
 }

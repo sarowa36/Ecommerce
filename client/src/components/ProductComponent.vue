@@ -3,7 +3,7 @@ import { ProductModel } from '../models/ProductModel';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 defineProps({
-    model:{
+    value:{
         type:ProductModel,
         required:true
     }
@@ -11,10 +11,10 @@ defineProps({
 </script>
 <template>
  <div class="d-flex flex-wrap text-center">
-                <img :src="model.img" alt="" class="col-12 bs_img">
-                <span class="col-12 mt-2 bs_title">{{ model.title }}</span>
-                <span class="col-6 bs_price">${{ model.price }}</span>
-                <span class="col-6 bs_star">{{ model.star }} <FontAwesomeIcon icon="star"></FontAwesomeIcon></span>
+                <img :src="value.img" alt="" class="col-12 bs_img">
+                <span class="col-12 mt-2 bs_title">{{ value.title }}</span>
+                <span class="col-6 bs_price">${{ value.price }}</span>
+                <span class="col-6 bs_star">{{ value.star }} <FontAwesomeIcon icon="star"></FontAwesomeIcon></span>
             </div>
 </template>
 <style>

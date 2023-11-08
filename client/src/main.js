@@ -1,8 +1,8 @@
-import './assets/main.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "select2/dist/css/select2.min.css";
 import "jquery-ui/dist/themes/ui-darkness/theme.css"
 import "jquery-ui/dist/themes/ui-darkness/jquery-ui.min.css"
+import './assets/main.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

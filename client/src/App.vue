@@ -18,7 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
         </div>
         <div class="col-3 nav_user">
           <FontAwesomeIcon icon="bag-shopping"></FontAwesomeIcon>
-          <button class="btn theme_btn">Login</button>
+          <button class="btn btn-primary">Login</button>
         </div>
       </div>
     </div>
@@ -190,7 +190,7 @@ padding-bottom: 12px;
   height: 20px;
 }
 
-.theme_btn {
+.btn-primary {
   padding-left: 25px;
   padding-right: 25px;
 }</style>

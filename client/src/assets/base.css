@@ -14,10 +14,12 @@
   --fifth-color:#DFFBEA;
   --sixth-color:#C2EFD4;
   --seventh-color:#A3F3BE;
+  --slider-connect-bg:#C2EFD4;
   --first-title-font:Roboto Slab;
   --second-title-font:Rufina;
   --first-font:Poppins;
   --logo-font:Elephant;
+  --bs-border-radius:3px;
 }
 *:not(svg,path){
   font-family: var(--first-font);
@@ -28,4 +30,41 @@ a{
 }
 img{
   max-width: 100%;
+}
+button,
+.btn {
+  transition: 0.3s;
+  border-radius: var(--bs-border-radius);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.btn-primary {
+  --bs-btn-color: var(--first-color);
+  --bs-btn-bg: transparent;
+  --bs-btn-border-color: var(--first-color);
+
+  --bs-btn-hover-color: var(--white-color);
+  --bs-btn-hover-bg: var(--first-color);
+  --bs-btn-hover-border-color: var(--first-color);
+
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  --bs-btn-active-color: var(--white-color);
+  --bs-btn-active-bg: var(--first-color);
+  --bs-btn-active-border-color:var(--first-color);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.btn-secondary{
+  --bs-btn-color: var(--white-color);
+  --bs-btn-bg: var(--first-color);
+  --bs-btn-border-width:0;
+  --bs-btn-hover-color:var(--first-color);
+  --bs-btn-hover-bg: var(--white-color);
+
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  --bs-btn-active-color: var(--first-color);
+  --bs-btn-active-bg: var(--white-color);
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }

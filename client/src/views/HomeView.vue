@@ -16,7 +16,7 @@ import { ProductModel } from '../models/ProductModel';
                     <span class="introduce_desc">
                         Explore our curated collection of stylish clothing and accessories tailored to your unique taste.
                     </span>
-                    <button class="btn theme_filled_btn">
+                    <button class="btn btn-secondary shadow">
                         Explore Now
                     </button>
                 </div>
@@ -32,10 +32,10 @@ import { ProductModel } from '../models/ProductModel';
             <span class="col-12 section_desc">Get in on the trend with our curated selection of best-selling styles.</span>
         </div>
         <div class="row pt-3 bs_products">
-            <ProductComponent v-for="pr in bestSellingProducts.slice(0,3)" :model="new ProductModel(pr)" class="col-4"> </ProductComponent>
+            <ProductComponent v-for="pr in bestSellingProducts.slice(0,3)" :value="pr" class="col-4"> </ProductComponent>
         </div>
         <div class="row pt-5 justify-content-center">
-            <button class="btn theme_btn col-2">See All</button>
+            <button class="btn btn-primary col-2">See All</button>
         </div>
     </section>
     <section class="container mt-5 theme_bg">
@@ -71,7 +71,7 @@ import { ProductModel } from '../models/ProductModel';
                     <div class="offer_hour"><h5>18</h5><span>Hours</span></div>
                     <div class="offer_minute"><h5>48</h5><span>Minute</span></div>
                 </div>
-                <button class="btn theme_filled_btn">Get Now</button>
+                <button class="btn btn-secondary shadow">Get Now</button>
             </div>
         </div>
     </section>
@@ -84,7 +84,7 @@ import { ProductModel } from '../models/ProductModel';
                 <a href="#">New Arrivals</a>
                 <a href="#">Accessories</a></div>
            
-                <ProductComponent v-for="pr in bestSellingProducts" :model="new ProductModel(pr)" class="col-3"> </ProductComponent>
+                <ProductComponent v-for="pr in bestSellingProducts" :value="pr" class="col-3"> </ProductComponent>
         </div>
     </section>
 </template>
@@ -110,7 +110,7 @@ import { ProductModel } from '../models/ProductModel';
     justify-content: center;
 }
 
-.theme_filled_btn {
+.btn-secondary {
     width: fit-content;
     padding: 15px 35px;
 }
@@ -215,11 +215,11 @@ export default {
     data() {
         return {
             bestSellingProducts: [
-                { img: "http://img.sarowa36.com.tr/woman1.png", title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" },
-                { img: "http://img.sarowa36.com.tr/woman2.png", title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" },
-                { img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" },
-                { img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }
-            ]
+            new ProductModel({ img: "http://img.sarowa36.com.tr/woman1.png", title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
+               new ProductModel( { img: "http://img.sarowa36.com.tr/woman2.png", title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
+               new ProductModel( { img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }),
+               new ProductModel( { img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })
+             ]
         }
     }
 }
