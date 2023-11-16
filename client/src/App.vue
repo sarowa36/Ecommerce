@@ -1,6 +1,7 @@
-<script setup lang="ts">
+<script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import jQuery from 'jquery'
 </script>
 
 <template>

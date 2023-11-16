@@ -59,9 +59,11 @@ button,
 .btn-secondary{
   --bs-btn-color: var(--white-color);
   --bs-btn-bg: var(--first-color);
-  --bs-btn-border-width:0;
+  --bs-btn-border-width:1px;
+
   --bs-btn-hover-color:var(--first-color);
   --bs-btn-hover-bg: var(--white-color);
+  --bs-btn-hover-border-color: var(--fourth-color);
 
   --bs-btn-focus-shadow-rgb: 49, 132, 253;
   --bs-btn-active-color: var(--first-color);

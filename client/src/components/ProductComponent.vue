@@ -1,21 +1,23 @@
 <script setup>
 import { ProductModel } from '../models/ProductModel';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { RouterLink } from 'vue-router';
+import {Guid} from "guid-typescript"
 
 defineProps({
-    value:{
-        type:ProductModel,
-        required:true
-    }
+  value: {
+    type: ProductModel,
+    required: true
+  }
 })
 </script>
 <template>
- <div class="d-flex flex-wrap text-center">
-                <img :src="value.img" alt="" class="col-12 bs_img">
-                <span class="col-12 mt-2 bs_title">{{ value.title }}</span>
-                <span class="col-6 bs_price">${{ value.price }}</span>
-                <span class="col-6 bs_star">{{ value.star }} <FontAwesomeIcon icon="star"></FontAwesomeIcon></span>
-            </div>
+  <RouterLink :to="'/Product?v='+Guid.create().toString()" class="d-flex flex-wrap text-center">
+    <img :src="value.img" alt="" class="col-12 bs_img">
+    <span class="col-12 mt-2 bs_title">{{ value.title }}</span>
+    <span class="col-6 bs_price">${{ value.price }}</span>
+    <span class="col-6 bs_star">{{ value.star }} <FontAwesomeIcon icon="star"></FontAwesomeIcon></span>
+  </RouterLink>
 </template>
 <style>
 .bs_title {
@@ -46,6 +48,8 @@ defineProps({
   line-height: normal;
   height: fit-content;
 }
-.bs_img{
+
+.bs_img {
   height: fit-content;
-}</style>
+}
+</style>
