@@ -3,8 +3,8 @@ Im creating a side project about E-Commerce. Frontend design based from [This De
 
 # Features Im Working On
 Im currently building only frontend side. I will add backend after than almost done frontend.
-- More page
-- Mobile design
+- Contact, Cart, Login, Register, Profile Dashboard(Last Order, Personal Information, Password Change) Pages
+- Mobile design (Home :white_check_mark:)
 - UI/UX improvments
 
 # Dependencies 

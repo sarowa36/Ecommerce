@@ -27,6 +27,7 @@ import router from './router'
     
     await import('owl.carousel');
     await import("jquery-ui/dist/jquery-ui");
+    await import("bootstrap/dist/js/bootstrap.min.js")
     select2()
     library.add(far)
     library.add(fas)

@@ -2,7 +2,7 @@
 import Carousel from "../components/Carousel.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Tabs, Tab } from 'vue3-tabs-component';
-import {ProductModel} from "../models/ProductModel";
+import { ProductModel } from "../models/ProductModel";
 import ProductComponent from "../components/ProductComponent.vue";
 </script> 
 <template>
@@ -60,12 +60,41 @@ import ProductComponent from "../components/ProductComponent.vue";
                     <button class="btn">
                         <FontAwesomeIcon :icon="['far', 'heart']" /> Like
                     </button>
-                    <button class="btn">
-                        <FontAwesomeIcon :icon="['far', 'bookmark']" /> Save
-                    </button>
-                    <button class="btn">
-                        <FontAwesomeIcon icon="share" /> Share
-                    </button>
+                    <div class="save_btn_outer">
+                        <button :class="'btn' + (showListDropdown ? ' active' : '')" @click="toggleShowListDropdown">
+                            <FontAwesomeIcon :icon="['far', 'bookmark']" /> Save
+                        </button>
+                        <div v-if="showListDropdown" class="save_btn_dropdown">
+                            <h6>Add To List</h6>
+                            <ul>
+                                <li><button class="btn">Lorem Ipsum
+                                        <FontAwesomeIcon :icon="['far', 'bookmark']" />
+                                    </button></li>
+                                <li><button class="btn">Lorem Ipsum
+                                        <FontAwesomeIcon :icon="['fas', 'bookmark']" />
+                                    </button></li>
+                                <li><button class="btn">Lorem Ipsum
+                                        <FontAwesomeIcon :icon="['far', 'bookmark']" />
+                                    </button></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="share_btn_outer">
+                        <button :class="'btn' +(showShareDropdown ? ' active': '')" @click="toggleShowShareDropdown">
+                            <FontAwesomeIcon icon="share" /> Share
+                        </button>
+                        <div v-if="showShareDropdown" class="share_btn_dropdown">
+                            <a href="#">
+                                <FontAwesomeIcon icon="link" />
+                            </a>
+                            <a href="#">
+                                <FontAwesomeIcon :icon="['fab','whatsapp']" />
+                            </a>
+                            <a href="#">
+                                <FontAwesomeIcon :icon="['fab','instagram']" />
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,17 +137,27 @@ import ProductComponent from "../components/ProductComponent.vue";
                                         <img src="/src/assets/rating_disabled_star.svg" alt="">
                                         <img src="/src/assets/rating_star.svg" class="active" alt="">
                                     </div>
-                                    <div class="comment_meta_inner">
+                                    <div>
                                         12 October, Saturday 2023 | D***** Z*****
                                     </div>
                                 </div>
                                 <div class="comment_text theme_bg_3">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. 
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+                                    has been the industry's standard dummy text ever since the 1500s, when an unknown
+                                    printer took a galley of type and scrambled it to make a type specimen book. It has
+                                    survived not only five centuries, but also the leap into electronic typesetting,
+                                    remaining essentially unchanged. It was popularised in the 1960s with the release of
+                                    Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+                                    publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                                 </div>
                                 <div class="comment_like_dislike">
                                     <span>Is this comment useful?</span>
-                                    <button class="btn"><FontAwesomeIcon :icon="['far','thumbs-up']" /> 3</button>
-                                    <button class="btn"><FontAwesomeIcon :icon="['far','thumbs-down']" /> 2</button>
+                                    <button class="btn">
+                                        <FontAwesomeIcon :icon="['far', 'thumbs-up']" /> 3
+                                    </button>
+                                    <button class="btn">
+                                        <FontAwesomeIcon :icon="['far', 'thumbs-down']" /> 2
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -132,23 +171,66 @@ import ProductComponent from "../components/ProductComponent.vue";
                                         <img src="/src/assets/rating_disabled_star.svg" alt="">
                                         <img src="/src/assets/rating_star.svg" class="active" alt="">
                                     </div>
-                                    <div class="comment_meta_inner">
+                                    <div>
                                         12 October, Saturday 2023 | D***** Z*****
                                     </div>
                                 </div>
                                 <div class="comment_text theme_bg_3">
-                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. 
+                                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+                                    has been the industry's standard dummy text ever since the 1500s, when an unknown
+                                    printer took a galley of type and scrambled it to make a type specimen book. It has
+                                    survived not only five centuries, but also the leap into electronic typesetting,
+                                    remaining essentially unchanged. It was popularised in the 1960s with the release of
+                                    Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+                                    publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                                 </div>
                                 <div class="comment_like_dislike">
                                     <span>Is this comment useful?</span>
-                                    <button class="btn"><FontAwesomeIcon :icon="['far','thumbs-up']" /> 3</button>
-                                    <button class="btn"><FontAwesomeIcon :icon="['far','thumbs-down']" /> 2</button>
+                                    <button class="btn">
+                                        <FontAwesomeIcon :icon="['far', 'thumbs-up']" /> 3
+                                    </button>
+                                    <button class="btn">
+                                        <FontAwesomeIcon :icon="['far', 'thumbs-down']" /> 2
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </Tab>
                     <Tab name="Questions">
-
+                        <div class="question">
+                            <h5>Question</h5>
+                            <div class="question_text theme_bg_3">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus doloremque iusto
+                                perspiciatis, illum possimus vel?
+                            </div>
+                            <div class="question_meta">
+                                12 September 2023 | A**** Z****
+                            </div>
+                            <h5>Answer</h5>
+                            <div class="question_answer">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, corrupti!
+                            </div>
+                            <div>
+                                12 September 2023
+                            </div>
+                        </div>
+                        <div class="question">
+                            <h5>Question</h5>
+                            <div class="question_text theme_bg_3">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus doloremque iusto
+                                perspiciatis, illum possimus vel?
+                            </div>
+                            <div class="question_meta">
+                                12 September 2023 | A**** Z****
+                            </div>
+                            <h5>Answer</h5>
+                            <div class="question_answer">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, corrupti!
+                            </div>
+                            <div>
+                                12 September 2023
+                            </div>
+                        </div>
                     </Tab>
                 </Tabs>
             </div>
@@ -221,55 +303,155 @@ import ProductComponent from "../components/ProductComponent.vue";
     align-items: center;
     gap: 15px;
 }
-.comment_outer{
+
+.comment_outer {
     display: flex;
 }
-.comment_picture{
+
+.comment_picture {
     width: 20%;
     text-align: center;
 }
-.comment_picture > img{
-    aspect-ratio:1;
+
+.comment_picture>img {
+    aspect-ratio: 1;
     object-fit: cover;
-    width:50%;
+    width: 50%;
     border-radius: 100%;
 }
-.comment_inner{
+
+.comment_inner {
     width: 80%;
 }
-.comment_meta_outer{
+
+.comment_meta_outer {
     display: flex;
     column-gap: 25px;
 }
-.comment_text{
-padding: 15px 35px;
+
+.comment_text {
+    padding: 15px 35px;
     margin-top: 15px;
     border-radius: 15px;
-    
+
 }
-.comment_like_dislike{
+
+.comment_like_dislike {
     padding: 10px;
 }
-.comment_like_dislike > button{
-    --bs-btn-border-width:0;
+
+.comment_like_dislike>button {
+    --bs-btn-border-width: 0;
 }
-.comment_outer{
-   border-top: 1px solid var(--sixth-color);
-  padding-top: 40px;
+
+.comment_outer {
+    border-top: 1px solid var(--sixth-color);
+    padding-top: 40px;
     padding-bottom: 24px;
 }
-.comment_outer:first-child{
+
+.comment_outer:first-child {
+    padding-top: 0px;
     border-top: none;
-}</style>
+}
+
+.question_text {
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.question_meta {
+    margin-bottom: 10px;
+}
+
+.question_answer {
+    background-color: var(--fifth-color);
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.question {
+    border-top: 1px solid var(--sixth-color);
+    padding-top: 24px;
+    padding-bottom: 24px;
+}
+
+.question:first-child {
+    border-top: none;
+    padding-top: 0px;
+}
+
+.product_buttons_section {
+    display: flex;
+    width: 100%;
+    column-gap: 25px;
+}
+
+.save_btn_outer {
+    position: relative;
+}
+
+.save_btn_dropdown {
+    position: absolute;
+    background-color: white;
+    width: 250px;
+    padding: 15px;
+    right: calc(-50% - 22px);
+    margin-top: 10px;
+}
+
+.save_btn_dropdown ul {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.save_btn_dropdown ul button {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.share_btn_outer{
+    position: relative;
+}
+.share_btn_dropdown{
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    padding:5px;
+    column-gap: 5px;
+    left: calc(-50% + 20px);
+    border-radius: 25px;
+    margin-top: 10px;
+}
+.share_btn_dropdown > a{
+    border:1px solid;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+.share_btn_dropdown > a:hover {
+  background: black;
+  color: white;
+  border-color: black;
+}
+</style>
 <script>
 export default {
     data: () => {
         return {
             productCartCount: 1,
-            products:[ 
+            products: [
                 new ProductModel({ img: "http://img.sarowa36.com.tr/woman1.png", title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
                 new ProductModel({ img: "http://img.sarowa36.com.tr/woman2.png", title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
-                new ProductModel({ img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })]
+                new ProductModel({ img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })],
+            showListDropdown: false,
+            showShareDropdown:false
         }
     },
     methods: {
@@ -279,6 +461,12 @@ export default {
         decreaseCartCount() {
             if (this.productCartCount > 1)
                 this.productCartCount--;
+        },
+        toggleShowListDropdown() {
+            this.showListDropdown = !this.showListDropdown;
+        },
+        toggleShowShareDropdown() {
+            this.showShareDropdown = !this.showShareDropdown;
         }
     }
 }

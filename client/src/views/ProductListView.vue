@@ -130,24 +130,6 @@ export default {
                 new ProductModel({ img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }),
                 new ProductModel({ img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })
             ],
-            /*  filterList: [
-              new Filter<string, Array<string>>("Categories","list", arraystringConverter, (val) => val != null && val.length > 0),
-              new Filter<string, Array<string>>("Size","up-right-and-down-left-from-center", arraystringConverter, (val) => val != null && val.length > 0),
-              new Filter<string, string>("Sort" ,"shuffle",
-                  (val) => val.value != null && val.value.length > 0 ? val.value : val.filterName,
-                  (val) => val != null && val.length > 0)],
-              priceFilter: new Filter<number, { minPrice?: number, maxPrice?: number }>("Price","hand-holding-dollar", (param) => {
-                  if (param.value) {
-                      let val = param.value;
-                      if (val[0] && val[1])
-                          return val[0].toString() + "$ - " + val[1].toString() + "$"
-                      else if (val[0])
-                          return val[0].toString() + "$+"
-                      else if (val[1])
-                          return val[1].toString() + "$-"
-                  }
-                  return param.filterName
-              },(val) => val && (val[1] != null && val[1] > 0 || val[0] != null && val[0] > 0))*/
               categoryFilter:{
                 active: false,
                 value: [],

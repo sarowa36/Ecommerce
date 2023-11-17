@@ -9,7 +9,7 @@ import { ProductModel } from '../models/ProductModel';
     <div class="theme_bg">
         <div class="container pt-5 pb-5">
             <div class="row">
-                <div class="col-7 introduce_letters">
+                <div class="col-lg-7 introduce_letters">
                     <h1 class="introduce_title">
                         Discover and Find Your Own Fashion!
                     </h1>
@@ -21,7 +21,7 @@ import { ProductModel } from '../models/ProductModel';
                     </button>
                 </div>
                 <div class="col-5">
-                    <img src="../assets/greenwoman.png" alt="">
+                    <img class="introduce_img" src="../assets/greenwoman.png" alt="">
                 </div>
             </div>
         </div>
@@ -31,8 +31,9 @@ import { ProductModel } from '../models/ProductModel';
             <h2 class="col-12 section_title">Best Selling</h2>
             <span class="col-12 section_desc">Get in on the trend with our curated selection of best-selling styles.</span>
         </div>
-        <div class="row pt-3 bs_products">
-            <ProductComponent v-for="pr in bestSellingProducts.slice(0,3)" :value="pr" class="col-4"> </ProductComponent>
+        <div class="row pt-3 justify-content-center">
+            <ProductComponent v-for="pr in bestSellingProducts.slice(0, 3)" :value="pr" class="col-sm-6 col-md-4 mt-3">
+            </ProductComponent>
         </div>
         <div class="row pt-5 justify-content-center">
             <button class="btn btn-primary col-2">See All</button>
@@ -40,7 +41,7 @@ import { ProductModel } from '../models/ProductModel';
     </section>
     <section class="container mt-5 theme_bg">
         <div class="row">
-            <div class="col-5 d-flex position-relative">
+            <div class="col-lg-5 position-relative offer_img_outer">
                 <div class="ellipse_group">
                     <div></div>
                     <div></div>
@@ -61,15 +62,22 @@ import { ProductModel } from '../models/ProductModel';
                 </div>
                 <img src="/src/assets/offerwoman.png" alt="">
             </div>
-            <div class="col-6 d-flex flex-column justify-content-evenly">
+            <div class="col-lg-6 d-flex flex-column justify-content-evenly offer_details">
                 <h3 class="offer_title">Exclusive offer</h3>
                 <span class="offer_desc">
-                    Unlock the ultimate style upgrade with our exclusive offer Enjoy savings of up to 40% off on our latest New Arrivals
+                    Unlock the ultimate style upgrade with our exclusive offer Enjoy savings of up to 40% off on our latest
+                    New Arrivals
                 </span>
                 <div class="offer_timer">
-                    <div class="offer_day"><h5>06</h5><span>Days</span></div>
-                    <div class="offer_hour"><h5>18</h5><span>Hours</span></div>
-                    <div class="offer_minute"><h5>48</h5><span>Minute</span></div>
+                    <div class="offer_day">
+                        <h5>06</h5><span>Days</span>
+                    </div>
+                    <div class="offer_hour">
+                        <h5>18</h5><span>Hours</span>
+                    </div>
+                    <div class="offer_minute">
+                        <h5>48</h5><span>Minute</span>
+                    </div>
                 </div>
                 <button class="btn btn-secondary shadow">Get Now</button>
             </div>
@@ -78,18 +86,18 @@ import { ProductModel } from '../models/ProductModel';
     <section class="container mt-4">
         <div class="row">
             <h2 class="section_title">Our Products</h2>
-            <div class="product_filters d-flex justify-content-evenly mt-3 mb-5">
+            <div class="product_filters mt-3 mb-3">
                 <a href="#">Sale</a>
                 <a href="#">Hot</a>
                 <a href="#">New Arrivals</a>
-                <a href="#">Accessories</a></div>
-           
-                <ProductComponent v-for="pr in bestSellingProducts" :value="pr" class="col-3"> </ProductComponent>
+                <a href="#">Accessories</a>
+            </div>
+            <ProductComponent v-for="pr in bestSellingProducts" :value="pr" class="col-sm-6 col-lg-3 mt-3">
+            </ProductComponent>
         </div>
     </section>
 </template>
 <style scoped>
-
 .introduce_title {
     font-family: var(--second-title-font);
     font-size: 86px;
@@ -166,60 +174,95 @@ import { ProductModel } from '../models/ProductModel';
     z-index: 2;
     margin-left: 60px;
 }
-.offer_title{
+
+.offer_title {
     color: var(--first-color);
-font-family: var(--first-title-font);
-font-size: 46px;
-font-style: normal;
-font-weight: 700;
-line-height: normal;
+    font-family: var(--first-title-font);
+    font-size: 46px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
 }
-.offer_desc{
+
+.offer_desc {
     color: var(--first-color);
-font-family: var(--first-font);
-font-size: 22px;
-font-style: normal;
-font-weight: 500;
-line-height: 167%;
+    font-family: var(--first-font);
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 167%;
 }
-.offer_timer{
+
+.offer_timer {
     display: flex;
-gap: 35px;
+    gap: 35px;
+    flex-wrap: wrap;
 }
-.offer_timer > div{
+
+.offer_timer>div {
     padding: 16px 29px;
-background-color: var(--white-color);
-border-radius: 3px;
-box-shadow: 0px 7px 30px 0px rgba(0, 0, 0, 0.05);
+    background-color: var(--white-color);
+    border-radius: 3px;
+    box-shadow: 0px 7px 30px 0px rgba(0, 0, 0, 0.05);
 }
-.offer_timer > div>h5{
+
+.offer_timer>div>h5 {
     font-size: 32px;
     font-weight: 600;
 }
-.offer_timer > div>span{
-font-size: 16px;
-font-weight: 500;
+
+.offer_timer>div>span {
+    font-size: 16px;
+    font-weight: 500;
 }
-.product_filters>a{
+.product_filters{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;    
+}
+.product_filters>a {
     color: var(--third-color);
-font-size: 22px;
-transition: 0.3s;
-border-bottom: 1px solid transparent;
+    font-size: 22px;
+    transition: 0.3s;
+    border-bottom: 1px solid transparent;
 }
-.product_filters>a:where(.active, :hover){
+
+.product_filters>a:where(.active, :hover) {
     color: var(--first-color);
     border-bottom: 1px solid var(--first-color);
+}
+
+.offer_img_outer {
+    display: flex;
+}
+
+.offer_details {
+    row-gap: 15px;
+    padding: 25px 35px;
+}
+
+@media (max-width:992px) {
+
+    .offer_img_outer,
+    .introduce_img {
+        display: none;
+    }
+}
+@media (max-width: 768px) {
+    .product_filters{
+        flex-direction: column;
+    }
 }</style>
 <script>
 export default {
     data() {
         return {
             bestSellingProducts: [
-            new ProductModel({ img: "http://img.sarowa36.com.tr/woman1.png", title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
-               new ProductModel( { img: "http://img.sarowa36.com.tr/woman2.png", title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
-               new ProductModel( { img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }),
-               new ProductModel( { img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })
-             ]
+                new ProductModel({ img: "http://img.sarowa36.com.tr/woman1.png", title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
+                new ProductModel({ img: "http://img.sarowa36.com.tr/woman2.png", title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
+                new ProductModel({ img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }),
+                new ProductModel({ img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })
+            ]
         }
     }
 }
