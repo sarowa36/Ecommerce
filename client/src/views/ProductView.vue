@@ -6,7 +6,7 @@ import { ProductModel } from "../models/ProductModel";
 import ProductComponent from "../components/ProductComponent.vue";
 </script> 
 <template>
-    <div class="container">
+    <div class="container mb-5">
         <div class="row justify-content-center theme_bg_3 mt-5 pt-4 pb-4">
             <div class="col-5">
                 <Carousel :items="1" :nav="false">

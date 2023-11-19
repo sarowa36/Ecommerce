@@ -22,7 +22,7 @@ import jQuery from 'jquery'
             <RouterLink to="/">Home</RouterLink>
             <RouterLink to="/ProductList">Shop</RouterLink>
             <RouterLink to="/">Features</RouterLink>
-            <RouterLink to="/">Contact</RouterLink>
+            <RouterLink to="/Contact">Contact</RouterLink>
             <RouterLink to="/">
               <FontAwesomeIcon v-if="$screen.width > 992" icon="bag-shopping"></FontAwesomeIcon><span v-else>Cart</span>
             </RouterLink>
@@ -33,7 +33,7 @@ import jQuery from 'jquery'
     </div>
   </div>
   <RouterView />
-  <footer class="theme_bg_2 mt-5">
+  <footer class="theme_bg_2">
     <div class="container">
       <div class="row footer_menu_row justify-content-between pt-5">
         <div class="col-md-6 col-lg-3">

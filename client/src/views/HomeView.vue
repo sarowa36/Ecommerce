@@ -83,7 +83,7 @@ import { ProductModel } from '../models/ProductModel';
             </div>
         </div>
     </section>
-    <section class="container mt-4">
+    <section class="container mt-4 mb-5">
         <div class="row">
             <h2 class="section_title">Our Products</h2>
             <div class="product_filters mt-3 mb-3">

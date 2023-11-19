@@ -5,19 +5,9 @@ import { ProductModel } from '../models/ProductModel';
 import Slider from '@vueform/slider'
 </script> 
 <template>
-    <div class="container">
+    <div class="container mb-5">
         <div class="row">
             <div class="col-12 mt-5 mb-4 filter_list">
-                <!-- <button :class="'btn'+(priceFilter.isActive() ? ' active':'') " @click="deneme">
-                    <FontAwesomeIcon :icon="priceFilter.icon"></FontAwesomeIcon>
-                    <span> {{ priceFilter.valueAsString() }}</span>
-                        <FontAwesomeIcon icon='chevron-down' ></FontAwesomeIcon>
-                </button>
-                 <button v-for="i in filterList" :class="'btn'+ (i.isActive() ? ' active':'')" >
-                    <FontAwesomeIcon :icon="i.icon"></FontAwesomeIcon>
-                    <span> {{ i.valueAsString() }}</span>
-                    <FontAwesomeIcon :icon="i.isActive() ? 'xmark-circle':'chevron-down'"></FontAwesomeIcon>
-                </button> -->
                 <div class="filter">
                     <button :class="'btn' + (categoryFilter.active ? ' active' : '')" @click="showFilter('categoryFilter')">
                         <FontAwesomeIcon icon="list"></FontAwesomeIcon>
@@ -116,7 +106,7 @@ import Slider from '@vueform/slider'
                     </div>
                 </div>
             </div>
-            <ProductComponent v-for="pr in products" :value="pr" class="col-3"></ProductComponent>
+            <ProductComponent v-for="pr in products" :value="pr" class="col-sm-6 col-md-4 col-lg-3 mb-5"></ProductComponent>
         </div>
     </div>
 </template>
