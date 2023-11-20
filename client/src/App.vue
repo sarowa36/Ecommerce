@@ -26,7 +26,7 @@ import jQuery from 'jquery'
             <RouterLink to="/">
               <FontAwesomeIcon v-if="$screen.width > 992" icon="bag-shopping"></FontAwesomeIcon><span v-else>Cart</span>
             </RouterLink>
-            <RouterLink to="/" :class="$screen.width > 992 ? 'btn btn-primary' : ''">Login</RouterLink>
+            <RouterLink to="/Login" :class="$screen.width > 992 ? 'btn btn-primary' : ''">Login</RouterLink>
           </div>
         </div>
       </div>
