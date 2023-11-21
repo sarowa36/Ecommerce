@@ -1,5 +1,6 @@
 <script setup>
 import TextBox from '../components/TextBox.vue';
+import { useLoginStore } from './../stores/LoginStore';
 </script>
 <template>
     <div class="container mt-5 mb-5 pt-1 pb-1">
@@ -17,7 +18,7 @@ import TextBox from '../components/TextBox.vue';
                         <TextBox placeholder="Password" />
                     </div>
                     <div class="col-md-7 mt-5 form-group login_form_buttons">
-                        <button class="btn btn-primary">Sign In</button><button class="btn btn-primary">Sign Up</button>
+                        <button class="btn btn-primary" @click="login">Sign In</button><button class="btn btn-primary">Sign Up</button>
                     </div>
                     <div class="col-md-7 mt-5 text-center">
                         <RouterLink to="" class="forgot_password">Forgot Password?</RouterLink>
@@ -74,13 +75,19 @@ import TextBox from '../components/TextBox.vue';
     .login_form_buttons {
         flex-direction: column;
     }
-
-    /*    .login_image_section{
-    filter: blur(2px);
-}    
-.login_form_section{
-    position: absolute;
-  background-color: rgba(255,255,255,.6);
-  height: 100%;
-}*/
-}</style>
+}
+</style>
+<script>
+export default {
+    data(){
+        return {
+            loginStore:useLoginStore()
+        };
+    },
+methods:{
+    login(){
+        this.loginStore.SignIn();
+    }
+}
+}
+</script>

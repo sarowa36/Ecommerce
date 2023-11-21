@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import jQuery from 'jquery'
+import { useLoginStore } from './stores/LoginStore';
 </script>
 
 <template>
@@ -26,7 +26,8 @@ import jQuery from 'jquery'
             <RouterLink to="/">
               <FontAwesomeIcon v-if="$screen.width > 992" icon="bag-shopping"></FontAwesomeIcon><span v-else>Cart</span>
             </RouterLink>
-            <RouterLink to="/Login" :class="$screen.width > 992 ? 'btn btn-primary' : ''">Login</RouterLink>
+            <RouterLink to="/Login" v-if="!loginStore.isLogged" :class="$screen.width > 992 ? 'btn btn-primary' : ''">Login</RouterLink>
+            <RouterLink to="/Profile" v-else>Profile</RouterLink>
           </div>
         </div>
       </div>
@@ -247,8 +248,14 @@ row-gap: 20px;
 </style>
 <script>
 export default {
+  data(){
+    return {
+      loginStore:useLoginStore()
+    }
+  },
   watch: {
     '$route'(to, from) {
+      
       var isHashChanged = to.fullPath.replace(to.hash, "") == from.fullPath.replace(from.hash, "") && to.hash != from.hash;
       var isPathChanged = to.fullPath.replace(to.hash, "") == from.fullPath.replace(from.hash, "");
       if (!isPathChanged && isHashChanged)
