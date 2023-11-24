@@ -13,7 +13,7 @@ defineProps({
 </script>
 <template>
   <RouterLink :to="'/Product?v='+Guid.create().toString()" class="d-flex flex-wrap text-center">
-    <img :src="value.img" alt="" class="col-12 bs_img">
+    <img :src="value.img[0]" alt="" class="col-12 bs_img">
     <span class="col-12 mt-2 bs_title">{{ value.title }}</span>
     <span class="col-6 bs_price">${{ value.price }}</span>
     <span class="col-6 bs_star">{{ value.star }} <FontAwesomeIcon icon="star"></FontAwesomeIcon></span>

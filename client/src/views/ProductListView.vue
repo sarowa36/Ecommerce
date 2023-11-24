@@ -115,10 +115,10 @@ export default {
     data() {
         return {
             products: [
-                new ProductModel({ img: "http://img.sarowa36.com.tr/woman1.png", title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
-                new ProductModel({ img: "http://img.sarowa36.com.tr/woman2.png", title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
-                new ProductModel({ img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }),
-                new ProductModel({ img: "http://img.sarowa36.com.tr/woman3.png", title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })
+                new ProductModel({ img: ["http://img.sarowa36.com.tr/woman1.png"], title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
+                new ProductModel({ img: ["http://img.sarowa36.com.tr/woman2.png"], title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
+                new ProductModel({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }),
+                new ProductModel({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })
             ],
               categoryFilter:{
                 active: false,
@@ -180,7 +180,6 @@ export default {
     border-radius: 6px;
     width: 370px;
     margin-top: 15px;
-    max-width: 92vw;
     position: absolute;
   background-color: white;
 }
@@ -199,5 +198,21 @@ export default {
     display: flex;
     padding: 20px 22px;
     justify-content: space-between;
+}
+@media (max-width:768px){
+    .filter_list{
+        flex-direction: column;
+    }
+    .filter>.btn{
+        width: 100%;
+    }
+    .filter_dropdown {
+        width: 516px;
+    }
+}
+@media (max-width:576px){
+    .filter_dropdown {
+        width: calc(100vw - 24px) ;
+    }
 }
 </style>
