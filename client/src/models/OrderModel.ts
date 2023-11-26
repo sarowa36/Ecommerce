@@ -1,7 +1,7 @@
 import { ModelBase } from "./ModelBase";
 import { ProductModel } from "./ProductModel";
 
-class OrderModel extends ModelBase {
+class OrderModel extends ModelBase<OrderModel> {
     id: string
     orderStatus: OrderStatus
     date: Date

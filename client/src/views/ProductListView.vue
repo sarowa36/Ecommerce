@@ -2,12 +2,17 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import ProductComponent from "../components/ProductComponent.vue"
 import { ProductModel } from '../models/ProductModel';
+import FilterComponent from '../components/FilterComponent.vue';
+import FilterValue from "../models/FilterValue";
+import FilterValueArray from "../models/FilterValueArray";
 import Slider from '@vueform/slider'
 </script> 
 <template>
     <div class="container mb-5">
         <div class="row">
             <div class="col-12 mt-5 mb-4 filter_list">
+                <FilterComponent describe-text="hello" :show="true" v-model="categoryFilterValues">
+                </FilterComponent>
                 <div class="filter">
                     <button :class="'btn' + (categoryFilter.active ? ' active' : '')" @click="showFilter('categoryFilter')">
                         <FontAwesomeIcon icon="list"></FontAwesomeIcon>
@@ -120,34 +125,36 @@ export default {
                 new ProductModel({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }),
                 new ProductModel({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })
             ],
-              categoryFilter:{
+            categoryFilterValues:new FilterValueArray(new FilterValue({value:"XS"}),new FilterValue({value:"XL"})),
+            categoryFilter: {
                 active: false,
                 value: [],
-                show:false,
-                describeText:"Categories"
-              },
-              sizeFilter:{
+                show: false,
+                describeText: "Categories"
+            },
+            sizeFilter: {
                 active: false,
                 value: [],
-                show:false,
-                describeText:"Size"
-              },
+                show: false,
+                describeText: "Size"
+            },
             priceFilter: {
                 active: false,
                 value: [0, 100],
-                show:false,
-                describeText:"Price"
+                show: false,
+                describeText: "Price"
             },
-            sortFilter:{
+            sortFilter: {
                 active: false,
                 value: [],
-                show:false,
-                describeText:"Sort"
-              },
-            
+                show: false,
+                describeText: "Sort"
+            },
+
         }
     },
     mounted() {
+        console.log(this.categoryFilterValues.GetSelectedValues())
     },
     methods: {
         showFilter(prop) {
@@ -176,43 +183,50 @@ export default {
 .filter>button:where(:hover, .active) {
     background-color: var(--sixth-color);
 }
+
 .filter_dropdown {
     border-radius: 6px;
     width: 370px;
     margin-top: 15px;
     position: absolute;
-  background-color: white;
+    background-color: white;
 }
-.filter_dropdown_body{
+
+.filter_dropdown_body {
     padding: 20px 22px;
 }
-.filter_dropdown_body ul{
+
+.filter_dropdown_body ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
     max-height: 155px;
-  overflow: scroll;
+    overflow: scroll;
 }
-.filter_dropdown_footer{
+
+.filter_dropdown_footer {
     background: #EAEAEA;
     display: flex;
     padding: 20px 22px;
     justify-content: space-between;
 }
-@media (max-width:768px){
-    .filter_list{
+
+@media (max-width:768px) {
+    .filter_list {
         flex-direction: column;
     }
-    .filter>.btn{
+
+    .filter>.btn {
         width: 100%;
     }
+
     .filter_dropdown {
         width: 516px;
     }
 }
-@media (max-width:576px){
+
+@media (max-width:576px) {
     .filter_dropdown {
-        width: calc(100vw - 24px) ;
+        width: calc(100vw - 24px);
     }
-}
-</style>
+}</style>
