@@ -2,6 +2,8 @@
 import FilterValueArray from '../models/FilterValueArray';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Guid } from 'guid-typescript';
+import FilterType from "../enums/FilterType";
+import Slider from "@vueform/slider"
 </script>
 <template>
     <div class="filter" :id="filterId">
@@ -12,14 +14,18 @@ import { Guid } from 'guid-typescript';
         <div class="filter_dropdown smooth_shadow" v-if="show">
             <div class="filter_dropdown_body">
                 <h5 class="filter_title"> {{ describeText }}</h5>
-                <input type="text" placeholder="Search" class="form-control mb-2">
-                <ul>
-                    <li v-for="(item) in value"><input type="checkbox" v-model="item.selected"> {{ item.text }}</li>
+                <input v-if="filterType != FilterType.priceRange && showSearchInput" type="text" placeholder="Search"
+                    class="form-control mb-2">
+                <ul v-if="filterType != FilterType.priceRange">
+                    <li v-for="(item) in value"><input type="checkbox" v-model="item.selected"
+                            @change="checkboxChanged($event, item)"> {{ item.text }}</li>
                 </ul>
+                <Slider v-if="filterType == FilterType.priceRange" :min="minValue" :max="maxValue" class="mt-5 me-2 ms-2"
+                    v-model="priceRangeValue" />
             </div>
             <div class="filter_dropdown_footer">
-                <button class="btn btn-secondary filter_dropdown_clear" @click="_clearEvent">Clear</button>
-                <button class="btn btn-primary filter_dropdown_apply" @click="_applyEvent">Apply</button>
+                <button class="btn btn-secondary" @click="_clearEvent">Clear</button>
+                <button class="btn btn-primary" @click="_applyEvent">Apply</button>
             </div>
         </div>
     </div>
@@ -28,21 +34,25 @@ import { Guid } from 'guid-typescript';
 export default {
     data: () => {
         return {
-            show:false,
-            filterId:Guid.create().toString().replace(/[0-9]/gm,"")
+            show: false,
+            filterId: Guid.create().toString().replace(/[0-9]/gm, ""),
+            minValue: 0,
+            maxValue: 0
         }
     },
-    mounted(){
-        console.log(this.$el)
-        window.addEventListener("click",this.windowClickEvent)
+    mounted() {
+        if (this.filterType == FilterType.priceRange) {
+            this.minValue = this.priceRangeValue[0];
+            this.maxValue = this.priceRangeValue[1];
+        }
+        window.addEventListener("click", this.windowClickEvent)
     },
-    beforeUnmount(){
-        window.removeEventListener("click",this.windowClickEvent)
+    beforeUnmount() {
+        window.removeEventListener("click", this.windowClickEvent)
     },
     methods: {
         toggleFilter() {
-           this.show=!this.show;
-           
+            this.show = !this.show;
         },
         _applyEvent() {
             if (this.applyEvent) {
@@ -54,21 +64,33 @@ export default {
                 this.clearEvent();
             }
             else {
-                this.value.map(x => { x.selected = false; return x });
+                this.value.map(x => {
+                    if (this.filterType == FilterType.priceRange) {
+                    }
+                    x.selected = false;
+                    return x
+                });
             }
         },
-        windowClickEvent(e){
-            var eventNode=e.target;
-            if(!eventNode.closest("#"+this.filterId) && this.show){
-                this.show=false;
+        windowClickEvent(e) {
+            var eventNode = e.target;
+            if (!eventNode.closest("#" + this.filterId) && this.show) {
+                this.show = false;
             }
         },
+        checkboxChanged(e, item) {
+            if (this.filterType == FilterType.checkboxListOnlyOneSelectable) {
+                this.value.filter(x => x != item).map(x => { x.selected = false; return x })
+            }
+        }
     },
     emits: ["update:modelValue"],
     props: {
         describeText: String,
         icon: String,
+        showSearchInput:true,
         modelValue: FilterValueArray,
+        filterType: FilterType,
         applyEvent: {
             type: Function,
             default: undefined
@@ -85,6 +107,15 @@ export default {
             },
             set(val) {
                 this.$emit("update:modelValue", val)
+            }
+        },
+        priceRangeValue: {
+            get() {
+                return [this.modelValue[0].value, this.modelValue[1].value];
+            },
+            set(val) {
+                this.value[0].value = val[0];
+                this.value[1].value = val[1];
             }
         }
     },
@@ -131,10 +162,6 @@ export default {
 }
 
 @media (max-width:768px) {
-    .filter_list {
-        flex-direction: column;
-    }
-
     .filter>.btn {
         width: 100%;
     }

@@ -5,10 +5,17 @@ import  OrderModel  from "../models/OrderModel";
 import OrderStatus from "../enums/OrderStatus";
 import { ProductModel } from "../models/ProductModel";
 import {createRandomNumber,dateToDateTimeString} from "@/helpers/";
+import FilterComponent from "../components/FilterComponent.vue";
+import FilterValueArray from "../models/FilterValueArray";
+import FilterValue from "../models/FilterValue";
+import FilterType from "../enums/FilterType";
 </script>
 <template>
     <DashboardLayout>
         <div class="row pt-5">
+            <div class="col-12 mb-3">
+                <FilterComponent icon="calendar-days" describeText="Date" v-model="dateFilterValues" :filterType="FilterType.checkboxListOnlyOneSelectable" :showSearchInput="false" />
+            </div>
             <div v-for="(item,index) in orders" :class="{ 'order_outer': true, 'active': currentOrderId==item.id }">
                 <div class="order_mini" @click="toggleOrder(item.id)">
                     <div class="order_mini_images">
@@ -87,109 +94,6 @@ import {createRandomNumber,dateToDateTimeString} from "@/helpers/";
                     </div>
                 </Transition>
             </div>
-            <!-- <div :class="{ 'order_outer': true, 'active': active }">
-                <a href="#" class="order_mini" @click="toggleOrder">
-                    <div class="order_mini_images">
-                        <img src="@/assets/e.webp" alt="">
-                        <img src="@/assets/e.webp" alt="">
-                        <img src="@/assets/e.webp" alt="">
-                    </div>
-                    <div class="order_mini_meta">
-                        <span>Order number: <strong>1234566456</strong></span>
-                        <span>10 October 2023, 22:17</span>
-                    </div>
-                    <div class="order_mini_status">
-                        <FontAwesomeIcon icon="check-circle" />
-                        <span>Order is done</span>
-                    </div>
-                    <div class="order_mini_amount">
-                        489.11 $
-                    </div>
-                    <div class="order_mini_toggle_icon">
-                        <FontAwesomeIcon icon="chevron-down" />
-                    </div>
-                </a>
-                <Transition name="nested">
-                    <div v-if="active" class="order_detail_outer">
-                        <div class="order_detail_inner">
-                            <div class="order_products">
-                                <div class="order_product">
-                                    <div class="order_product_card_image">
-                                        <a class="order_product_image_outer" href="#"><img src="@/assets/e.webp" alt=""></a>
-                                    </div>
-                                    <div class="order_product_card_content">
-                                        <a href="#">
-                                            <h6>Piece Of Beauty</h6>
-                                        </a>
-                                        <div class="text-success">489.11$</div>
-                                    </div>
-                                </div>
-                                <div class="order_product">
-                                    <div class="order_product_card_image">
-                                        <a class="order_product_image_outer" href="#"><img src="@/assets/e.webp" alt=""></a>
-                                    </div>
-                                    <div class="order_product_card_content">
-                                        <a href="#">
-                                            <h6>Piece Of Beauty</h6>
-                                        </a>
-                                        <div class="text-success">489.11$</div>
-                                    </div>
-                                </div>
-                                <div class="order_product">
-                                    <div class="order_product_card_image">
-                                        <a class="order_product_image_outer" href="#"><img src="@/assets/e.webp" alt=""></a>
-                                    </div>
-                                    <div class="order_product_card_content">
-                                        <a href="#">
-                                            <h6>Piece Of Beauty</h6>
-                                        </a>
-                                        <div class="text-success">489.11$</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="order_action_buttons">
-                                <a href="#" class="btn btn-primary">
-                                    <FontAwesomeIcon icon="people-carry-box" />Cargo Tracking
-                                </a>
-                                <a href="#" class="btn btn-primary">
-                                    <FontAwesomeIcon icon="ban" />Complaint Or Refund
-                                </a>
-                                <a href="#" class="btn btn-primary">
-                                    <FontAwesomeIcon icon="file-invoice" />Show Bill
-                                </a>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="order_delivery_status_box">
-                                        <FontAwesomeIcon icon="check-circle" />
-                                        <div class="order_delivery_meta">
-                                            <h6>Delivered</h6>
-                                            <span class="text-success">Delivered on: <strong>Tue, Oct 10,
-                                                    12:27</strong></span>
-                                        </div>
-                                    </div>
-                                    <div class="order_delivery_detail_box mt-3">
-                                        <h5>Delivery Details</h5>
-                                        <strong>Home</strong>
-                                        <span>5632 Grove Street Apartment #20</span>
-                                        <span>, NY 10014 USA</span>
-                                        <strong>Cemal Mustafaoğlu - 905*******58</strong>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mt-4">
-                                    <h5>Payment Information</h5>
-                                    <ul class="order_payment_detail_list">
-                                        <li><span>Cargo: </span><span>Free</span></li>
-                                        <li><span>Amount: </span><span>$539.11</span></li>
-                                        <li><span>Discount: </span><span>$50</span></li>
-                                        <li><span>Total Amount: </span><span>$489.11</span></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </Transition>
-            </div> -->
         </div>
     </DashboardLayout>
 </template>
@@ -237,7 +141,14 @@ export default {
                     amount: 539.11,
                     discount: 50,
                     totalAmount: 489.11
-                })]
+                })],
+            dateFilterValues:new FilterValueArray(
+                new FilterValue({text:"Last 30 Day", value:"30"}),
+                new FilterValue({text:"Last 3 Months",value:"90"}),
+                new FilterValue({text:"Last 6 Months", value:"180"}),
+                new FilterValue({text:"Last 1 Year", value:"365"}),
+                new FilterValue({text:"All", value:"-1"}),
+                )
         }
     },
     methods: {

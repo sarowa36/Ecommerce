@@ -17,7 +17,7 @@ import { useLoginStore } from './stores/LoginStore';
             <span class="navbar-toggler-icon"></span>
           </button>
         </div>
-        <div :class="'col-lg-8'+ ($screen.width > 992 ? '' : ' collapse')" id="navigation">
+        <div :class="'col-lg-8' + ($screen.width > 992 ? '' : ' collapse')" id="navigation">
           <div class="navigation">
             <RouterLink to="/">Home</RouterLink>
             <RouterLink to="/ProductList">Shop</RouterLink>
@@ -26,7 +26,8 @@ import { useLoginStore } from './stores/LoginStore';
             <RouterLink to="/">
               <FontAwesomeIcon v-if="$screen.width > 992" icon="bag-shopping"></FontAwesomeIcon><span v-else>Cart</span>
             </RouterLink>
-            <RouterLink to="/Login" v-if="!loginStore.isLogged" :class="$screen.width > 992 ? 'btn btn-primary' : ''">Login</RouterLink>
+            <RouterLink to="/Login" v-if="!loginStore.isLogged" :class="$screen.width > 992 ? 'btn btn-primary' : ''">
+              Login</RouterLink>
             <RouterLink to="/Profile" v-else>Profile</RouterLink>
           </div>
         </div>
@@ -191,10 +192,13 @@ import { useLoginStore } from './stores/LoginStore';
   justify-content: space-evenly;
   align-items: center;
   gap: 25px;
+  z-index: 9;
 }
-.navigation>a:not(:hover){
+
+.navigation>a:not(:hover) {
   color: var(--first-color);
 }
+
 .navigation>a {
   font-family: var(--first-font);
   font-size: 19px;
@@ -226,7 +230,8 @@ row-gap: 20px;
     width: 100%;
     text-align: center;
   }
-  #navigation{
+
+  #navigation {
     position: relative;
   }
 }
@@ -248,17 +253,16 @@ row-gap: 20px;
 </style>
 <script>
 export default {
-  data(){
+  data() {
     return {
-      loginStore:useLoginStore()
+      loginStore: useLoginStore()
     }
   },
   watch: {
     '$route'(to, from) {
-      
+      var isPathChanged = to.fullPath != from.fullPath;
       var isHashChanged = to.fullPath.replace(to.hash, "") == from.fullPath.replace(from.hash, "") && to.hash != from.hash;
-      var isPathChanged = to.fullPath.replace(to.hash, "") == from.fullPath.replace(from.hash, "");
-      if (!isPathChanged && isHashChanged)
+      if (isPathChanged && !isHashChanged)
         window.scrollTo(0, 0)
     }
   }
