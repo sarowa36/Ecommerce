@@ -1,59 +1,93 @@
 <script setup>
 import FilterValueArray from '../models/FilterValueArray';
-/*defineProps({
-    describeText:String,
-    show:Boolean,
-    modelValue:FilterValueArray
-})*/
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { Guid } from 'guid-typescript';
 </script>
 <template>
-    <div class="filter">
-        <button :class="'btn' + (active ? ' active' : '')" @click="showFilter('categoryFilter')">
-            <FontAwesomeIcon icon="list"></FontAwesomeIcon>
+    <div class="filter" :id="filterId">
+        <button :class="'btn' + (active ? ' active' : '')" @click="toggleFilter">
+            <FontAwesomeIcon :icon="icon"></FontAwesomeIcon>
             <span> {{ describeText }}</span>
         </button>
         <div class="filter_dropdown smooth_shadow" v-if="show">
             <div class="filter_dropdown_body">
-                <h5 class="filter_title">Categories</h5>
+                <h5 class="filter_title"> {{ describeText }}</h5>
                 <input type="text" placeholder="Search" class="form-control mb-2">
                 <ul>
-                    <li v-for="(item) in value"><input type="checkbox" v-model="item.selected"> {{item.text}}</li>
+                    <li v-for="(item) in value"><input type="checkbox" v-model="item.selected"> {{ item.text }}</li>
                 </ul>
             </div>
             <div class="filter_dropdown_footer">
-                <button class="btn btn-secondary filter_dropdown_clear">Clear</button>
-                <button class="btn btn-primary filter_dropdown_apply" @click="logModel">Apply</button>
+                <button class="btn btn-secondary filter_dropdown_clear" @click="_clearEvent">Clear</button>
+                <button class="btn btn-primary filter_dropdown_apply" @click="_applyEvent">Apply</button>
             </div>
         </div>
     </div>
 </template>
 <script>
 export default {
-    data:()=>{
+    data: () => {
         return {
-            deneme:false
+            show:false,
+            filterId:Guid.create().toString().replace(/[0-9]/gm,"")
         }
     },
-    methods:{
-      logModel(){
-        console.log(this.modelValue);
-      }  
+    mounted(){
+        console.log(this.$el)
+        window.addEventListener("click",this.windowClickEvent)
     },
-    props:{
-    describeText:String,
-    show:Boolean,
-    modelValue:FilterValueArray
-},
-    computed:{
-        value:{
-            get(){
+    beforeUnmount(){
+        window.removeEventListener("click",this.windowClickEvent)
+    },
+    methods: {
+        toggleFilter() {
+           this.show=!this.show;
+           
+        },
+        _applyEvent() {
+            if (this.applyEvent) {
+                this.applyEvent();
+            }
+        },
+        _clearEvent() {
+            if (this.clearEvent) {
+                this.clearEvent();
+            }
+            else {
+                this.value.map(x => { x.selected = false; return x });
+            }
+        },
+        windowClickEvent(e){
+            var eventNode=e.target;
+            if(!eventNode.closest("#"+this.filterId) && this.show){
+                this.show=false;
+            }
+        },
+    },
+    emits: ["update:modelValue"],
+    props: {
+        describeText: String,
+        icon: String,
+        modelValue: FilterValueArray,
+        applyEvent: {
+            type: Function,
+            default: undefined
+        },
+        clearEvent: {
+            type: Function,
+            default: undefined
+        }
+    },
+    computed: {
+        value: {
+            get() {
                 return this.modelValue;
             },
-            set(val){
-                this.$emit("update:modelValue",val)
+            set(val) {
+                this.$emit("update:modelValue", val)
             }
         }
-    }
+    },
 }
 </script>
 <style scoped>
@@ -114,4 +148,5 @@ export default {
     .filter_dropdown {
         width: calc(100vw - 24px);
     }
-}</style>
+}
+</style>

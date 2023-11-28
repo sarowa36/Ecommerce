@@ -1,5 +1,6 @@
 import { ModelBase } from "./ModelBase";
 import { ProductModel } from "./ProductModel";
+import OrderStatus from "../enums/OrderStatus";
 
 class OrderModel extends ModelBase<OrderModel> {
     id: string
@@ -18,10 +19,4 @@ class OrderModel extends ModelBase<OrderModel> {
     discount: number
     totalAmount: number
 }
-enum OrderStatus {
-    waitingApprove="Order waiting approve",
-    onDelivery="Order on delivery",
-    deliverySuccess="Order is done",
-    deliveryCancel="Order is cancalled"
-}
-export { OrderModel, OrderStatus };
+export default OrderModel ;

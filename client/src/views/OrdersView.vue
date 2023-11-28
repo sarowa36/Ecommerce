@@ -1,7 +1,8 @@
 <script setup>
 import DashboardLayout from "@/components/DashboardLayout.vue"
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { OrderModel, OrderStatus } from "../models/OrderModel";
+import  OrderModel  from "../models/OrderModel";
+import OrderStatus from "../enums/OrderStatus";
 import { ProductModel } from "../models/ProductModel";
 import {createRandomNumber,dateToDateTimeString} from "@/helpers/";
 </script>
