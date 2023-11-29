@@ -8,14 +8,14 @@ import ProductComponent from "../components/ProductComponent.vue";
 <template>
     <div class="container mb-5">
         <div class="row justify-content-center theme_bg_3 mt-5 pt-4 pb-4">
-            <div class="col-5">
+            <div class="col-md-8 col-lg-5">
                 <Carousel :items="1" :nav="false">
                     <img src="http://img.sarowa36.com.tr/woman1.png" alt="">
                     <img src="http://img.sarowa36.com.tr/woman2.png" alt="">
                     <img src="http://img.sarowa36.com.tr/woman3.png" alt="">
                 </Carousel>
             </div>
-            <div class="col-6 product_description">
+            <div class="col-lg-6 product_description">
                 <h3>Piece of beauty</h3>
                 <h4>1800,00 TL</h4>
                 <div class="product_reviews_section">
@@ -235,7 +235,7 @@ import ProductComponent from "../components/ProductComponent.vue";
                 </Tabs>
             </div>
             <div class="col-12">
-                <Carousel :loop="true">
+                <Carousel :loop="true" :responsive="{0:{items:1,nav:false},992:{items:3}}">
                     <ProductComponent v-for="pr in products" :value="pr" class="m-3"></ProductComponent>
                 </Carousel>
             </div>
@@ -439,6 +439,11 @@ import ProductComponent from "../components/ProductComponent.vue";
   background: black;
   color: white;
   border-color: black;
+}
+@media (max-width: 768px) {
+    .comment_meta_outer, .product_boxs_section{
+        flex-direction: column;
+    }
 }
 </style>
 <script>

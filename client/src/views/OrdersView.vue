@@ -147,7 +147,7 @@ export default {
                 new FilterValue({text:"Last 3 Months",value:"90"}),
                 new FilterValue({text:"Last 6 Months", value:"180"}),
                 new FilterValue({text:"Last 1 Year", value:"365"}),
-                new FilterValue({text:"All", value:"-1"}),
+                new FilterValue({text:"All", value:"-1",selected:true}),
                 )
         }
     },

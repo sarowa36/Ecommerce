@@ -1,9 +1,11 @@
-import { ModelBase } from "./ModelBase"
-
-class ProductModel extends ModelBase<ProductModel> {
+class ProductModel {
     img: Array<string>
     title: string
     price: string
     star: string
+    constructor(p?:ProductModel){
+        if(p)
+        Object.assign(this,p)
+    }
 }
 export { ProductModel }

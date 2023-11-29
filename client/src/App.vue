@@ -2,38 +2,11 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useLoginStore } from './stores/LoginStore';
+import Navbar from './components/layout/Navbar.vue';
 </script>
 
 <template>
-  <div class="theme_bg">
-    <div class="container">
-      <div class="row navbar pt-4 pb-4">
-        <div class="col-3 col-lg-4 logo">
-          Salsha
-        </div>
-        <div class="col-4 d-flex d-lg-none justify-content-end">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation"
-            aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        </div>
-        <div :class="'col-lg-8' + ($screen.width > 992 ? '' : ' collapse')" id="navigation">
-          <div class="navigation">
-            <RouterLink to="/">Home</RouterLink>
-            <RouterLink to="/ProductList">Shop</RouterLink>
-            <RouterLink to="/">Features</RouterLink>
-            <RouterLink to="/Contact">Contact</RouterLink>
-            <RouterLink to="/">
-              <FontAwesomeIcon v-if="$screen.width > 992" icon="bag-shopping"></FontAwesomeIcon><span v-else>Cart</span>
-            </RouterLink>
-            <RouterLink to="/Login" v-if="!loginStore.isLogged" :class="$screen.width > 992 ? 'btn btn-primary' : ''">
-              Login</RouterLink>
-            <RouterLink to="/Profile" v-else>Profile</RouterLink>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<Navbar />
   <RouterView />
   <footer class="theme_bg_2">
     <div class="container">
@@ -169,72 +142,7 @@ import { useLoginStore } from './stores/LoginStore';
   line-height: normal;
 }
 
-.logo {
-  color: var(--first-color);
-  font-family: var(--logo-font);
-  font-size: 33px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-}
 
-.logo_white {
-  color: var(--white-color);
-  font-family: var(--logo-font);
-  font-size: 50px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-}
-
-.navigation {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  gap: 25px;
-  z-index: 9;
-}
-
-.navigation>a:not(:hover) {
-  color: var(--first-color);
-}
-
-.navigation>a {
-  font-family: var(--first-font);
-  font-size: 19px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  text-transform: uppercase;
-}
-
-.btn-primary {
-  padding-left: 25px;
-  padding-right: 25px;
-}
-
-/*.footer_menu_row{
-row-gap: 20px;
-}*/
-@media (max-width:992px) {
-  .navigation {
-    position: absolute;
-    flex-direction: column;
-    margin-top: 15px;
-    width: 100%;
-    background-color: white;
-    padding: 15px;
-  }
-
-  .navigation>a {
-    width: 100%;
-    text-align: center;
-  }
-
-  #navigation {
-    position: relative;
-  }
-}
 
 @media (min-width: 768px) and (max-width: 992px) {
 

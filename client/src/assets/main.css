@@ -150,6 +150,11 @@ color: #2c5777;
   border-color: #7aa7c7;
   border-bottom: solid 1px #fff;
 }
+@media (max-width:768px) {
+  .tabs-component-tabs{
+    padding: 0;
+  }
+}
 /* end of vue3-tab-component section */
 
 /* animation section */
@@ -188,3 +193,21 @@ color: #2c5777;
   opacity: 0.001;
 }
 /* animation section end */
+
+.logo {
+  color: var(--first-color);
+  font-family: var(--logo-font);
+  font-size: 33px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.logo_white {
+  color: var(--white-color);
+  font-family: var(--logo-font);
+  font-size: 50px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}

@@ -1,8 +1,7 @@
-import { ModelBase } from "./ModelBase";
 import { ProductModel } from "./ProductModel";
 import OrderStatus from "../enums/OrderStatus";
 
-class OrderModel extends ModelBase<OrderModel> {
+class OrderModel {
     id: string
     orderStatus: OrderStatus
     date: Date
@@ -18,5 +17,9 @@ class OrderModel extends ModelBase<OrderModel> {
     amount: number
     discount: number
     totalAmount: number
+    constructor(p?:OrderModel){
+        if(p)
+        Object.assign(this,p)
+    }
 }
 export default OrderModel ;
