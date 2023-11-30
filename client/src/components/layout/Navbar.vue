@@ -26,6 +26,7 @@ import { useLoginStore } from '../../stores/LoginStore';
               <div class="nav_submenu_inner">
                 <div class="nav_submenu_links">
                   <RouterLink to="/Orders">Orders</RouterLink>
+                  <RouterLink to="/Register">Register</RouterLink>
                 </div>
               </div>
             </div>
@@ -169,6 +170,10 @@ width: 50%;
 /* NavSubmenuLinks */
 .nav_submenu_links>a{
     display: block;
+    padding: 8px 0;
+}
+.nav_submenu_links>a:not(:first-child){
+  border-top: 1px solid #e6e6e6;
 }
 .nav_links>.btn{
     display: none;
