@@ -165,14 +165,6 @@ export default {
     return {
       loginStore: useLoginStore()
     }
-  },
-  watch: {
-    '$route'(to, from) {
-      var isPathChanged = to.fullPath != from.fullPath;
-      var isHashChanged = to.fullPath.replace(to.hash, "") == from.fullPath.replace(from.hash, "") && to.hash != from.hash;
-      if (isPathChanged && !isHashChanged)
-        window.scrollTo(0, 0)
-    }
   }
 }
 </script>

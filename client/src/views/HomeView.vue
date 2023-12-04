@@ -252,6 +252,12 @@ import { ProductModel } from '../models/ProductModel';
     .product_filters{
         flex-direction: column;
     }
+    .introduce_title{
+        font-size: 60px;
+    }
+    .introduce_desc{
+        font-size: 20px;
+    }
 }</style>
 <script>
 export default {

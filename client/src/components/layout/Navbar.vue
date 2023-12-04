@@ -27,13 +27,14 @@ import { useLoginStore } from '../../stores/LoginStore';
                 <div class="nav_submenu_links">
                   <RouterLink to="/Orders">Orders</RouterLink>
                   <RouterLink to="/Register">Register</RouterLink>
+                  <RouterLink to="/Cart">Cart</RouterLink>
                 </div>
               </div>
             </div>
           </div>
             <RouterLink to="/Contact">Contact</RouterLink>
             <div class="nav_link_with_dropdown nav_cart">
-              <RouterLink to="/">
+              <RouterLink to="/Cart">
                 <FontAwesomeIcon v-if="$screen.width > 992" icon="bag-shopping"></FontAwesomeIcon><span v-else>Cart</span>
               </RouterLink>
               <div v-if="$screen.width > 992" class="nav_submenu_outer nav_cart_dropdown">
@@ -58,7 +59,7 @@ import { useLoginStore } from '../../stores/LoginStore';
                     </a>
                 </div>
                 <div class="nav_submenu_buttons">
-                  <RouterLink to="/" class="btn btn-primary">Cart</RouterLink><RouterLink to="/" class="btn btn-secondary">Order</RouterLink>
+                  <RouterLink to="/Cart" class="btn btn-primary">Cart</RouterLink><RouterLink to="/" class="btn btn-secondary">Order</RouterLink>
                 </div>
               </div>
               </div>

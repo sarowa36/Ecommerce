@@ -31,11 +31,11 @@ import ProductComponent from "../components/ProductComponent.vue";
                     </div>
                 </div>
                 <div class="product_cart_section">
-                    <div class="product_cart_counter">
+                    <div class="cart_counter">
                         <button class="btn btn-outline-dark" @click="decreaseCartCount">
                             <FontAwesomeIcon icon="minus" />
                         </button>
-                        <input type="text" class="form-control" :value="productCartCount" disabled>
+                        <input type="text" class="form-control border-dark" :value="productCartCount" disabled>
                         <button class="btn btn-outline-dark" @click="increaseCartCount">
                             <FontAwesomeIcon icon="plus" />
                         </button>
@@ -234,6 +234,8 @@ import ProductComponent from "../components/ProductComponent.vue";
                     </Tab>
                 </Tabs>
             </div>
+            <h1 class="text-center">Best Sellers</h1>
+            <div class="divider_line mb-3"></div>
             <div class="col-12">
                 <Carousel :loop="true" :responsive="{0:{items:1,nav:false},992:{items:3}}">
                     <ProductComponent v-for="pr in products" :value="pr" class="m-3"></ProductComponent>
@@ -243,21 +245,6 @@ import ProductComponent from "../components/ProductComponent.vue";
     </div>
 </template>
 <style scoped>
-.product_cart_counter {
-    display: flex;
-    margin-right: 5px;
-}
-
-.product_cart_counter>button {
-    aspect-ratio: 1;
-}
-
-.product_cart_counter>input {
-    width: 46px;
-    text-align: center;
-    outline-color: unset;
-}
-
 .product_cart_section {
     display: flex;
 }

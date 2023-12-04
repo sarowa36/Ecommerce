@@ -41,9 +41,9 @@
 .logo {
   color: var(--first-color);
   font-family: var(--logo-font);
-  font-size: 33px;
+  font-size: 40px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 900;
   line-height: normal;
 }
 
@@ -54,4 +54,46 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+}
+.cart_counter {
+  display: flex;
+  margin-right: 5px;
+}
+
+.cart_counter>button {
+  aspect-ratio: 1;
+  border-radius: 0;
+}
+.cart_counter>button:first-child{
+  border-right: 0;
+}
+.cart_counter>button:last-child{
+  border-left: 0;
+}
+.cart_counter>input {
+  width: 46px;
+  text-align: center;
+  outline-color: unset;
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+}
+.divider_line{
+  position: relative;
+height: 6px;
+}
+.divider_line:after, .divider_line:before{
+      content: '';
+position: absolute;
+    width: 20px;
+height: 2px;
+background-color: #222;
+}
+.divider_line:before{
+top: 0;
+left: calc(50% - 5px);
+}
+.divider_line:after{
+top: 4px;
+right: calc(50% - 5px);
 }

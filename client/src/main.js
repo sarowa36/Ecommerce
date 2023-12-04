@@ -35,7 +35,7 @@ import router from './router'
     library.add(far)
     library.add(fas)
     library.add(fab)
-
+    if(import.meta.env.DEV)
     app.config.compilerOptions.comments = true
 
     app.component("tabs",Tabs);
