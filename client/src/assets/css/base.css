@@ -5,7 +5,7 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto+Mono");
 @font-face {
   font-family: Elephant;
-  src: "../Elephant.ttf";
+  src: url("@/assets/Elephant.ttf");
 }
 :root{
   --white-color:#fff;
