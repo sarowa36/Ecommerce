@@ -79,7 +79,7 @@ import { useLoginStore } from '../../stores/LoginStore';
   justify-content: space-evenly;
   align-items: center;
   gap: 25px;
-  z-index: 9;
+  z-index: 999;
 }
 
 .navigation>a:not(:hover) {

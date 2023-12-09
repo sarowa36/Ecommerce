@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Helpers;
 using EntityLayer.Base;
 using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer
 {
-    public class ADC:DbContext
+    public class ADC:IdentityDbContext<ApplicationUser>
     {
         public ADC(DbContextOptions<ADC> options) : base(options)
         {

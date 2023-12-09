@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using BusinessLayer.Validations.Admin.Product;
+using BusinessLayer.Validations.Admin.ProductController;
 using DataAccessLayer.Concrete;
 using EntityLayer.Concrete;
 using EntityLayer.ViewModels.Admin.ProductController;

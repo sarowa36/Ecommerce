@@ -165,6 +165,9 @@ export default {
     return {
       loginStore: useLoginStore()
     }
+  },
+  mounted(){
+    this.loginStore.loadUser();
   }
 }
 </script>

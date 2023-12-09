@@ -3,10 +3,10 @@ import HomeView from '../views/HomeView.vue'
 import ProductListView from  "../views/ProductListView.vue"
 import ProductView from "../views/ProductView.vue"
 import ContactView from "../views/ContactView.vue"
-import LoginView from "../views/LoginView.vue"
+import LoginView from "../views/Identity/LoginView.vue"
 import ProfileView from "../views/ProfileView.vue"
 import OrdersView from "../views/OrdersView.vue"
-import RegisterView from "../views/RegisterView.vue"
+import RegisterView from "../views/Identity/RegisterView.vue"
 import CartView from '../views/CartView.vue'
 
 const router = createRouter({

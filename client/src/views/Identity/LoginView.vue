@@ -1,7 +1,9 @@
 <script setup>
 import { RouterLink } from 'vue-router';
-import TextBox from '../components/TextBox.vue';
-import { useLoginStore } from './../stores/LoginStore';
+import TextBox from '../../components/TextBox.vue';
+import { useLoginStore } from './../../stores/LoginStore';
+import axios from "axios"
+import router from '../../router';
 </script>
 <template>
     <div class="container mt-5 mb-5 pt-1 pb-1">
@@ -13,14 +15,16 @@ import { useLoginStore } from './../stores/LoginStore';
                 <img class="identity_form_mobile_background" src="@/assets/LoginImage.svg" alt="">
                 <div class="row identity_form_inner h-100 p-4 justify-content-center align-content-center gap-4">
                     <h4 class="col-12 text-center font_roboto_mono">Login</h4>
+                    <span class="col-12 text-danger white-space-pre-line text-center">{{ errors.modelOnly }}</span>
                     <div class="col-md-7 form-group">
-                        <TextBox placeholder="Email" />
+                        <TextBox placeholder="Email" v-model="model.email" :errorMessage="errors.email" />
                     </div>
                     <div class="col-md-7 form-group">
-                        <TextBox placeholder="Password" />
+                        <TextBox placeholder="Password" type="password" v-model="model.password" :errorMessage="errors.password" />
                     </div>
                     <div class="col-md-7 form-group identity_form_buttons">
-                        <button class="btn btn-primary" @click="login">Sign In</button><RouterLink to="/Register" class="btn btn-primary">Register</RouterLink>
+                        <button class="btn btn-primary" @click="sendRequest">Sign In</button>
+                        <RouterLink to="/Register" class="btn btn-primary">Register</RouterLink>
                     </div>
                     <div class="col-md-7 text-center">
                         <RouterLink to="" class="fs-5 font_roboto_mono">Forgot Password?</RouterLink>
@@ -32,15 +36,27 @@ import { useLoginStore } from './../stores/LoginStore';
 </template>
 <script>
 export default {
-    data(){
+    data() {
         return {
-            loginStore:useLoginStore()
+            model: {
+                email: "",
+                password: ""
+            },
+            errors: {},
+            loginStore: useLoginStore()
         };
     },
-methods:{
-    login(){
-        this.loginStore.SignIn();
+    methods: {
+        async sendRequest() {
+            var response = (await axios.postForm("Identity/Login", this.model));
+            this.errors = {};
+            if (response.status != 200)
+                this.errors = response.data;
+            else {
+                this.loginStore.loadUser();
+                router.push("/")
+            }
+        }
     }
-}
 }
 </script>

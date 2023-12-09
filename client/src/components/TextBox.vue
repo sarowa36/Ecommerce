@@ -3,74 +3,78 @@ import { computed } from 'vue';
 import { Guid } from 'guid-typescript';
 
 defineProps({
+    placeholder: "",
+    modelValue: "",
+    id: {
+        type: String,
+        default: null
+    },
+    errorMessage: {
+        type: String,
+        default: ""
+    },
     type:{
         type:String,
-        default:"textbox"
-    },
-    placeholder:"",
-    modelValue:"",
-    id:Guid.create().toString(),
-    whenPressEnter:{
-        type:Function,
-        default:()=>{}
+        default:"text"
     }
 })
-defineEmits(["update:modelValue"])
+defineEmits(["update:modelValue", "pressEnter"])
 </script>
 <template>
     <div class="form_group">
-        <span v-if="!error.isValid"></span>
-        <input :id="id" ref="textbox" :class="'myinput '+ (value ? 'with_value':'')" :placeholder="placeholder" @blur="checkVal" v-model="value" @keydown="keydownEvent" />
-        <label :for="id" class="input_label">{{placeholder}}</label>
+        <span v-if="errorMessage" class="text-danger">{{ errorMessage }}</span>
+        <input :id="_id" ref="textbox" :type="type" :class="'myinput ' + (value ? 'with_value' : '')" :placeholder="placeholder"
+            @blur="checkVal" v-model="value" @keydown="keydownEvent" />
+        <label :for="_id" class="input_label">{{ placeholder }}</label>
     </div>
 </template> 
 <script>
 export default {
-    data(){
-        return{
-        error:{
-            isValid:true,
-            list:[]
+    data() {
+        return {
+            _id: ""
         }
-        };
     },
-    methods:{
-        checkVal(e){
-           const node=this.$refs.textbox;
-           if(node.value && !node.classList.contains("with_value")){
-            node.classList.add("with_value");
-           }
-           else if(!node.value && node.classList.contains("with_value"))
-           {
-            node.classList.remove("with_value");
-           }
+    methods: {
+        checkVal(e) {
+            const node = this.$refs.textbox;
+            if (node.value && !node.classList.contains("with_value")) {
+                node.classList.add("with_value");
+            }
+            else if (!node.value && node.classList.contains("with_value")) {
+                node.classList.remove("with_value");
+            }
         },
-        keydownEvent(e){
-            if(e.keyCode==13){
-                this.whenPressEnter()
+        keydownEvent(e) {
+            if (e.keyCode == 13) {
+                this.$emit("pressEnter")
             }
         }
     },
     mounted() {
-     const node=this.$refs.textbox;
-        if(this.modelValue && this.type!="file"){
-            node.value=this.modelValue;
+        const node = this.$refs.textbox;
+        if (this.modelValue) {
+            node.value = this.modelValue;
             node.classList.add("with_value")
         }
+        if (!this.id)
+            this._id = Guid.create().toString()
+        else
+            this._id = this.id
     },
-    computed:{
-      value:{
-        get(){
-            return this.modelValue;
-        },
-        set(val){
-            this.$emit("update:modelValue", val)
+    computed: {
+        value: {
+            get() {
+                return this.modelValue;
+            },
+            set(val) {
+                this.$emit("update:modelValue", val)
+            }
         }
-      }  
     },
-    watch:{
-        value(newVal, oldVal){
-            if(!newVal){
+    watch: {
+        value(newVal, oldVal) {
+            if (!newVal) {
                 this.$refs.textbox.classList.remove("with_value");
             }
         }
@@ -83,13 +87,17 @@ export default {
     transform: translateY(100%);
     cursor: text;
     transition: 0.3s;
+    z-index: 50;
 }
 
-.myinput:focus, .myinput.with_value {
+.myinput:focus,
+.myinput.with_value {
     border-bottom-color: var(--second-color);
 }
 
-.myinput:focus+.input_label, .myinput.with_value + .input_label {
+.myinput:focus + .input_label,
+.input_label::selection,
+.myinput.with_value+.input_label {
     transform: scale(85%);
 }
 
@@ -100,6 +108,7 @@ export default {
     color: var(--first-color);
     outline: none;
     transition: 0.3s;
+    z-index: 100;
 }
 
 .form_group {
@@ -107,12 +116,16 @@ export default {
     flex-direction: column-reverse;
 }
 
-input.myinput::placeholder, textarea.myinput::placeholder {
+.form_group>span {
+    white-space: pre-line;
+}
+
+input.myinput::placeholder,
+textarea.myinput::placeholder {
     color: transparent;
 }
 
 input.myinput:focus,
 input.myinput:focus-visible {
     outline: none;
-}
-</style>
+}</style>
