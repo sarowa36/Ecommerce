@@ -2,13 +2,18 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import axios from 'axios'
 
-export const useLoginStore = defineStore('login', {
+enum UserRole {
+  Admin = "Admin",
+  User = "User"
+}
+
+const useLoginStore = defineStore('login', {
   state: () => {
     return {
       user: {
         name: '',
         surname: '',
-        roles: []
+        roles:[]
       },
       isLogged: false
     }
@@ -23,3 +28,5 @@ export const useLoginStore = defineStore('login', {
     }
   }
 })
+
+export { UserRole, useLoginStore }
