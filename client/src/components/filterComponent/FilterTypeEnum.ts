@@ -1,6 +1,6 @@
-enum FilterType{
+enum FilterTypeEnum{
 checkboxList,
 checkboxListOnlyOneSelectable,
 priceRange
 }
-export default FilterType;
+export default FilterTypeEnum;

@@ -1,8 +1,8 @@
 <script setup>
-import FilterValueArray from '../models/FilterValueArray';
+import {FilterValueArray,FilterTypeEnum} from "./";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Guid } from 'guid-typescript';
-import FilterType from "../enums/FilterType";
+
 import Slider from "@vueform/slider"
 </script>
 <template>
@@ -14,13 +14,13 @@ import Slider from "@vueform/slider"
         <div class="filter_dropdown smooth_shadow" v-if="show">
             <div class="filter_dropdown_body">
                 <h5 class="filter_title"> {{ describeText }}</h5>
-                <input v-if="filterType != FilterType.priceRange && showSearchInput" type="text" placeholder="Search"
+                <input v-if="filterType != FilterTypeEnum.priceRange && showSearchInput" type="text" placeholder="Search"
                     class="form-control mb-2">
-                <ul v-if="filterType != FilterType.priceRange">
+                <ul v-if="filterType != FilterTypeEnum.priceRange">
                     <li v-for="(item) in value"><input type="checkbox" v-model="item.selected"
                             @change="checkboxChanged($event, item)"> {{ item.text }}</li>
                 </ul>
-                <Slider v-if="filterType == FilterType.priceRange" :min="minValue" :max="maxValue" class="mt-5 me-2 ms-2"
+                <Slider v-if="filterType == FilterTypeEnum.priceRange" :min="minValue" :max="maxValue" class="mt-5 me-2 ms-2"
                     v-model="priceRangeValue" />
             </div>
             <div class="filter_dropdown_footer">
@@ -41,7 +41,7 @@ export default {
         }
     },
     mounted() {
-        if (this.filterType == FilterType.priceRange) {
+        if (this.filterType == FilterTypeEnum.priceRange) {
             this.minValue = this.priceRangeValue[0];
             this.maxValue = this.priceRangeValue[1];
         }
@@ -65,7 +65,7 @@ export default {
             }
             else {
                 this.value.map(x => {
-                    if (this.filterType == FilterType.priceRange) {
+                    if (this.filterType == FilterTypeEnum.priceRange) {
                     }
                     x.selected = false;
                     return x
@@ -79,7 +79,7 @@ export default {
             }
         },
         checkboxChanged(e, item) {
-            if (this.filterType == FilterType.checkboxListOnlyOneSelectable) {
+            if (this.filterType == FilterTypeEnum.checkboxListOnlyOneSelectable) {
                 this.value.filter(x => x != item).map(x => { x.selected = false; return x })
             }
         }
@@ -90,7 +90,7 @@ export default {
         icon: String,
         showSearchInput:true,
         modelValue: FilterValueArray,
-        filterType: FilterType,
+        filterType: FilterTypeEnum,
         applyEvent: {
             type: Function,
             default: undefined
@@ -176,4 +176,4 @@ export default {
         width: calc(100vw - 24px);
     }
 }
-</style>
+</style>./filterComponent/FilterValueArray

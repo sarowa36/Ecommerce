@@ -2,10 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import ProductComponent from "../components/ProductComponent.vue"
 import { ProductModel } from '../models/ProductModel';
-import FilterComponent from '../components/FilterComponent.vue';
-import FilterValue from "../models/FilterValue";
-import FilterValueArray from "../models/FilterValueArray";
-import FilterType from '../enums/FilterType';
+import { FilterComponent,FilterTypeEnum,FilterValue,FilterValueArray } from '../components/filterComponent';
 import Slider from '@vueform/slider'
 </script> 
 <template>
@@ -16,7 +13,7 @@ import Slider from '@vueform/slider'
                 </FilterComponent>
                 <FilterComponent describe-text="Sizes" icon="up-right-and-down-left-from-center" v-model="sizeFilterValues">
                 </FilterComponent>
-                <FilterComponent describe-text="Price" icon="hand-holding-dollar" :filterType="FilterType.priceRange" v-model="priceFilterValues">
+                <FilterComponent describe-text="Price" icon="hand-holding-dollar" :filterType="FilterTypeEnum.priceRange" v-model="priceFilterValues">
                 </FilterComponent>
                 <FilterComponent describe-text="Sort" icon="shuffle" v-model="sortFilterValues">
                 </FilterComponent>
@@ -93,4 +90,4 @@ export default {
         flex-direction: column;
     }
 }
-</style>
+</style>../components/filterComponent/FilterValueArray

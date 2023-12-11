@@ -8,7 +8,7 @@ import ProfileView from "../views/ProfileView.vue"
 import OrdersView from "../views/OrdersView.vue"
 import RegisterView from "../views/Identity/RegisterView.vue"
 import CartView from '../views/CartView.vue'
-
+import ProductCreateUpdateView from '../views/Admin/Product/ProductCreateUpdateView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   scrollBehavior(to,from,savedPosition){
@@ -55,10 +55,16 @@ const router = createRouter({
       path:"/Orders",
       name:"orders",
       component:OrdersView
-    }, {
+    }, 
+    {
       path:"/Cart",
       name:"cart",
       component:CartView
+    },
+    {
+      path:"/ProductCreate",
+      name:"productCreateUpdateView",
+      component:ProductCreateUpdateView
     },
   ]
 })

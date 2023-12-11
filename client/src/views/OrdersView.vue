@@ -1,20 +1,17 @@
 <script setup>
-import DashboardLayout from "@/components/DashboardLayout.vue"
+import {DashboardLayout} from "@/components/dashboard/"
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import  OrderModel  from "../models/OrderModel";
 import OrderStatus from "../enums/OrderStatus";
 import { ProductModel } from "../models/ProductModel";
 import {createRandomNumber,dateToDateTimeString} from "@/helpers/";
-import FilterComponent from "../components/FilterComponent.vue";
-import FilterValueArray from "../models/FilterValueArray";
-import FilterValue from "../models/FilterValue";
-import FilterType from "../enums/FilterType";
+import { FilterComponent,FilterTypeEnum,FilterValue,FilterValueArray } from '../components/filterComponent';
 </script>
 <template>
     <DashboardLayout>
         <div class="row pt-5">
             <div class="col-12 mb-3">
-                <FilterComponent icon="calendar-days" describeText="Date" v-model="dateFilterValues" :filterType="FilterType.checkboxListOnlyOneSelectable" :showSearchInput="false" />
+                <FilterComponent icon="calendar-days" describeText="Date" v-model="dateFilterValues" :filterType="FilterTypeEnum.checkboxListOnlyOneSelectable" :showSearchInput="false" />
             </div>
             <div v-for="(item,index) in orders" :class="{ 'order_outer': true, 'active': currentOrderId==item.id }">
                 <div class="order_mini" @click="toggleOrder(item.id)">
@@ -311,4 +308,4 @@ margin-top: 10px;
     display: none;
 }    
 }
-</style>
+</style>../components/filterComponent/FilterValueArray
