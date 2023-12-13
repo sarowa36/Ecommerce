@@ -16,7 +16,7 @@ import { ProductModel } from '../models/ProductModel';
                     <span class="introduce_desc">
                         Explore our curated collection of stylish clothing and accessories tailored to your unique taste.
                     </span>
-                    <button class="btn btn-secondary shadow">
+                    <button class="btn btn-primary shadow">
                         Explore Now
                     </button>
                 </div>
@@ -29,14 +29,14 @@ import { ProductModel } from '../models/ProductModel';
     <section class="container mt-5">
         <div class="row pt-5">
             <h2 class="col-12 section_title">Best Selling</h2>
-            <span class="col-12 section_desc">Get in on the trend with our curated selection of best-selling styles.</span>
+            <span class="col-12 section_desc text_theme">Get in on the trend with our curated selection of best-selling styles.</span>
         </div>
         <div class="row pt-3 justify-content-center">
             <ProductComponent v-for="pr in bestSellingProducts.slice(0, 3)" :value="pr" class="col-sm-6 col-md-4 mt-3">
             </ProductComponent>
         </div>
         <div class="row pt-5 justify-content-center">
-            <button class="btn btn-primary col-2">See All</button>
+            <button class="btn btn-outline-primary col-2">See All</button>
         </div>
     </section>
     <section class="container mt-5 theme_bg">
@@ -79,7 +79,7 @@ import { ProductModel } from '../models/ProductModel';
                         <h5>48</h5><span>Minute</span>
                     </div>
                 </div>
-                <button class="btn btn-secondary shadow">Get Now</button>
+                <button class="btn btn-primary shadow">Get Now</button>
             </div>
         </div>
     </section>
@@ -100,6 +100,7 @@ import { ProductModel } from '../models/ProductModel';
 <style scoped>
 .introduce_title {
     font-family: var(--second-title-font);
+    color: var(--first-color);
     font-size: 86px;
     font-weight: 700;
 }
@@ -118,18 +119,9 @@ import { ProductModel } from '../models/ProductModel';
     justify-content: center;
 }
 
-.btn-secondary {
+.btn-primary {
     width: fit-content;
     padding: 15px 35px;
-}
-
-.section_title {
-    font-family: var(--first-title-font);
-    font-size: 64px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: normal;
-    text-align: center;
 }
 
 .section_desc {

@@ -14,7 +14,7 @@ import router from '../../router';
             <div class="col-lg-6 p-0 theme_bg_3 position-relative">
                 <img class="identity_form_mobile_background" src="@/assets/registerimage.svg" alt="">
                 <div class="row identity_form_inner h-100 p-4 justify-content-center align-content-center gap-4">
-                    <h4 class="col-12 text-center font_roboto_mono">Register {{ loginStore.user.name }}</h4>
+                    <h4 class="col-12 text-center font_roboto_mono text_theme">Register {{ loginStore.user.name }}</h4>
                     <span class="col-12 text-danger white-space-pre-line text-center">{{ errors.modelOnly }}</span>
                     <div class="col-12">
                         <TextBox placeholder="Name" v-model="model.name" :errorMessage="errors.name" />
@@ -37,10 +37,10 @@ import router from '../../router';
                             :errorMessage="errors.passwordConfirm" />
                     </div>
                     <div class="col-md-7 identity_form_buttons">
-                        <button class="btn btn-primary" @click="sendRequest">Register</button>
+                        <button class="btn btn-outline-primary" @click="sendRequest">Register</button>
                     </div>
                     <div class="col-md-12 text-center">
-                        <RouterLink to="/Login" class="fs-5 font_roboto_mono">Do You Have Account Already?</RouterLink>
+                        <RouterLink to="/Login" class="fs-5 font_roboto_mono text_theme">Do You Have Account Already?</RouterLink>
                     </div>
                 </div>
             </div>

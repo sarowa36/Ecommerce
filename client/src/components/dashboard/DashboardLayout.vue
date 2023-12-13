@@ -9,7 +9,7 @@ import { useLoginStore, UserRole } from "@/stores/LoginStore";
             <div class="col-lg-3 profile_aside pt-5 pb-5 ps-0 pe-0">
                 <div class="form-check form-switch d-flex align-items-center justify-content-center gap-2 p-2">
                     <label class="form-check-label">User</label>
-                    <input class="form-check-input m-0" type="checkbox" role="switch" @change="toggleRole">
+                    <input class="form-check-input m-0" type="checkbox" role="switch" :checked="loginStore.user.roles.includes(UserRole.Admin)" @change="toggleRole">
                     <label class="form-check-label">Admin</label>
                 </div>
                 <div class="profile_basic_detail">

@@ -19,14 +19,14 @@ import { FilterComponent,FilterTypeEnum,FilterValue,FilterValueArray } from '../
                         <img v-for="imagelink in item.products.map(x=>x.img[0])" :src="imagelink" alt="">
                     </div>
                     <div class="order_mini_meta">
-                        <span>Order number: <strong>{{ item.id }}</strong></span>
+                        <span>Order number: <strong class="text_theme">{{ item.id }}</strong></span>
                         <span>{{ dateToDateTimeString(item.date) }}</span>
                     </div>
                     <div class="order_mini_status">
                         <FontAwesomeIcon icon="check-circle" />
                         <span>{{ item.orderStatus }}</span>
                     </div>
-                    <div class="order_mini_amount">
+                    <div class="order_mini_amount text_theme">
                         {{ item.totalAmount }} $
                     </div>
                     <div class="order_mini_toggle_icon">
@@ -50,27 +50,27 @@ import { FilterComponent,FilterTypeEnum,FilterValue,FilterValueArray } from '../
                                 </div>
                             </div>
                             <div class="order_action_buttons">
-                                <a href="#" class="btn btn-primary">
+                                <a href="#" class="btn btn-outline-primary">
                                     <FontAwesomeIcon icon="people-carry-box" />Cargo Tracking
                                 </a>
-                                <a href="#" class="btn btn-primary">
+                                <a href="#" class="btn btn-outline-primary">
                                     <FontAwesomeIcon icon="ban" />Complaint Or Refund
                                 </a>
-                                <a href="#" class="btn btn-primary">
+                                <a href="#" class="btn btn-outline-primary">
                                     <FontAwesomeIcon icon="file-invoice" />Show Bill
                                 </a>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="order_delivery_status_box">
-                                        <FontAwesomeIcon icon="check-circle" />
+                                        <FontAwesomeIcon icon="check-circle" class="text_theme" />
                                         <div class="order_delivery_meta">
                                             <h6>{{item.orderStatus}}</h6>
                                             <span class="text-success">Delivered on: <strong>{{ item.date.toLocaleString() }}</strong></span>
                                         </div>
                                     </div>
                                     <div class="order_delivery_detail_box mt-3">
-                                        <h5>Delivery Details</h5>
+                                        <h5 class="text_theme">Delivery Details</h5>
                                         <strong>{{item.addressName}}</strong>
                                         <span>{{ item.addressDetail }}</span>
                                         <span>{{ item.addressCity }}, {{ item.addressZip }} {{ item.addressCountry }}</span>
@@ -78,7 +78,7 @@ import { FilterComponent,FilterTypeEnum,FilterValue,FilterValueArray } from '../
                                     </div>
                                 </div>
                                 <div class="col-md-6 mt-4">
-                                    <h5>Payment Information</h5>
+                                    <h5 class="text_theme">Payment Information</h5>
                                     <ul class="order_payment_detail_list">
                                         <li><span>Cargo: </span><span>{{ item.cargoAmount }}</span></li>
                                         <li><span>Amount: </span><span>$ {{ item.amount }}</span></li>

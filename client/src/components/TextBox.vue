@@ -25,7 +25,7 @@ defineEmits(["update:modelValue", "pressEnter"])
         <span v-if="errorMessage" class="text-danger">{{ errorMessage }}</span>
         <input :id="_id" ref="textbox" :type="type" :class="'myinput ' + (value ? 'with_value' : '')" :placeholder="placeholder"
             @blur="checkVal" v-model="value" @keydown="keydownEvent" />
-        <label :for="_id" class="input_label">{{ placeholder }}</label>
+        <label :for="_id" class="input_label text_theme">{{ placeholder }}</label>
     </div>
 </template> 
 <script>

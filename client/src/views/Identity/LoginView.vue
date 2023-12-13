@@ -14,7 +14,7 @@ import router from '../../router';
             <div class="col-lg-6 p-0 theme_bg_3 position-relative">
                 <img class="identity_form_mobile_background" src="@/assets/LoginImage.svg" alt="">
                 <div class="row identity_form_inner h-100 p-4 justify-content-center align-content-center gap-4">
-                    <h4 class="col-12 text-center font_roboto_mono">Login</h4>
+                    <h4 class="col-12 text-center font_roboto_mono text_theme">Login</h4>
                     <span class="col-12 text-danger white-space-pre-line text-center">{{ errors.modelOnly }}</span>
                     <div class="col-md-7 form-group">
                         <TextBox placeholder="Email" v-model="model.email" :errorMessage="errors.email" />
@@ -23,11 +23,11 @@ import router from '../../router';
                         <TextBox placeholder="Password" type="password" v-model="model.password" :errorMessage="errors.password" />
                     </div>
                     <div class="col-md-7 form-group identity_form_buttons">
-                        <button class="btn btn-primary" @click="sendRequest">Sign In</button>
-                        <RouterLink to="/Register" class="btn btn-primary">Register</RouterLink>
+                        <button class="btn btn-outline-primary" @click="sendRequest">Sign In</button>
+                        <RouterLink to="/Register" class="btn btn-outline-primary">Register</RouterLink>
                     </div>
                     <div class="col-md-7 text-center">
-                        <RouterLink to="" class="fs-5 font_roboto_mono">Forgot Password?</RouterLink>
+                        <RouterLink to="" class="fs-5 font_roboto_mono text_theme">Forgot Password?</RouterLink>
                     </div>
                 </div>
             </div>

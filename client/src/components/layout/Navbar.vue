@@ -59,12 +59,12 @@ import { useLoginStore } from '../../stores/LoginStore';
                     </a>
                 </div>
                 <div class="nav_submenu_buttons">
-                  <RouterLink to="/Cart" class="btn btn-primary">Cart</RouterLink><RouterLink to="/" class="btn btn-secondary">Order</RouterLink>
+                  <RouterLink to="/Cart" class="btn btn-outline-primary">Cart</RouterLink><RouterLink to="/" class="btn btn-primary">Order</RouterLink>
                 </div>
               </div>
               </div>
             </div>
-            <RouterLink to="/Login" v-if="!loginStore.isLogged" :class="$screen.width > 992 ? 'btn btn-primary btn_login' : ''">
+            <RouterLink to="/Login" v-if="!loginStore.isLogged" :class="$screen.width > 992 ? 'btn btn-outline-primary btn_login' : ''">
               Login</RouterLink>
             <RouterLink to="/Profile" v-else>Profile</RouterLink>
           </div>
@@ -82,10 +82,13 @@ import { useLoginStore } from '../../stores/LoginStore';
   z-index: 999;
 }
 
-.navigation>a:not(:hover) {
+.navigation a:not(.btn) {
+  transition: 0.3s;
   color: var(--first-color);
 }
-
+.navigation a:not(.btn):hover{
+  color: var(--second-color);
+}
 .navigation :where( a, div.nav_link_with_dropdown > a){
   font-family: var(--first-font);
   font-size: 19px;

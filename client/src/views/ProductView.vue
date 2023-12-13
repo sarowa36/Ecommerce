@@ -16,7 +16,7 @@ import ProductComponent from "../components/ProductComponent.vue";
                 </Carousel>
             </div>
             <div class="col-lg-6 product_description">
-                <h3>Piece of beauty</h3>
+                <h3 class="text_theme">Piece of beauty</h3>
                 <h4>1800,00 TL</h4>
                 <div class="product_reviews_section">
                     <div class="d-flex align-items-center">
@@ -40,7 +40,7 @@ import ProductComponent from "../components/ProductComponent.vue";
                             <FontAwesomeIcon icon="plus" />
                         </button>
                     </div>
-                    <button class="btn btn-secondary">
+                    <button class="btn btn-primary">
                         <FontAwesomeIcon icon="cart-shopping" /> Add Cart
                     </button>
                 </div>
@@ -61,7 +61,8 @@ import ProductComponent from "../components/ProductComponent.vue";
                         <FontAwesomeIcon :icon="['far', 'heart']" /> Like
                     </button>
                     <div class="save_btn_outer">
-                        <button :class="'btn' + (showListDropdown ? ' active' : '')" @click="toggleShowListDropdown">
+                        <button :class="'btn show_list_dropdown' + (showListDropdown ? ' active' : '')"
+                            @click="toggleShowListDropdown">
                             <FontAwesomeIcon :icon="['far', 'bookmark']" /> Save
                         </button>
                         <div v-if="showListDropdown" class="save_btn_dropdown">
@@ -80,7 +81,8 @@ import ProductComponent from "../components/ProductComponent.vue";
                         </div>
                     </div>
                     <div class="share_btn_outer">
-                        <button :class="'btn' +(showShareDropdown ? ' active': '')" @click="toggleShowShareDropdown">
+                        <button :class="'btn' + (showShareDropdown ? ' active' : '')"
+                            @click="toggleShowShareDropdown">
                             <FontAwesomeIcon icon="share" /> Share
                         </button>
                         <div v-if="showShareDropdown" class="share_btn_dropdown">
@@ -88,10 +90,10 @@ import ProductComponent from "../components/ProductComponent.vue";
                                 <FontAwesomeIcon icon="link" />
                             </a>
                             <a href="#">
-                                <FontAwesomeIcon :icon="['fab','whatsapp']" />
+                                <FontAwesomeIcon :icon="['fab', 'whatsapp']" />
                             </a>
                             <a href="#">
-                                <FontAwesomeIcon :icon="['fab','instagram']" />
+                                <FontAwesomeIcon :icon="['fab', 'instagram']" />
                             </a>
                         </div>
                     </div>
@@ -237,7 +239,7 @@ import ProductComponent from "../components/ProductComponent.vue";
             <h1 class="text-center">Best Sellers</h1>
             <div class="divider_line mb-3"></div>
             <div class="col-12">
-                <Carousel :loop="true" :responsive="{0:{items:1,nav:false},992:{items:3}}">
+                <Carousel :loop="true" :responsive="{ 0: { items: 1, nav: false }, 992: { items: 3 } }">
                     <ProductComponent v-for="pr in products" :value="pr" class="m-3"></ProductComponent>
                 </Carousel>
             </div>
@@ -398,22 +400,25 @@ import ProductComponent from "../components/ProductComponent.vue";
     display: flex;
     justify-content: space-between;
 }
-.share_btn_outer{
+
+.share_btn_outer {
     position: relative;
 }
-.share_btn_dropdown{
+
+.share_btn_dropdown {
     position: absolute;
     display: flex;
     justify-content: space-between;
     background-color: white;
-    padding:5px;
+    padding: 5px;
     column-gap: 5px;
     left: calc(-50% + 20px);
     border-radius: 25px;
     margin-top: 10px;
 }
-.share_btn_dropdown > a{
-    border:1px solid;
+
+.share_btn_dropdown>a {
+    border: 1px solid var(--first-color);
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -421,14 +426,19 @@ import ProductComponent from "../components/ProductComponent.vue";
     align-items: center;
     justify-content: center;
     transition: 0.3s;
+    color: var(--first-color);
 }
-.share_btn_dropdown > a:hover {
-  background: black;
-  color: white;
-  border-color: black;
+
+.share_btn_dropdown>a:hover {
+    background: black;
+    color: white;
+    border-color: black;
 }
+
 @media (max-width: 768px) {
-    .comment_meta_outer, .product_boxs_section{
+
+    .comment_meta_outer,
+    .product_boxs_section {
         flex-direction: column;
     }
 }
@@ -443,8 +453,14 @@ export default {
                 new ProductModel({ img: ["http://img.sarowa36.com.tr/woman2.png"], title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
                 new ProductModel({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })],
             showListDropdown: false,
-            showShareDropdown:false
+            showShareDropdown: false
         }
+    },
+    mounted(){
+        window.addEventListener("click",this.windowClickEvent)
+    },
+    unmounted(){
+        window.removeEventListener("click",this.windowClickEvent)
     },
     methods: {
         increaseCartCount() {
@@ -459,7 +475,17 @@ export default {
         },
         toggleShowShareDropdown() {
             this.showShareDropdown = !this.showShareDropdown;
-        }
+        },
+        windowClickEvent(e) {
+            /*show_share_dropdown  show_list_dropdown*/
+            var eventNode = e.target;
+            if (!eventNode.closest(".share_btn_outer") && this.showShareDropdown) {
+                this.showShareDropdown = false;
+            }
+            if (!eventNode.closest(".save_btn_outer") && this.showListDropdown) {
+                this.showListDropdown = false;
+            }
+        },
     }
 }
 </script>

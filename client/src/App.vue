@@ -104,6 +104,7 @@ import Navbar from './components/layout/Navbar.vue';
   background: var(--seventh-color);
   border: 2px solid var(--seventh-color);
   border-radius: 0 var(--bs-border-radius) var(--bs-border-radius) 0;
+  color: var(--first-color);
 }
 
 .footer_link_list {

@@ -64,7 +64,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
                     <textarea class="form-control" cols="30" rows="10"></textarea>
                 </div>
                 <div class="col-12 mt-3 text-end">
-                    <button class="btn btn-secondary">Send</button>
+                    <button class="btn btn-primary">Send</button>
                 </div>
             </div>
         </div>

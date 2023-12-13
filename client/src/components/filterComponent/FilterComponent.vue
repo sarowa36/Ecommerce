@@ -24,8 +24,8 @@ import Slider from "@vueform/slider"
                     v-model="priceRangeValue" />
             </div>
             <div class="filter_dropdown_footer">
-                <button class="btn btn-secondary" @click="_clearEvent">Clear</button>
-                <button class="btn btn-primary" @click="_applyEvent">Apply</button>
+                <button class="btn btn-primary" @click="_clearEvent">Clear</button>
+                <button class="btn btn-outline-primary" @click="_applyEvent">Apply</button>
             </div>
         </div>
     </div>
