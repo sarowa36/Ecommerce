@@ -28,6 +28,7 @@ import { useLoginStore } from '../../stores/LoginStore';
                   <RouterLink to="/Orders">Orders</RouterLink>
                   <RouterLink to="/Register">Register</RouterLink>
                   <RouterLink to="/Cart">Cart</RouterLink>
+                  <RouterLink to="/ProductCreate">Create Product</RouterLink>
                 </div>
               </div>
             </div>
