@@ -17,7 +17,7 @@ defineEmits(["remove", "showLightbox"])
             </div>
         </div>
         <div class="file_buttons">
-            <button class="btn file_show" @click='this.$emit("showLightbox", this.modelValue)'>
+            <button class="btn file_show" @click='$emit("showLightbox", modelValue)'>
                 <FontAwesomeIcon icon="eye" />
             </button>
             <button class="btn file_move">

@@ -63,21 +63,21 @@ export default {
         return {
             loginStore: useLoginStore(),
             userMenuItems: [
-                new DashboardMenuItemValue({icon: "bell", link: "/", text: "Notifications"}),
+                new DashboardMenuItemValue({icon: "bell", link: "", text: "Notifications"}),
                 new DashboardMenuItemValue({ icon: "box", link: "/Orders", text: "Orders" }),
-                new DashboardMenuItemValue({ icon: "question", link: "/", text: "My Questions" }),
-                new DashboardMenuItemValue({ icon: "user-pen", link: "/", text: "Profile Detail" }),
-                new DashboardMenuItemValue({ icon: "lock", link: "/", text: "Change Password" }),
+                new DashboardMenuItemValue({ icon: "question", link: "", text: "My Questions" }),
+                new DashboardMenuItemValue({ icon: "user-pen", link: "", text: "Profile Detail" }),
+                new DashboardMenuItemValue({ icon: "lock", link: "", text: "Change Password" }),
                 new DashboardMenuItemValue({ isHr: true }),
-                new DashboardMenuItemValue({ icon: "heart", link: "/", text: "My Favorites" }),
-                new DashboardMenuItemValue({ icon: "bookmark", link: "/", text: "My Lists" }),
+                new DashboardMenuItemValue({ icon: "heart", link: "", text: "My Favorites" }),
+                new DashboardMenuItemValue({ icon: "bookmark", link: "", text: "My Lists" }),
                 new DashboardMenuItemValue({ isHr: true }),
-                new DashboardMenuItemValue({ icon: "right-from-bracket", link: "/", text: "Exit" }),
+                new DashboardMenuItemValue({ icon: "right-from-bracket", link: "", text: "Exit" }),
             ],
             adminMenuItems: [
-                new DashboardMenuItemValue({icon:"box",text:"Products",link:"/",childItems:[new DashboardMenuItemValue({icon:"plus",text:"Create",link:"/ProductCreate"})]}),
+                new DashboardMenuItemValue({icon:"box",text:"Products",link:"",childItems:[new DashboardMenuItemValue({icon:"plus",text:"Create",link:"/ProductCreate"})]}),
                 new DashboardMenuItemValue({ isHr: true }),
-                new DashboardMenuItemValue({ icon: "right-from-bracket", link: "/", text: "Exit" }),
+                new DashboardMenuItemValue({ icon: "right-from-bracket", link: "", text: "Exit" }),
             ]
         }
     },

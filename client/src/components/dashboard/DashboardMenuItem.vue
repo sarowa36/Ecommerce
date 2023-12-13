@@ -47,7 +47,7 @@ defineProps({
     transition: 0.3s;
     width: 100%;
 }
-.dashboard_menu_item a:where(:hover, .router-link-active) {
+.dashboard_menu_item a:where(:hover/*, .router-link-active*/) {
     color: var(--second-color);
 }
 .dashboard_submenu_collapser {
