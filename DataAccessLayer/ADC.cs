@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Helpers;
+using DataAccessLayer.Interceptions;
 using EntityLayer.Base;
-using EntityLayer.Concrete;
+using EntityLayer.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -16,6 +17,11 @@ namespace DataAccessLayer
     {
         public ADC(DbContextOptions<ADC> options) : base(options)
         {
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.AddInterceptors(new SoftDeletableInterception());
+            base.OnConfiguring(optionsBuilder);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

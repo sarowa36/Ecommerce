@@ -2,7 +2,7 @@
 using BusinessLayer.Validations.IdentityController;
 using Ecommerce.AutoMappers.IdentityController;
 using Ecommerce.Helpers;
-using EntityLayer.Concrete;
+using EntityLayer.Entities;
 using EntityLayer.ViewModels.IdentityController;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;

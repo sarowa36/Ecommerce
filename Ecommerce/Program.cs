@@ -1,7 +1,7 @@
 using DataAccessLayer;
 using Ecommerce.Helpers;
 using Ecommerce.Middlewares;
-using EntityLayer.Concrete;
+using EntityLayer.Entities;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -62,8 +62,8 @@ app.UseEndpoints(endpoints => {
 });
 
 app.UseSpa(options => {
-/*if(app.Environment.IsDevelopment())
-        options.UseProxyToSpaDevelopmentServer("http://localhost:5173/");*/
+if(app.Environment.IsDevelopment())
+        options.UseProxyToSpaDevelopmentServer("http://localhost:5173/");
 });
 
 app.Run();

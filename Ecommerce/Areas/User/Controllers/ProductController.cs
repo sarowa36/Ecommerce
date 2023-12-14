@@ -1,5 +1,5 @@
-﻿using DataAccessLayer.Concrete;
-using EntityLayer.Concrete;
+﻿using DataAccessLayer.Base.Repositories.ProductRepositories;
+using EntityLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Areas.User.Controllers
@@ -7,31 +7,15 @@ namespace Ecommerce.Areas.User.Controllers
     [Area("User")]
     public class ProductController : Controller
     {
-        private readonly ProductRepository _productRepository;
-        public ProductController(ProductRepository productRepository)
+        private readonly IProductReadRepository _productReadRepository;
+        public ProductController(IProductReadRepository productReadRepository)
         {
-            _productRepository = productRepository;
+            _productReadRepository = productReadRepository;
 
         }
         public async Task<IActionResult> GetAll()
         {
-            return Ok(_productRepository.GetAll().ToList());
-        }
-        public async Task<IActionResult> AddRange()
-        {
-           /* _productRepository.CreateRange(new List<Product>() {
-            new(){ ProductName=Guid.NewGuid().ToString(),ProductDescription=Guid.NewGuid().ToString()},
-            new(){ ProductName=Guid.NewGuid().ToString(),ProductDescription=Guid.NewGuid().ToString()},
-            new(){ ProductName=Guid.NewGuid().ToString(),ProductDescription=Guid.NewGuid().ToString()},
-            new(){ ProductName=Guid.NewGuid().ToString(),ProductDescription=Guid.NewGuid().ToString()},
-            new(){ ProductName=Guid.NewGuid().ToString(),ProductDescription=Guid.NewGuid().ToString()},
-            new(){ ProductName=Guid.NewGuid().ToString(),ProductDescription=Guid.NewGuid().ToString()},
-            new(){ ProductName=Guid.NewGuid().ToString(),ProductDescription=Guid.NewGuid().ToString()},
-            new(){ ProductName=Guid.NewGuid().ToString(),ProductDescription=Guid.NewGuid().ToString()},
-            new(){ ProductName=Guid.NewGuid().ToString(),ProductDescription=Guid.NewGuid().ToString()},
-            new(){ ProductName=Guid.NewGuid().ToString(),ProductDescription=Guid.NewGuid().ToString()},
-            });*/
-            return Ok();
+            return Ok(_productReadRepository.GetAll().ToList());
         }
     }
 }

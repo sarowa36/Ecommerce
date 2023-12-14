@@ -2,10 +2,10 @@
 import draggable from "vuedraggable"
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import VueEasyLightbox from 'vue-easy-lightbox'
-import { FileUploadValue, ListedFileComponent } from "./";
+import { FileUploadValue,FileUploadValueArray, ListedFileComponent } from "./";
 defineProps({
     modelValue:{
-        type:Array,
+        type:FileUploadValueArray,
         default:[]
     }
 })
@@ -14,7 +14,7 @@ defineEmits(["update:modelValue"])
 <template>
     <div class="row">
         <div :class="[value.length < 1 ? 'align-items-center d-flex justify-content-center' : '', 'col-7']">
-            <draggable v-model="value" handle=".file_move" item-key="id" @change="arrayResorted">
+            <draggable v-model="value" handle=".file_move" item-key="id">
                 <template #item="{ element, index }">
                     <ListedFileComponent v-model="value[index]" @remove="remove(index)" @showLightbox="showLightbox" />
                 </template>
@@ -66,28 +66,14 @@ export default {
             e.preventDefault();
             e.stopPropagation();
             var dt = new DataTransfer();
-            [...this.$refs.file_storage_input.files].forEach(x => dt.items.add(x));
-            [...e.dataTransfer.files].forEach(x => dt.items.add(x));
-            this.$refs.file_storage_input.files = dt.files;
-            this.uploadStoredValues()
+            [...e.dataTransfer.files].forEach(x => this.modelValue.push(new FileUploadValue({file:x})));
             return false;
         },
         fileInputChange() {
-            var dt = new DataTransfer();
-            [...this.$refs.file_temp_input.files].forEach(x => dt.items.add(x));
-            [...this.$refs.file_storage_input.files].forEach(x => dt.items.add(x));
-            this.$refs.file_storage_input.files = dt.files;
-            this.$refs.file_temp_input.files = (new DataTransfer()).files;
-            this.uploadStoredValues();
-        },
-        uploadStoredValues() {
-            this.value=[...this.$refs.file_storage_input.files].map(x => new FileUploadValue({ fileName: x.name, fileSize: x.size, file: x }))
+            [...this.$refs.file_temp_input.files].forEach(x => this.modelValue.push(new FileUploadValue({file:x})));
         },
         remove(index) {
-            var dt = new DataTransfer();
-            [...this.$refs.file_storage_input.files].forEach((x, i) => { if (i != index) dt.items.add(x); })
-            this.$refs.file_storage_input.files = dt.files;
-            this.uploadStoredValues()
+            this.value=this.modelValue.filter((x, i) => { if (i != index) return x; })
         },
         async showLightbox(item) {
             if (!item.base64Value) {
@@ -103,12 +89,6 @@ export default {
                 this.base64Value = item.base64Value;
                 this.lightboxToggler = true;
             }
-        },
-        arrayResorted() {
-            console.log(1)
-            var dt = new DataTransfer();
-            this.value.forEach(x => dt.items.add(x.file));
-            this.$refs.file_storage_input.files = dt.files;
         },
         prevent(e) {
             e.preventDefault();

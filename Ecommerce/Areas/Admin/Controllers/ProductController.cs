@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using BusinessLayer.Validations.Admin.ProductController;
-using DataAccessLayer.Concrete;
-using EntityLayer.Concrete;
+using DataAccessLayer;
+using DataAccessLayer.Base.Repositories.ProductRepositories;
+using DataAccessLayer.Repositories;
+using EntityLayer.Entities;
 using EntityLayer.ViewModels.Admin.ProductController;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -12,18 +14,19 @@ namespace Ecommerce.Areas.Admin.Controllers
     [Area("Admin")]
     public class ProductController : Controller
     {
-        private readonly ProductRepository _productRepository;
+        private readonly IProductWriteRepository _productWriteRepository;
         private readonly IMapper _mapper;
         private readonly IServiceProvider _serviceProvider;
-        public ProductController(ProductRepository productRepository, IMapper mapper,IServiceProvider serviceProvider)
+        public ProductController(IProductWriteRepository productWriteRepository, IMapper mapper,IServiceProvider serviceProvider)
         {
-            _productRepository = productRepository;
+            _productWriteRepository = productWriteRepository;
             _mapper = mapper;
             _serviceProvider = serviceProvider;
         }
         [HttpPost]
         public async Task<IActionResult> Create(CreateProductVM model)
         {
+            var files=HttpContext.Request.Form.Files;
             var res = _serviceProvider.GetService<CreateProductVMValidation>().Validate(model);
             if (res.IsValid)
             {
@@ -33,7 +36,8 @@ namespace Ecommerce.Areas.Admin.Controllers
                 {
                    modelAsProduct.Images.Add(await img.SaveFileAsync(Path.Combine("Admin","Product")));
                 }
-                _productRepository.Create(modelAsProduct);
+                await _productWriteRepository.CreateAsync(modelAsProduct);
+                await _productWriteRepository.SaveChangesAsync();
                 return Ok();
             }
             return BadRequest(res.Errors);

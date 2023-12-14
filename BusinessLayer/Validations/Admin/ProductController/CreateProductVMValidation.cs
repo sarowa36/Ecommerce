@@ -15,7 +15,7 @@ namespace BusinessLayer.Validations.Admin.ProductController
             RuleFor(x=> x.Name).NotEmpty().MinimumLength(3).MaximumLength(45);
             RuleFor(x => x.Description).MaximumLength(1000);
             RuleFor(x => x.Price).NotEmpty().GreaterThan(1);
-            RuleFor(x => x.Images).NotEmpty().Must(x => x.Count() > 0);
+            RuleFor(x => x.Images).NotEmpty().Must(x => x?.Count() > 0);
         }
     }
 }

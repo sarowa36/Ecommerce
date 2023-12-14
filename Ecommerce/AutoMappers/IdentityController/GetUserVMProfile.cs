@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using EntityLayer.Concrete;
+using EntityLayer.Entities;
 using EntityLayer.ViewModels.IdentityController;
 
 namespace Ecommerce.AutoMappers.IdentityController
