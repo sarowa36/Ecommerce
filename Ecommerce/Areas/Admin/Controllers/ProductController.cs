@@ -34,7 +34,7 @@ namespace Ecommerce.Areas.Admin.Controllers
                 modelAsProduct.Images = new List<string>();
                 foreach (var img in model.Images)
                 {
-                   modelAsProduct.Images.Add(await img.SaveFileAsync(Path.Combine("Admin","Product")));
+                   modelAsProduct.Images.Add(await img.SaveFileAsync(Path.Combine("Admin","Product"))); 
                 }
                 await _productWriteRepository.CreateAsync(modelAsProduct);
                 await _productWriteRepository.SaveChangesAsync();
