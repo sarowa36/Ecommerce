@@ -17,7 +17,7 @@ namespace DataAccessLayer.Base
         Task DeleteWhereAsync(Expression<Func<T,bool>> expression);
         Task DeleteAsync(object id);
         Task DeleteRangeAsync(IEnumerable<T> values);
-        Task SaveChangesAsync();
+        Task<int> SaveChangesAsync();
 
     }
 }

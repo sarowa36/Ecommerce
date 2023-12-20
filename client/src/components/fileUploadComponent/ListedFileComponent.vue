@@ -11,9 +11,9 @@ defineEmits(["remove", "showLightbox"])
 </script>
 <template>
     <div class="uploaded_file">
-        <font-awesome-icon v-if="!modelValue.base64Value" class="file_icon" icon="image" />
-        <img v-else :src="modelValue.base64Value" class="file_icon" alt="">
-        <div class="file_meta">{{ modelValue.file.name }}<div class="file_size">{{ ~~(modelValue.file.size / 1024) }} kb
+        <font-awesome-icon v-if="!modelValue.link" class="file_icon" icon="image" />
+        <img v-else :src="modelValue.link" class="file_icon" alt="">
+        <div class="file_meta">{{ modelValue.file !=null ? modelValue.file.name : modelValue.link.split("/").pop() }}<div class="file_size">{{ modelValue.file ? ~~(modelValue.file.size / 1024) +"kb" :'' }}
             </div>
         </div>
         <div class="file_buttons">

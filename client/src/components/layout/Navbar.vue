@@ -19,7 +19,7 @@ import { useLoginStore } from '../../stores/LoginStore';
         <div :class="'col-lg-8' + ($screen.width > 992 ? '' : ' collapse')" id="navigation">
           <div class="navigation">
             <RouterLink to="/">Home</RouterLink>
-            <RouterLink to="/ProductList">Shop</RouterLink>
+            <RouterLink to="/Shop">Shop</RouterLink>
             <div class="nav_link_with_dropdown nav_links">
             <RouterLink to="/">Features</RouterLink> <button class="btn" @click="collapseSubmenu"><FontAwesomeIcon icon="chevron-down" /></button>
             <div class="nav_submenu_outer">

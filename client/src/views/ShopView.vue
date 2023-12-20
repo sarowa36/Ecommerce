@@ -1,8 +1,7 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import ProductComponent from "../components/ProductComponent.vue"
-import { ProductModel } from '../models/ProductModel';
-import { FilterComponent,FilterTypeEnum,FilterValue,FilterValueArray } from '../components/filterComponent';
+import { ProductComponentValue, ProductComponent} from "@/components/productComponent"
+import { FilterComponent,FilterTypeEnum,FilterValue,FilterValueArray } from '@/components/filterComponent';
 import Slider from '@vueform/slider'
 </script> 
 <template>
@@ -27,10 +26,10 @@ export default {
     data() {
         return {
             products: [
-                new ProductModel({ img: ["http://img.sarowa36.com.tr/woman1.png"], title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
-                new ProductModel({ img: ["http://img.sarowa36.com.tr/woman2.png"], title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
-                new ProductModel({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }),
-                new ProductModel({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })
+                new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman1.png"], title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
+                new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman2.png"], title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
+                new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }),
+                new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })
             ],
             categoryFilterValues:new FilterValueArray(
                 new FilterValue({value:"XS"}),
@@ -90,4 +89,4 @@ export default {
         flex-direction: column;
     }
 }
-</style>../components/filterComponent/FilterValueArray
+</style>

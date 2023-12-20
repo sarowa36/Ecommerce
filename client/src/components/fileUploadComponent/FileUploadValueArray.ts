@@ -4,7 +4,13 @@ class FileUploadValueArray extends Array<FileUploadValue>{
         return this.filter(x => x.file != null).map(x => x.file);
     }
     AppendFilesToFormData(valueName: string, formData: FormData): void {
-        this.GetFiles().forEach(x => formData.append(valueName, x))
+        this.forEach((element,index) => {
+            if(element.isUploaded)
+            formData.append(valueName+`[${index}].link`,element.link);
+            else
+            formData.append(valueName+`[${index}].file`,element.file);
+        });
+       // this.GetFiles().forEach(x => formData.append(valueName, x))
     }
 }
 export default FileUploadValueArray;

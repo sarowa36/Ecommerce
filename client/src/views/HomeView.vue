@@ -1,7 +1,6 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import ProductComponent from '../components/ProductComponent.vue';
-import { ProductModel } from '../models/ProductModel';
+import { ProductComponent, ProductComponentValue } from '@/components/productComponent';
 
 </script>
 
@@ -29,7 +28,8 @@ import { ProductModel } from '../models/ProductModel';
     <section class="container mt-5">
         <div class="row pt-5">
             <h2 class="col-12 section_title">Best Selling</h2>
-            <span class="col-12 section_desc text_theme">Get in on the trend with our curated selection of best-selling styles.</span>
+            <span class="col-12 section_desc text_theme">Get in on the trend with our curated selection of best-selling
+                styles.</span>
         </div>
         <div class="row pt-3 justify-content-center">
             <ProductComponent v-for="pr in bestSellingProducts.slice(0, 3)" :value="pr" class="col-sm-6 col-md-4 mt-3">
@@ -207,11 +207,13 @@ import { ProductModel } from '../models/ProductModel';
     font-size: 16px;
     font-weight: 500;
 }
-.product_filters{
+
+.product_filters {
     display: flex;
     justify-content: space-evenly;
-    align-items: center;    
+    align-items: center;
 }
+
 .product_filters>a {
     color: var(--third-color);
     font-size: 22px;
@@ -240,26 +242,30 @@ import { ProductModel } from '../models/ProductModel';
         display: none;
     }
 }
+
 @media (max-width: 768px) {
-    .product_filters{
+    .product_filters {
         flex-direction: column;
     }
-    .introduce_title{
+
+    .introduce_title {
         font-size: 60px;
     }
-    .introduce_desc{
+
+    .introduce_desc {
         font-size: 20px;
     }
-}</style>
+}
+</style>
 <script>
 export default {
     data() {
         return {
             bestSellingProducts: [
-                new ProductModel({ img: ["http://img.sarowa36.com.tr/woman1.png"], title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
-                new ProductModel({ img: ["http://img.sarowa36.com.tr/woman2.png"], title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
-                new ProductModel({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }),
-                new ProductModel({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })
+                new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman1.png"], title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
+                new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman2.png"], title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
+                new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }),
+                new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })
             ]
         }
     }

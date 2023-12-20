@@ -362,4 +362,5 @@ MigrationBackup/
 client/.vscode
 [Ee]commerce/appsettings.json
 [Ee]commerce/dist
+[Ee]commerce/wwwroot
 /[Ee]commerce/.config

@@ -2,8 +2,7 @@
 import Carousel from "../components/Carousel.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Tabs, Tab } from 'vue3-tabs-component';
-import { ProductModel } from "../models/ProductModel";
-import ProductComponent from "../components/ProductComponent.vue";
+import { ProductComponent, ProductComponentValue } from "@/components/productComponent";
 </script> 
 <template>
     <div class="container mb-5">
@@ -81,8 +80,7 @@ import ProductComponent from "../components/ProductComponent.vue";
                         </div>
                     </div>
                     <div class="share_btn_outer">
-                        <button :class="'btn' + (showShareDropdown ? ' active' : '')"
-                            @click="toggleShowShareDropdown">
+                        <button :class="'btn' + (showShareDropdown ? ' active' : '')" @click="toggleShowShareDropdown">
                             <FontAwesomeIcon icon="share" /> Share
                         </button>
                         <div v-if="showShareDropdown" class="share_btn_dropdown">
@@ -449,18 +447,18 @@ export default {
         return {
             productCartCount: 1,
             products: [
-                new ProductModel({ img: ["http://img.sarowa36.com.tr/woman1.png"], title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
-                new ProductModel({ img: ["http://img.sarowa36.com.tr/woman2.png"], title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
-                new ProductModel({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })],
+                new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman1.png"], title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
+                new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman2.png"], title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
+                new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })],
             showListDropdown: false,
             showShareDropdown: false
         }
     },
-    mounted(){
-        window.addEventListener("click",this.windowClickEvent)
+    mounted() {
+        window.addEventListener("click", this.windowClickEvent)
     },
-    unmounted(){
-        window.removeEventListener("click",this.windowClickEvent)
+    unmounted() {
+        window.removeEventListener("click", this.windowClickEvent)
     },
     methods: {
         increaseCartCount() {

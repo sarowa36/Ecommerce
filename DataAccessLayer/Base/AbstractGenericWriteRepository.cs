@@ -10,7 +10,7 @@ namespace DataAccessLayer.Base
 {
     public abstract class AbstractGenericWriteRepository<T> : IWriteRepository<T> where T : class
     {
-        public DbSet<T> Table => Table;
+        public DbSet<T> Table { get { return _db.Set<T>(); } }
         private readonly ADC _db;
         public AbstractGenericWriteRepository(ADC db)
         {
@@ -19,11 +19,11 @@ namespace DataAccessLayer.Base
 
         public virtual async Task CreateAsync(T t)
         {
-            Table.Add(t);
+           await Table.AddAsync(t);
         }
         public virtual async Task CreateRangeAsync(IEnumerable<T> values)
         {
-            Table.AddRange(values);
+           await Table.AddRangeAsync(values);
         }
         public virtual async Task UpdateAsync(T t)
         {
@@ -35,7 +35,7 @@ namespace DataAccessLayer.Base
         }
         public virtual async Task DeleteAsync(T t)
         {
-            Table.Update(t);
+            Table.Remove(t);
         }
         public virtual async Task DeleteAsync(object id)
         {
@@ -55,9 +55,9 @@ namespace DataAccessLayer.Base
         {
             Table.RemoveRange(values);
         }
-        public virtual async Task SaveChangesAsync()
+        public virtual async Task<int> SaveChangesAsync()
         {
-            _db.SaveChangesAsync();
+           return await _db.SaveChangesAsync();
         }
     }
 }

@@ -14,5 +14,6 @@ namespace DataAccessLayer.Base
         public T? GetWhere(Expression<Func<T, bool>> expression);
         public bool GetWhere(Expression<Func<T, bool>> expression,out T? t);
         public IQueryable<T> GetAll(int? index = null, int? count = null);
+        public bool Exist(Expression<Func<T, bool>> expression);
     }
 }

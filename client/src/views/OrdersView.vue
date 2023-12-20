@@ -3,7 +3,7 @@ import {DashboardLayout} from "@/components/dashboard/"
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import  OrderModel  from "../models/OrderModel";
 import OrderStatus from "../enums/OrderStatus";
-import { ProductModel } from "../models/ProductModel";
+import { ProductComponentValue } from "@/components/productComponent";
 import {createRandomNumber,dateToDateTimeString} from "@/helpers/";
 import { FilterComponent,FilterTypeEnum,FilterValue,FilterValueArray } from '../components/filterComponent';
 </script>
@@ -105,9 +105,9 @@ export default {
                     id: createRandomNumber(),
                     orderStatus: OrderStatus.deliverySuccess,
                     date: new Date(),
-                    products: [new ProductModel({ img: ["http://img.sarowa36.com.tr/woman1.png"], title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
-                    new ProductModel({ img: ["http://img.sarowa36.com.tr/woman2.png"], title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
-                    new ProductModel({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })],
+                    products: [new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman1.png"], title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
+                    new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman2.png"], title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
+                    new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })],
                     addressName: "Home",
                     addressDetail: "5632 Grove Street Apartment #20",
                     addressCity: "New York",
@@ -124,9 +124,9 @@ export default {
                     id: createRandomNumber(),
                     orderStatus: OrderStatus.deliverySuccess,
                     date: new Date(),
-                    products: [new ProductModel({ img: ["http://img.sarowa36.com.tr/woman1.png"], title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
-                    new ProductModel({ img: ["http://img.sarowa36.com.tr/woman2.png"], title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
-                    new ProductModel({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })],
+                    products: [new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman1.png"], title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
+                    new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman2.png"], title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
+                    new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })],
                     addressName: "Home",
                     addressDetail: "5632 Grove Street Apartment #20",
                     addressCity: "New York",
@@ -308,4 +308,4 @@ margin-top: 10px;
     display: none;
 }    
 }
-</style>../components/filterComponent/FilterValueArray
+</style>

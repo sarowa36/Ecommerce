@@ -32,7 +32,7 @@ defineEmits(["update:modelValue"])
             </div>
         </div>
     </div>
-    <vue-easy-lightbox :visible="lightboxToggler" :imgs="base64Value" @hide="lightboxToggler = false" />
+    <vue-easy-lightbox :visible="lightboxToggler" :imgs="link" @hide="lightboxToggler = false" />
 </template>
 <style>
 .file_drop {
@@ -57,7 +57,7 @@ defineEmits(["update:modelValue"])
 export default {
     data() {
         return {
-            base64Value: "",
+            link: "",
             lightboxToggler: false
         }
     },
@@ -76,17 +76,17 @@ export default {
             this.value=this.modelValue.filter((x, i) => { if (i != index) return x; })
         },
         async showLightbox(item) {
-            if (!item.base64Value) {
+            if (!item.link) {
                 var fileReader = new FileReader();
                 fileReader.onloadend = (x) => {
-                    item.base64Value=fileReader.result;
-                    this.base64Value = fileReader.result;
+                    item.link=fileReader.result;
+                    this.link = fileReader.result;
                     this.lightboxToggler = true;
                 }
                 await fileReader.readAsDataURL(item.file);
             }
             else {
-                this.base64Value = item.base64Value;
+                this.link = item.link;
                 this.lightboxToggler = true;
             }
         },

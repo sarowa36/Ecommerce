@@ -75,7 +75,7 @@ export default {
                 new DashboardMenuItemValue({ icon: "right-from-bracket", link: "", text: "Exit" }),
             ],
             adminMenuItems: [
-                new DashboardMenuItemValue({icon:"box",text:"Products",link:"",childItems:[new DashboardMenuItemValue({icon:"plus",text:"Create",link:"/ProductCreate"})]}),
+                new DashboardMenuItemValue({icon:"box",text:"Products",link:"/ProductList",childItems:[new DashboardMenuItemValue({icon:"plus",text:"Create",link:"/ProductCreate"})]}),
                 new DashboardMenuItemValue({ isHr: true }),
                 new DashboardMenuItemValue({ icon: "right-from-bracket", link: "", text: "Exit" }),
             ]

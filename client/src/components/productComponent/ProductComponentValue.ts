@@ -1,11 +1,11 @@
-class ProductModel {
+class ProductComponentValue {
     img: Array<string>
     title: string
     price: string
     star: string
-    constructor(p?:ProductModel){
+    constructor(p?:ProductComponentValue){
         if(p)
         Object.assign(this,p)
     }
 }
-export { ProductModel }
+export default ProductComponentValue

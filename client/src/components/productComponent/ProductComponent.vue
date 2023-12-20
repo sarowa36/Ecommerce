@@ -1,12 +1,12 @@
 <script setup>
-import { ProductModel } from '../models/ProductModel';
+import { ProductComponentValue } from './';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { RouterLink } from 'vue-router';
 import {Guid} from "guid-typescript"
 
 defineProps({
   value: {
-    type: ProductModel,
+    type: ProductComponentValue,
     required: true
   }
 })
@@ -52,4 +52,4 @@ defineProps({
 .bs_img {
   height: fit-content;
 }
-</style>
+</style>@/components/productComponent/ProductComponentValue

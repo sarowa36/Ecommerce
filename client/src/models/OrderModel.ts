@@ -1,4 +1,4 @@
-import { ProductModel } from "./ProductModel";
+import { ProductModel } from "../components/productComponent/ProductComponentValue";
 import OrderStatus from "../enums/OrderStatus";
 
 class OrderModel {
