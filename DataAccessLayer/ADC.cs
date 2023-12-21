@@ -31,5 +31,6 @@ namespace DataAccessLayer
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
     }
 }
