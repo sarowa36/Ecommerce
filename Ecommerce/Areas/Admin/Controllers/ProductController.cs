@@ -8,6 +8,7 @@ using EntityLayer.Entities;
 using EntityLayer.ViewModels.Admin.ProductController;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ToolsLayer.FileManagement;
 
 namespace Ecommerce.Areas.Admin.Controllers
@@ -45,9 +46,23 @@ namespace Ecommerce.Areas.Admin.Controllers
             }
             return BadRequest(res.ToErrorModel());
         }
-        public async Task<IActionResult> GetList()
+        public async Task<IActionResult> GetList(int page, int itemsPerPage, string? sortKey, string? sortOrder)
         {
-            return Ok(_productReadRepository.GetAll().ToList().Select(x => _mapper.Map<ListProductValueVM>(x)));
+            // camelCase to PascalCase
+            if (sortKey != null)
+                sortKey = sortKey.First().ToString().ToUpper() + sortKey.Substring(1);
+            return Ok(new
+            {
+                values = _productReadRepository.GetAll(
+                    (page - 1) * itemsPerPage, 
+                    itemsPerPage,
+                    sortKey,
+                    !string.IsNullOrWhiteSpace(sortOrder) && sortOrder == "desc")
+                .ToList()
+                .Select(x => _mapper.Map<ListProductValueVM>(x)
+                ),
+                totalCount = _productReadRepository.Count()
+            });
         }
         public async Task<IActionResult> Update(int id)
         {
@@ -65,16 +80,16 @@ namespace Ecommerce.Areas.Admin.Controllers
                 modelAsProduct.Images = new List<string>();
                 foreach (var img in model.Images)
                 {
-                    modelAsProduct.Images.Add(img.File!=null ? await img.File.SaveFileAsync(Path.Combine("Admin", "Product")) : img.Link);
+                    modelAsProduct.Images.Add(img.File != null ? await img.File.SaveFileAsync(Path.Combine("Admin", "Product")) : img.Link);
                 }
                 await _productWriteRepository.UpdateAsync(modelAsProduct);
                 await _productWriteRepository.SaveChangesAsync();
                 return Ok();
             }
-            if(!exist)
-                return BadRequest(new{modelOnly="This value doesnt exist" });
+            if (!exist)
+                return BadRequest(new { modelOnly = "This value doesnt exist" });
             return BadRequest(res.ToErrorModel());
         }
-        
+
     }
 }

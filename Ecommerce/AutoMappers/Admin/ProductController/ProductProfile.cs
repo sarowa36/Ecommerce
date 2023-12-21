@@ -10,7 +10,7 @@ namespace Ecommerce.AutoMappers.Admin.ProductController
         {
             CreateMap<Product, CreateProductVM>().ForMember(x=>x.Images,opt=>opt.Ignore());
             CreateMap<CreateProductVM,Product>().ForMember(x => x.Images, opt => opt.Ignore());
-            CreateMap<Product, ListProductValueVM>().ReverseMap();
+            CreateMap<Product, ListProductValueVM>().ForMember(x=>x.Image,opt=>opt.MapFrom(y=>y.Images.FirstOrDefault())).ReverseMap();
             CreateMap<Product, UpdateGetProductVM>();
             CreateMap<UpdatePostProductVM,Product>();
         }

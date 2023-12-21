@@ -16,7 +16,7 @@ import { useLoginStore } from '../../stores/LoginStore';
             <span class="navbar-toggler-icon"></span>
           </button>
         </div>
-        <div :class="'col-lg-8' + ($screen.width > 992 ? '' : ' collapse')" id="navigation">
+        <div :class="'col-lg-8' + ($screen.width > 1200 ? '' : ' collapse')" id="navigation">
           <div class="navigation">
             <RouterLink to="/">Home</RouterLink>
             <RouterLink to="/Shop">Shop</RouterLink>
@@ -36,9 +36,9 @@ import { useLoginStore } from '../../stores/LoginStore';
             <RouterLink to="/Contact">Contact</RouterLink>
             <div class="nav_link_with_dropdown nav_cart">
               <RouterLink to="/Cart">
-                <FontAwesomeIcon v-if="$screen.width > 992" icon="bag-shopping"></FontAwesomeIcon><span v-else>Cart</span>
+                <FontAwesomeIcon v-if="$screen.width > 1200" icon="bag-shopping"></FontAwesomeIcon><span v-else>Cart</span>
               </RouterLink>
-              <div v-if="$screen.width > 992" class="nav_submenu_outer nav_cart_dropdown">
+              <div v-if="$screen.width > 1200" class="nav_submenu_outer nav_cart_dropdown">
                 <div class="nav_submenu_inner">
                 <h6 class="nav_submenu_title">Cart (1)</h6>
                 <div class="nav_cart_products">
@@ -65,7 +65,7 @@ import { useLoginStore } from '../../stores/LoginStore';
               </div>
               </div>
             </div>
-            <RouterLink to="/Login" v-if="!loginStore.isLogged" :class="$screen.width > 992 ? 'btn btn-outline-primary btn_login' : ''">
+            <RouterLink to="/Login" v-if="!loginStore.isLogged" :class="$screen.width > 1200 ? 'btn btn-outline-primary btn_login' : ''">
               Login</RouterLink>
             <RouterLink to="/Profile" v-else>Profile</RouterLink>
           </div>
@@ -109,7 +109,7 @@ import { useLoginStore } from '../../stores/LoginStore';
     border: 1px solid #e6e6e6;
     box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.07);
 }
-@media (min-width: 992px) {
+@media (min-width: 1200px) {
     .nav_submenu_outer{
     position: absolute;
     width: 300px;
@@ -183,7 +183,7 @@ width: 50%;
 .nav_links>.btn{
     display: none;
 }
-@media (max-width:992px){
+@media (max-width:1200px){
     .nav_links{
     display: flex;
     flex-wrap: wrap;
@@ -222,7 +222,7 @@ width: 50%;
   padding-left: 25px;
   padding-right: 25px;
 }
-@media (max-width:992px) {
+@media (max-width:1200px) {
   .navigation {
     position: absolute;
     flex-direction: column;

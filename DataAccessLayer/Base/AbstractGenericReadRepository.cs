@@ -34,9 +34,13 @@ namespace DataAccessLayer.Base
             t = this.GetWhere(expression);
             return t != null;
         }
-        public virtual IQueryable<T> GetAll(int? index = null, int? count = null)
+        public virtual IQueryable<T> GetAll(int? index = null, int? count = null, string? orderPropertyName = null, bool isDesc = false)
         {
             var query = Table.AsQueryable();
+            if(orderPropertyName != null && isDesc)
+                query=query.OrderByDescending(x=>EF.Property<object>(x, orderPropertyName));
+            else if(orderPropertyName!=null)
+                query = query.OrderBy(x => EF.Property<object>(x, orderPropertyName));
             if (index != null)
                 query = query.Skip((int)index);
             if (count != null)
@@ -47,7 +51,11 @@ namespace DataAccessLayer.Base
         {
             return Table.Any(expression);
         }
-
-       
+        public virtual int Count(Expression<Func<T, bool>>? expression = null)
+        {
+            if(expression!=null)
+                return Table.Count(expression);
+            return Table.Count();
+        }
     }
 }

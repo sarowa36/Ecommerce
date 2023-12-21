@@ -4,6 +4,8 @@ import 'jquery-ui/dist/themes/ui-darkness/theme.css'
 import 'jquery-ui/dist/themes/ui-darkness/jquery-ui.min.css'
 import './assets/main.css'
 import 'vue-toastification/dist/index.css'
+import '@mdi/font/css/materialdesignicons.css'
+
 // Import the CSS or use your own!
 
 import { createApp } from 'vue'
@@ -13,6 +15,12 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
+
+// Vuetify
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
 
 import { default as Toast, useToast } from 'vue-toastification'
 import { Tabs, Tab } from 'vue3-tabs-component'
@@ -60,6 +68,12 @@ import router from './router'
 
   app.use(VueScreen, 'bootstrap')
 
+  const vuetify = createVuetify({
+    components,
+    directives,
+  })
+  app.use(vuetify);
+  
   app.use(router)
 
   app.mount('#app')
