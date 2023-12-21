@@ -19,7 +19,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 // Vuetify
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
+import {VDataTableServer,VBtn,VCard,VImg,VRating} from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
 import { default as Toast, useToast } from 'vue-toastification'
@@ -69,7 +69,7 @@ import router from './router'
   app.use(VueScreen, 'bootstrap')
 
   const vuetify = createVuetify({
-    components,
+    components:{VDataTableServer,VBtn,VCard,VImg,VRating},
     directives,
   })
   app.use(vuetify);

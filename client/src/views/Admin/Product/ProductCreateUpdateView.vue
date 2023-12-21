@@ -4,16 +4,18 @@ import { DashboardLayout } from '@/components/dashboard/'
 import { FileUploadValueArray, FileUploadComponent, FileUploadValue } from '@/components/fileUploadComponent'
 import { ckeditor, ClassicEditor } from "@/components/ckeditorComponent";
 import TextBox from '@/components/TextBox.vue';
+import { useToast } from 'vue-toastification';
 import axios from 'axios'
 </script>
 <template>
   <DashboardLayout class="dashboard_layout">
     <div class="row pt-5">
       <h2 class="text_theme mb-3">Product {{ $route.meta.method }}</h2>
-      <div class="col-6">
+      <span class="col-12 text-danger white-space-pre-line text-center">{{ errors.modelOnly }}</span>
+      <div class="col-md-6">
         <TextBox placeholder="Title" v-model="formValues.name" :errorMessage="errors.name" />
       </div>
-      <div class="col-6">
+      <div class="col-md-6">
         <TextBox placeholder="Price" v-model="formValues.price" :errorMessage="errors.price" />
       </div>
       <h3 class="text_theme mt-3">Product Description</h3>
@@ -44,7 +46,8 @@ export default {
         price: "",
         description: "",
       },
-      errors:{}
+      errors:{},
+      toast:useToast()
     }
   },
   async mounted() {
@@ -70,8 +73,11 @@ export default {
           response = await axios.postForm('Admin/Product/Update', data);
           break;
       }
-      if(response!=null && response.status!=200){
+      if(response!=null){
+        if(response.status==400)
         this.errors=response.data;
+        else if(response.status==200)
+        this.toast.success("Your request was successful");
       }
     }
   }

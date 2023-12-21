@@ -16,7 +16,7 @@ import { FilterComponent,FilterTypeEnum,FilterValue,FilterValueArray } from '../
             <div v-for="(item,index) in orders" :class="{ 'order_outer': true, 'active': currentOrderId==item.id }">
                 <div class="order_mini" @click="toggleOrder(item.id)">
                     <div class="order_mini_images">
-                        <img v-for="imagelink in item.products.map(x=>x.img[0])" :src="imagelink" alt="">
+                        <img v-for="imagelink in item.products.map(x=>x.image)" :src="imagelink" alt="">
                     </div>
                     <div class="order_mini_meta">
                         <span>Order number: <strong class="text_theme">{{ item.id }}</strong></span>
@@ -39,11 +39,11 @@ import { FilterComponent,FilterTypeEnum,FilterValue,FilterValueArray } from '../
                             <div class="order_products">
                                 <div v-for="order_product in item.products" class="order_product">
                                     <div class="order_product_card_image">
-                                        <a class="order_product_image_outer" href="#"><img :src="order_product.img[0]" alt=""></a>
+                                        <a class="order_product_image_outer" href="#"><img :src="order_product.image" alt=""></a>
                                     </div>
                                     <div class="order_product_card_content">
                                         <a href="#">
-                                            <h6>{{ order_product.title }}</h6>
+                                            <h6>{{ order_product.name }}</h6>
                                         </a>
                                         <div class="text-success">{{order_product.price}} $</div>
                                     </div>
@@ -105,9 +105,9 @@ export default {
                     id: createRandomNumber(),
                     orderStatus: OrderStatus.deliverySuccess,
                     date: new Date(),
-                    products: [new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman1.png"], title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
-                    new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman2.png"], title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
-                    new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })],
+                    products: [new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman1.png"], name: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
+                    new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman2.png"], name: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
+                    new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman3.png"], name: "Textured Sunset Shirt", price: "49.99", star: "5.0" })],
                     addressName: "Home",
                     addressDetail: "5632 Grove Street Apartment #20",
                     addressCity: "New York",
@@ -124,9 +124,9 @@ export default {
                     id: createRandomNumber(),
                     orderStatus: OrderStatus.deliverySuccess,
                     date: new Date(),
-                    products: [new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman1.png"], title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
-                    new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman2.png"], title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
-                    new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })],
+                    products: [new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman1.png"], name: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
+                    new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman2.png"], name: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
+                    new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman3.png"], name: "Textured Sunset Shirt", price: "49.99", star: "5.0" })],
                     addressName: "Home",
                     addressDetail: "5632 Grove Street Apartment #20",
                     addressCity: "New York",

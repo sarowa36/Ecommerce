@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 <template>
   <DashboardLayout>
     <v-data-table-server v-model:items-per-page="itemsPerPage" :headers="headers" :items-length="totalItems"
-      :items="serverItems" :loading="loading" item-value="name" @update:options="loadItems">
+      :items="serverItems" :loading="loading" item-value="name" @update:options="loadItems" :page="page">
       <template v-slot:item.image="{ item }">
         <v-card class="my-2" elevation="0" rounded>
           <v-img :src="item.image" height="64"></v-img>
@@ -27,6 +27,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 <script>
 export default {
   data: () => ({
+    initiated: false,
     itemsPerPage: 10,
     headers: [
       { title: "Image", key: "image", align: "center", sortable: false },
@@ -38,22 +39,45 @@ export default {
     serverItems: [],
     loading: true,
     totalItems: 0,
+    page: 1
   }),
   methods: {
     loadItems({ page, itemsPerPage, sortBy }) {
-      this.loading = true
-      console.log(arguments)
-      var params = { page, itemsPerPage, }
-      if (sortBy.length > 0) {
-        params.sortKey = sortBy[0].key;
-        params.sortOrder = sortBy[0].order;
+      if (this.initiated) {
+        var query = { page, itemsPerPage };
+        if (sortBy.length > 0) {
+          query.sortByKey = sortBy[0].key
+          query.sortByOrder = sortBy[0].order
+        }
+        this.$router.push({ query })
+      }
+      else{
+        var queryParams = this.$route.query;
+        this.request(queryParams.page, queryParams.itemsPerPage, queryParams.sortByKey, queryParams.sortByOrder);
+        this.initiated=true;
+      }
+      
+    },
+    request(page = 1, itemsPerPage = this.itemsPerPage, sortByKey, sortByOrder) {
+      this.loading = true;
+      var params = { page, itemsPerPage }
+      if (sortByKey != null && sortByKey.length > 0) {
+        params.sortKey = sortByKey;
+        params.sortOrder = sortByOrder;
       }
       axios.get("Admin/Product/GetList", { params: params }).then(response => {
-        this.serverItems = response.data.values
-        this.totalItems = response.data.totalCount
-        this.loading = false
+        this.serverItems = response.data.values;
+        this.totalItems = response.data.totalCount;
+        this.page = page
+        this.loading = false;
       })
-    },
+    }
+  },
+  watch: {
+    '$route.query'(to, from) {
+      var { page, itemsPerPage, sortByKey, sortByOrder } = to;
+      this.request(page, itemsPerPage, sortByKey, sortByOrder);
+    }
   },
 }
 </script>

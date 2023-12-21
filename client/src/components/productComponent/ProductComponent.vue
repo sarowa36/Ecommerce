@@ -12,14 +12,14 @@ defineProps({
 })
 </script>
 <template>
-  <RouterLink :to="'/Product?v='+Guid.create().toString()" class="d-flex flex-wrap text-center">
-    <img :src="value.img[0]" alt="" class="col-12 bs_img">
-    <span class="col-12 mt-2 bs_title">{{ value.title }}</span>
+  <RouterLink :to="'/Product/'+value.id" class="d-flex flex-wrap text-center">
+    <img :src="value.image" alt="" class="col-12 bs_img">
+    <span class="col-12 mt-2 bs_title">{{ value.name }}</span>
     <span class="col-6 bs_price">${{ value.price }}</span>
     <span class="col-6 bs_star">{{ value.star }} <FontAwesomeIcon icon="star"></FontAwesomeIcon></span>
   </RouterLink>
 </template>
-<style>
+<style scoped>
 .bs_title {
   color: var(--third-color);
   text-align: center;
@@ -51,5 +51,7 @@ defineProps({
 
 .bs_img {
   height: fit-content;
+  aspect-ratio: 12/16;
+  object-fit: cover;
 }
-</style>@/components/productComponent/ProductComponentValue
+</style>

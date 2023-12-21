@@ -58,7 +58,7 @@ export default {
     data() {
         return {
             link: "",
-            lightboxToggler: false
+            lightboxToggler: false,
         }
     },
     methods: {
@@ -101,7 +101,9 @@ export default {
                 return this.modelValue;
             },
             set(val){
-                this.$emit("update:modelValue",val)
+                var ary=new FileUploadValueArray();
+                val.forEach(x=>ary.push(x));
+                this.$emit("update:modelValue",ary)
             }
         }
     }
