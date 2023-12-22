@@ -4,9 +4,9 @@ using EntityLayer.ViewModels.IdentityController;
 
 namespace Ecommerce.AutoMappers.IdentityController
 {
-    public class GetUserVMProfile:Profile
+    public class ApplicationUserProfile:Profile
     {
-        public GetUserVMProfile()
+        public ApplicationUserProfile()
         {
             CreateMap<ApplicationUser,GetUserVM>().ForMember(x=>x.Roles,opt=>opt.Ignore()).ReverseMap();
         }

@@ -1,7 +1,8 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { useLoginStore } from './stores/LoginStore';
+import { useLoginStore } from '@/stores/LoginStore';
+import { useCartStore } from '@/stores/CartStore';
 import Navbar from './components/layout/Navbar.vue';
 </script>
 
@@ -164,11 +165,13 @@ import Navbar from './components/layout/Navbar.vue';
 export default {
   data() {
     return {
-      loginStore: useLoginStore()
+      loginStore: useLoginStore(),
+      cartStore:useCartStore()
     }
   },
   mounted(){
     this.loginStore.loadUser();
+    this.cartStore.loadCart();
   }
 }
 </script>

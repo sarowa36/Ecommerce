@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Admin\ViewModels\" />
+    <Folder Include="dist\" />
     <Folder Include="wwwroot\Admin\Product\" />
 	  <Content Include="dist\**\*" CopyToOutputDirectory="Always" />
   </ItemGroup>

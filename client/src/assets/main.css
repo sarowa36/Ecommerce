@@ -67,29 +67,6 @@
   font-style: normal;
   line-height: normal;
 }
-.cart_counter {
-  display: flex;
-  margin-right: 5px;
-}
-
-.cart_counter>button {
-  aspect-ratio: 1;
-  border-radius: 0;
-}
-.cart_counter>button:first-child{
-  border-right: 0;
-}
-.cart_counter>button:last-child{
-  border-left: 0;
-}
-.cart_counter>input {
-  width: 46px;
-  text-align: center;
-  outline-color: unset;
-  border-radius: 0;
-  border-left: 0;
-  border-right: 0;
-}
 .divider_line{
   position: relative;
 height: 6px;

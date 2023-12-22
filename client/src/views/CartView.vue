@@ -1,8 +1,10 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Carousel from "../components/Carousel.vue";
-import {ProductComponentValue,ProductComponent} from '@/components/productComponent';
-
+import { ProductComponentValue, ProductComponent } from '@/components/productComponent';
+import { QuantityCounterComponent } from "@/components/quantityCounterComponent/";
+import { useCartStore } from "@/stores/CartStore"
+import axios from 'axios';
 </script>
 <template>
     <div class="theme_bg_3 mb-5">
@@ -11,51 +13,19 @@ import {ProductComponentValue,ProductComponent} from '@/components/productCompon
                 <div class="col-xl-8">
                     <h3 class="mb-4 text_theme">Your Cart</h3>
                     <div class="cart_products">
-                        <div class="cart_product">
-                            <img src="http://img.sarowa36.com.tr/woman1.png" alt="">
-                            <h5 class="cart_product_title text_theme">Piece Of Beauty</h5>
+                        <div v-for="(item,key) in cartStore.items" :key="key" class="cart_product">
+                            <img :src="item.productImage" alt="">
+                            <h5 class="cart_product_title text_theme">{{ item.productName }}</h5>
                             <div class="cart_product_price">
                                 <div><strong>Price</strong></div>
-                                <div>10$</div>
+                                <div>{{ item.productPrice }}$</div>
                             </div>
-                            <div class="cart_counter">
-                                <button class="btn btn-outline-dark" @click="decreaseCartCount">
-                                    <FontAwesomeIcon icon="minus" />
-                                </button>
-                                <input type="text" class="form-control border-dark" :value="productCartCount" disabled>
-                                <button class="btn btn-outline-dark" @click="increaseCartCount">
-                                    <FontAwesomeIcon icon="plus" />
-                                </button>
-                            </div>
+                            <QuantityCounterComponent v-model="item.quantity" @increaseCartCount="increaseCartCount(item)" @decreaseCartCount="decreaseCartCount(item)" :loading="loading" />
                             <div class="cart_product_total">
                                 <div><strong>Total</strong></div>
-                                <div>800$</div>
+                                <div>{{ item.productPrice * item.quantity }}$</div>
                             </div>
-                            <button class="btn btn-primary">
-                                <FontAwesomeIcon icon="trash" />
-                            </button>
-                        </div>
-                        <div class="cart_product">
-                            <img src="http://img.sarowa36.com.tr/woman1.png" alt="">
-                            <h5 class="cart_product_title">Piece Of Beauty</h5>
-                            <div class="cart_product_price">
-                                <div><strong>Price</strong></div>
-                                <div>10$</div>
-                            </div>
-                            <div class="cart_counter">
-                                <button class="btn btn-outline-dark" @click="decreaseCartCount">
-                                    <FontAwesomeIcon icon="minus" />
-                                </button>
-                                <input type="text" class="form-control border-dark" :value="productCartCount" disabled>
-                                <button class="btn btn-outline-dark" @click="increaseCartCount">
-                                    <FontAwesomeIcon icon="plus" />
-                                </button>
-                            </div>
-                            <div class="cart_product_total">
-                                <div><strong>Total</strong></div>
-                                <div>800$</div>
-                            </div>
-                            <button class="btn btn-primary">
+                            <button class="btn btn-primary" @click="deleteCartItem(item)">
                                 <FontAwesomeIcon icon="trash" />
                             </button>
                         </div>
@@ -66,8 +36,8 @@ import {ProductComponentValue,ProductComponent} from '@/components/productCompon
                         <h4 class="text_theme">Summary</h4>
                         <ul class="cart_summary_list pt-2">
                             <li>
-                                <div>SubTotal(1 items)</div>
-                                <div>80$</div>
+                                <div>SubTotal({{cartStore.items.length}} items)</div>
+                                <div>{{cartStore.items.length >0 ? cartStore.items.map(x=>x.quantity*x.productPrice).reduce((a,b)=>a+b) :0}}$</div>
                             </li>
                             <li>
                                 <div>Cargo</div>
@@ -79,7 +49,7 @@ import {ProductComponentValue,ProductComponent} from '@/components/productCompon
                             </li>
                             <li>
                                 <div>Balance</div>
-                                <div>82$</div>
+                                <div>{{cartStore.items.length >0 ? cartStore.items.map(x=>x.quantity*x.productPrice).reduce((a,b)=>a+b) :0}}$</div>
                             </li>
                         </ul>
                         <button class="btn btn-primary">Checkout</button>
@@ -168,6 +138,8 @@ export default {
     data() {
         return {
             productCartCount: 1,
+            cartStore: useCartStore(),
+            loading:false,
             products: [
                 new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman1.png"], name: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
                 new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman2.png"], name: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
@@ -175,12 +147,30 @@ export default {
         }
     },
     methods: {
-        increaseCartCount() {
-            this.productCartCount++;
+        increaseCartCount(item) {
+            this.loading=true;
+            axios.postForm("User/ShoppingCart/Write",{productId:item.productId,quantity:item.quantity+1}).then(x=>{
+                if(x.status==200)
+                this.cartStore.loadCart();
+                this.loading=false;
+            })
+            
         },
-        decreaseCartCount() {
-            if (this.productCartCount > 1)
-                this.productCartCount--;
+        decreaseCartCount(item) {
+            this.loading=true;
+            axios.postForm("User/ShoppingCart/Write",{productId:item.productId,quantity:item.quantity-1}).then(x=>{
+                if(x.status==200)
+                this.cartStore.loadCart();
+                this.loading=false;
+            })
+        },
+        deleteCartItem(item){
+            this.loading=true;
+            axios.postForm("User/ShoppingCart/Write",{productId:item.productId,quantity:0}).then(x=>{
+                if(x.status==200)
+                this.cartStore.loadCart();
+                this.loading=false;
+            })
         }
     }
 }

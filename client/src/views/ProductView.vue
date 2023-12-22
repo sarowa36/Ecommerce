@@ -3,19 +3,22 @@ import Carousel from "../components/Carousel.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Tabs, Tab } from 'vue3-tabs-component';
 import { ProductComponent, ProductComponentValue } from "@/components/productComponent";
+import useCartStore from "@/stores/CartStore"
 import axios from "axios";
+import { useToast } from "vue-toastification";
+import QuantityCounterComponent from "@/components/quantityCounterComponent";
 </script> 
 <template>
     <div class="container mb-5">
         <div class="row justify-content-center theme_bg_3 mt-5 pt-4 pb-4">
             <div class="col-md-8 col-lg-5">
-                <Carousel v-if="product.images.length>0" :items="1" :nav="false">
+                <Carousel v-if="product.images.length > 0" :items="1" :nav="false">
                     <img v-for="img in product.images" :src="img" alt="">
                 </Carousel>
             </div>
             <div class="col-lg-6 product_description">
                 <h3 class="text_theme">{{ product.name }}</h3>
-                <h4>{{product.price}} $</h4>
+                <h4>{{ product.price }} $</h4>
                 <div class="product_reviews_section">
                     <div class="d-flex align-items-center">
                         <span class="h4 m-0 me-2">3.6</span>
@@ -28,17 +31,11 @@ import axios from "axios";
                         16 Review
                     </div>
                 </div>
+
                 <div class="product_cart_section">
-                    <div class="cart_counter">
-                        <button class="btn btn-outline-dark" @click="decreaseCartCount">
-                            <FontAwesomeIcon icon="minus" />
-                        </button>
-                        <input type="text" class="form-control border-dark" :value="productCartCount" disabled>
-                        <button class="btn btn-outline-dark" @click="increaseCartCount">
-                            <FontAwesomeIcon icon="plus" />
-                        </button>
-                    </div>
-                    <button class="btn btn-primary">
+                    <QuantityCounterComponent class="me-3" v-model="productCartCount" @decreaseCartCount="decreaseCartCount"
+                        @increaseCartCount="increaseCartCount" />
+                    <button class="btn btn-primary" @click="addToCart" :disabled="loading">
                         <FontAwesomeIcon icon="cart-shopping" /> Add Cart
                     </button>
                 </div>
@@ -431,6 +428,7 @@ export default {
     data: () => {
         return {
             productCartCount: 1,
+            loading: false,
             product: {
                 images: [],
                 name: "",
@@ -441,11 +439,13 @@ export default {
                 new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman1.png"], name: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
                 new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman2.png"], name: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
                 new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman3.png"], name: "Textured Sunset Shirt", price: "49.99", star: "5.0" })],
+            toast: useToast(),
             showListDropdown: false,
-            showShareDropdown: false
+            showShareDropdown: false,
+            cartStore: useCartStore(),
         }
     },
-     beforeMount() {
+    beforeMount() {
         this.getProduct()
     },
     mounted() {
@@ -459,8 +459,18 @@ export default {
             var res = await axios.get("Anonym/Product/Get", { params: { id: this.$route.params.id } })
             if (res.status == 200) {
                 this.product = res.data;
+                this.productCartCount = this.cartStore.items.filter(x => x.productId == this.product.id)[0]?.quantity ?? 1;
             }
-
+        },
+        async addToCart() {
+            this.loading = true;
+            axios.postForm("User/ShoppingCart/Write", { productId: this.product.id, quantity: this.productCartCount }).then(x => {
+                if (x.status == 200) {
+                    this.cartStore.loadCart();
+                    this.toast.success("Your request was successful");
+                    this.loading=false;
+                }
+            })
         },
         increaseCartCount() {
             this.productCartCount++;
