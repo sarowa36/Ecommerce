@@ -4,6 +4,7 @@ import Carousel from "../components/Carousel.vue";
 import { ProductComponentValue, ProductComponent } from '@/components/productComponent';
 import { QuantityCounterComponent } from "@/components/quantityCounterComponent/";
 import { useCartStore } from "@/stores/CartStore"
+import { useLoginStore } from '@/stores/LoginStore';
 import axios from 'axios';
 </script>
 <template>
@@ -139,6 +140,7 @@ export default {
         return {
             productCartCount: 1,
             cartStore: useCartStore(),
+            loginStore:useLoginStore(),
             loading:false,
             products: [
                 new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman1.png"], name: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
@@ -149,7 +151,12 @@ export default {
     methods: {
         increaseCartCount(item) {
             this.loading=true;
-            axios.postForm("User/ShoppingCart/Write",{productId:item.productId,quantity:item.quantity+1}).then(x=>{
+            var path="";
+            if(this.loginStore.isLogged)
+            path="User/ShoppingCart/Write";
+            else
+            path="Anonym/ShoppingCart/Write";
+            axios.postForm(path,{productId:item.productId,quantity:item.quantity+1}).then(x=>{
                 if(x.status==200)
                 this.cartStore.loadCart();
                 this.loading=false;
@@ -158,7 +165,12 @@ export default {
         },
         decreaseCartCount(item) {
             this.loading=true;
-            axios.postForm("User/ShoppingCart/Write",{productId:item.productId,quantity:item.quantity-1}).then(x=>{
+            var path="";
+            if(this.loginStore.isLogged)
+            path="User/ShoppingCart/Write";
+            else
+            path="Anonym/ShoppingCart/Write";
+            axios.postForm(path,{productId:item.productId,quantity:item.quantity-1}).then(x=>{
                 if(x.status==200)
                 this.cartStore.loadCart();
                 this.loading=false;
@@ -166,7 +178,12 @@ export default {
         },
         deleteCartItem(item){
             this.loading=true;
-            axios.postForm("User/ShoppingCart/Write",{productId:item.productId,quantity:0}).then(x=>{
+            var path="";
+            if(this.loginStore.isLogged)
+            path="User/ShoppingCart/Write";
+            else
+            path="Anonym/ShoppingCart/Write";
+            axios.postForm(path,{productId:item.productId,quantity:0}).then(x=>{
                 if(x.status==200)
                 this.cartStore.loadCart();
                 this.loading=false;

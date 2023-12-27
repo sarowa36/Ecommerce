@@ -169,9 +169,9 @@ export default {
       cartStore:useCartStore()
     }
   },
-  mounted(){
-    this.loginStore.loadUser();
-    this.cartStore.loadCart();
+ async  mounted(){
+   await this.loginStore.loadUser();
+   await this.cartStore.loadCart();
   }
 }
 </script>

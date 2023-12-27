@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Tabs, Tab } from 'vue3-tabs-component';
 import { ProductComponent, ProductComponentValue } from "@/components/productComponent";
 import useCartStore from "@/stores/CartStore"
+import { useLoginStore } from "@/stores/LoginStore";
 import axios from "axios";
 import { useToast } from "vue-toastification";
 import QuantityCounterComponent from "@/components/quantityCounterComponent";
@@ -443,6 +444,7 @@ export default {
             showListDropdown: false,
             showShareDropdown: false,
             cartStore: useCartStore(),
+            loginStore:useLoginStore()
         }
     },
     beforeMount() {
@@ -464,7 +466,12 @@ export default {
         },
         async addToCart() {
             this.loading = true;
-            axios.postForm("User/ShoppingCart/Write", { productId: this.product.id, quantity: this.productCartCount }).then(x => {
+            var path="";
+            if(this.loginStore.isLogged)
+            path="User/ShoppingCart/Write";
+            else
+            path="Anonym/ShoppingCart/Write";
+            axios.postForm(path, { productId: this.product.id, quantity: this.productCartCount }).then(x => {
                 if (x.status == 200) {
                     this.cartStore.loadCart();
                     this.toast.success("Your request was successful");

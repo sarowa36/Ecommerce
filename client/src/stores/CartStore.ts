@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { useLoginStore } from './LoginStore';
+
 class CartItem {
   productId: number = 0;
   productImage: string = "";
@@ -18,7 +20,13 @@ const useCartStore = defineStore('cart', {
   },
   actions: {
     async loadCart() {
+      const loginStore=useLoginStore();
+      if(loginStore.isLogged){
       var res = await axios.get('User/ShoppingCart/GetList');
+      }
+      else{
+        var res = await axios.get('Anonym/ShoppingCart/GetList');
+      }
       this.items=new Array<CartItem>();
       if (res.data) {
         res.data.forEach(element => {

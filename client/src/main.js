@@ -37,13 +37,18 @@ import router from './router'
 
   axios.defaults.baseURL = location.origin + '/api/'
   axios.defaults.validateStatus = (status) => status >= 200 && status <= 600
-  axios.interceptors.response.use(function (response,val1) {
+  axios.interceptors.response.use(function (response) {
     var toast = useToast()
-    if (response.status >= 500)
+    var serverErrorGroup=response.status >= 500;
+    var requestErrorGroup=response.status>=400 && response.status<500;
+    if(response.data.redirect){
+      window.location.href=response.data.redirect;
+    }
+    if (serverErrorGroup)
       toast.error(
         'A server-based error occurred. The error report has been logged and will be resolved as soon as possible.'
       )
-    else if (response.status >= 400)
+    else if (requestErrorGroup)
       toast.warning('You have made a false request. Check your request again.')
     return response
   }, undefined)
