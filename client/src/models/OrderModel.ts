@@ -1,11 +1,11 @@
-import { ProductModel } from "../components/productComponent/ProductComponentValue";
+import { ProductComponentValue } from "@/components/productComponent/";
 import OrderStatus from "../enums/OrderStatus";
 
 class OrderModel {
     id: string
     orderStatus: OrderStatus
     date: Date
-    products: Array<ProductModel>
+    products: Array<ProductComponentValue>
     addressName: string
     addressDetail: string
     addressCity: string

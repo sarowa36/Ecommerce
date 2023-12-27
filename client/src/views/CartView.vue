@@ -149,45 +149,29 @@ export default {
         }
     },
     methods: {
-        increaseCartCount(item) {
+       async increaseCartCount(item) {
             this.loading=true;
-            var path="";
-            if(this.loginStore.isLogged)
-            path="User/ShoppingCart/Write";
-            else
-            path="Anonym/ShoppingCart/Write";
-            axios.postForm(path,{productId:item.productId,quantity:item.quantity+1}).then(x=>{
-                if(x.status==200)
+            var res=await this.cartStore.updateCartItem(item.productId,item.quantity+1);
+            if(res.status==200){
                 this.cartStore.loadCart();
                 this.loading=false;
-            })
-            
+            } 
         },
-        decreaseCartCount(item) {
+        async decreaseCartCount(item) {
             this.loading=true;
-            var path="";
-            if(this.loginStore.isLogged)
-            path="User/ShoppingCart/Write";
-            else
-            path="Anonym/ShoppingCart/Write";
-            axios.postForm(path,{productId:item.productId,quantity:item.quantity-1}).then(x=>{
-                if(x.status==200)
+            var res=await this.cartStore.updateCartItem(item.productId,item.quantity-1);
+            if(res.status==200){
                 this.cartStore.loadCart();
                 this.loading=false;
-            })
+            } 
         },
-        deleteCartItem(item){
+        async deleteCartItem(item){
             this.loading=true;
-            var path="";
-            if(this.loginStore.isLogged)
-            path="User/ShoppingCart/Write";
-            else
-            path="Anonym/ShoppingCart/Write";
-            axios.postForm(path,{productId:item.productId,quantity:0}).then(x=>{
-                if(x.status==200)
+            var res=await this.cartStore.updateCartItem(item.productId,0);
+            if(res.status==200){
                 this.cartStore.loadCart();
                 this.loading=false;
-            })
+            } 
         }
     }
 }

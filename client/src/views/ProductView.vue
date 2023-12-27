@@ -466,18 +466,12 @@ export default {
         },
         async addToCart() {
             this.loading = true;
-            var path="";
-            if(this.loginStore.isLogged)
-            path="User/ShoppingCart/Write";
-            else
-            path="Anonym/ShoppingCart/Write";
-            axios.postForm(path, { productId: this.product.id, quantity: this.productCartCount }).then(x => {
-                if (x.status == 200) {
+           var res=await this.cartStore.updateCartItem(this.product.id,this.productCartCount);
+            if (res.status == 200) {
                     this.cartStore.loadCart();
                     this.toast.success("Your request was successful");
                     this.loading=false;
                 }
-            })
         },
         increaseCartCount() {
             this.productCartCount++;
