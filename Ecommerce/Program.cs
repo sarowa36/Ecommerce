@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System.Reflection;
+using ServiceLayer;
+using DataAccessLayer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +40,8 @@ builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddValidatorsFromAssembly(Assembly.Load("BusinessLayer"));
 
-builder.Services.AddRepositories();
+builder.Services.AddDataAccessLayerServices();
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 

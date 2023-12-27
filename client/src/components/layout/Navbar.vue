@@ -11,13 +11,13 @@ import { useCartStore } from "@/stores/CartStore";
         <div class="col-3 col-lg-4 logo">
           Salsha
         </div>
-        <div class="col-4 d-flex d-lg-none justify-content-end">
+        <div class="col-4 d-flex d-md-none justify-content-end">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation"
             aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
         </div>
-        <div :class="'col-lg-8' + ($screen.width > 1200 ? '' : ' collapse')" id="navigation">
+        <div :class="'col-lg-8' + ($screen.width > 992 ? '' : ' collapse')" id="navigation">
           <div class="navigation">
             <RouterLink to="/">Home</RouterLink>
             <RouterLink to="/Shop">Shop</RouterLink>
@@ -39,10 +39,10 @@ import { useCartStore } from "@/stores/CartStore";
             <RouterLink to="/Contact">Contact</RouterLink>
             <div class="nav_link_with_dropdown nav_cart">
               <RouterLink to="/Cart">
-                <FontAwesomeIcon v-if="$screen.width > 1200" icon="bag-shopping"></FontAwesomeIcon><span
+                <FontAwesomeIcon v-if="$screen.width > 992" icon="bag-shopping"></FontAwesomeIcon><span
                   v-else>Cart</span>
               </RouterLink>
-              <div v-if="$screen.width > 1200" class="nav_submenu_outer nav_cart_dropdown">
+              <div v-if="$screen.width > 992" class="nav_submenu_outer nav_cart_dropdown">
                 <div class="nav_submenu_inner">
                   <h6 class="nav_submenu_title">Cart ({{ cartStore.items.length }})</h6>
                   <div class="nav_cart_products">
@@ -64,7 +64,7 @@ import { useCartStore } from "@/stores/CartStore";
               </div>
             </div>
             <RouterLink to="/Login" v-if="!loginStore.isLogged"
-              :class="$screen.width > 1200 ? 'btn btn-outline-primary btn_login' : ''">
+              :class="$screen.width > 992 ? 'btn btn-outline-primary btn_login' : ''">
               Login</RouterLink>
             <RouterLink to="/Profile" v-else>Profile</RouterLink>
           </div>
@@ -113,7 +113,7 @@ import { useCartStore } from "@/stores/CartStore";
   box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.07);
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 992px) {
   .nav_submenu_outer {
     position: absolute;
     width: 300px;
@@ -205,7 +205,7 @@ import { useCartStore } from "@/stores/CartStore";
   display: none;
 }
 
-@media (max-width:1200px) {
+@media (max-width:992px) {
   .nav_links {
     display: flex;
     flex-wrap: wrap;
@@ -250,7 +250,7 @@ import { useCartStore } from "@/stores/CartStore";
   padding-right: 25px;
 }
 
-@media (max-width:1200px) {
+@media (max-width:992px) {
   .navigation {
     position: absolute;
     flex-direction: column;

@@ -1,30 +1,38 @@
 ﻿using AutoMapper;
 using BusinessLayer.Validations.IdentityController;
+using DataAccessLayer.Repositories.ShoppingCartItemRepositories;
 using Ecommerce.AutoMappers.IdentityController;
-using Ecommerce.Helpers;
+using ToolsLayer.ErrorModel;
 using EntityLayer.Entities;
 using EntityLayer.ViewModels.IdentityController;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using ServiceLayer.Base.Services;
+using DataAccessLayer.Base.Repositories.ShoppingCartItemRepositories;
+using ServiceLayer.ServiceResults.Identity;
 
 namespace Ecommerce.Controllers
 {
-
     public class IdentityController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IShoppingCartItemWriteRepository _shoppingCartItemWriteRepository;
         private readonly IServiceProvider _serviceProvider;
         private readonly IMapper _mapper;
-        public IdentityController(UserManager<ApplicationUser> userManager, IServiceProvider serviceProvider, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager, IMapper mapper)
+        private readonly IIdentityService _identityService;
+        public IdentityController(UserManager<ApplicationUser> userManager, IServiceProvider serviceProvider, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager, IMapper mapper, IShoppingCartItemWriteRepository shoppingCartItemWriteRepository, IIdentityService identityService)
         {
             _userManager = userManager;
             _serviceProvider = serviceProvider;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _mapper = mapper;
+            _shoppingCartItemWriteRepository = shoppingCartItemWriteRepository;
+            _identityService = identityService;
         }
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM model)
@@ -32,31 +40,27 @@ namespace Ecommerce.Controllers
             var validationResult = _serviceProvider.GetService<RegisterVMValidation>().Validate(model);
             Dictionary<string, string> errors;
             if (!validationResult.IsValid)
-                errors = validationResult.ToErrorModel();
+                return BadRequest(validationResult.ToErrorModel());
             else
             {
-                var val = new ApplicationUser()
-                {
-                    Email = model.Email,
-                    PhoneNumber = model.PhoneNumber,
-                    UserName = model.Email,
-                    Name = model.Name,
-                    Surname = model.Surname
-                };
-                var result = await _userManager.CreateAsync(val, model.Password);
+                var createUserResponse = await _identityService.CreateUserAsync(model);
 
-                if (result.Succeeded)
+                if (createUserResponse.IsSuccess)
                 {
-                    result = await _userManager.AddToRoleAsync(val, "User");
-                    if (result.Succeeded)
-                    {
-                        await _signInManager.SignInAsync(val, true);
+                        await _signInManager.SignInAsync(createUserResponse.Value, true);
+                        if (HttpContext.Request.Cookies.TryGetValue("shoppingCart",out var cookieCartString))
+                        {
+                            var cartProductAndQuantity=JsonConvert.DeserializeObject<Dictionary<int,int>>(cookieCartString);
+                            if(cartProductAndQuantity != null && cartProductAndQuantity.Count>0) {
+                                await _shoppingCartItemWriteRepository.UpdateRangeAsync(cartProductAndQuantity.Select(x=>new ShoppingCartItem() {UserId= createUserResponse.Value.Id, ProductId=x.Key,Quantity=x.Value}));
+                                await _shoppingCartItemWriteRepository.SaveChangesAsync();
+                            }
+                            HttpContext.Response.Cookies.Delete("shoppingCart");
+                        }
                         return Ok();
-                    }
                 }
-                errors = result.ToErrorModel();
+                return BadRequest(createUserResponse.Errors);
             }
-            return BadRequest(errors);
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginVM model)
@@ -64,15 +68,22 @@ namespace Ecommerce.Controllers
             var validationResult = _serviceProvider.GetService<LoginVmValidation>().Validate(model);
             Dictionary<string, string> errors;
             if (!validationResult.IsValid)
-                errors = validationResult.ToErrorModel();
+                return BadRequest(validationResult.ToErrorModel());
             else
             {
-                var result=await _signInManager.PasswordSignInAsync(model.Email,model.Password,true,true);
-                if (result.Succeeded)
-                    return Ok();
-                errors = result.ToErrorModel();
+                var loginResponse=await _identityService.LoginAsync(model.Email,model.Password);
+                if(loginResponse.IsSuccess && HttpContext.Request.Cookies.TryGetValue("shoppingCart", out var cookieCartString))
+                {
+                    var cartProductAndQuantity = JsonConvert.DeserializeObject<Dictionary<int, int>>(cookieCartString);
+                    if (cartProductAndQuantity != null && cartProductAndQuantity.Count > 0)
+                    {
+                        await _shoppingCartItemWriteRepository.UpdateRangeAsync(cartProductAndQuantity.Select(x => new ShoppingCartItem() { UserId = loginResponse.Value.Id, ProductId = x.Key, Quantity = x.Value }));
+                        await _shoppingCartItemWriteRepository.SaveChangesAsync();
+                    }
+                    HttpContext.Response.Cookies.Delete("shoppingCart");
+                }
+                return loginResponse.IsSuccess ? Ok() : BadRequest(loginResponse.Errors);
             }
-            return BadRequest(errors);
         }
         public async Task<IActionResult> GetUser()
         {
