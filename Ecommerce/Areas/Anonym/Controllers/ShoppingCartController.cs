@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using DataAccessLayer.Base.Repositories.ProductRepositories;
 using DataAccessLayer.Base.Repositories.ShoppingCartItemRepositories;
 using EntityLayer.Entities;
@@ -8,63 +9,30 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using ServiceLayer.Base.Services;
 
 namespace Ecommerce.Areas.Anonym.Controllers
 {
     [Area("Anonym")]
     public class ShoppingCartController : Controller
     {
-        private readonly IProductReadRepository _productReadRepository;
-        private const string ShoppingCartCookieName = "shoppingCart";
-        public ShoppingCartController(IProductReadRepository productReadRepository)
+        readonly IShoppingCartService _shoppingCartService;
+
+        public ShoppingCartController(IShoppingCartService shoppingCartService)
         {
-            this._productReadRepository = productReadRepository;
+            _shoppingCartService = shoppingCartService;
         }
+
         [HttpPost]
         public async Task<IActionResult> Write(int productId, int quantity)
         {
-            Dictionary<int,int> cookieCart = new Dictionary<int, int>();
-            if (HttpContext.Request.Cookies.TryGetValue(ShoppingCartCookieName, out var cookieCartString))
-            {
-                cookieCart = JsonConvert.DeserializeObject<Dictionary<int,int>>(cookieCartString);
-                if(cookieCart.ContainsKey(productId))
-                {
-                    if(quantity<=0)
-                    {
-                        cookieCart.Remove(productId);
-                    }
-                    else
-                    {
-                        cookieCart[productId]= quantity;
-                    }
-                }
-                else if(quantity>0)
-                {
-                    cookieCart.Add(productId, quantity);
-                }
-                
-            }
-            else if(quantity>0)
-            {
-                cookieCart.Add(productId,quantity);
-            }
-            HttpContext.Response.Cookies.Append(ShoppingCartCookieName, JsonConvert.SerializeObject(cookieCart));
-            return Ok();
+            var response=await _shoppingCartService.AddOrUpdateOrRemoveProductToCookieAsync(productId,quantity);
+            return response.IsSuccess ? Ok() : BadRequest(response.Errors);
         }
         public async Task<IActionResult> GetList()
         {
-            if (HttpContext.Request.Cookies.TryGetValue(ShoppingCartCookieName, out var cookieCartString)) { 
-                Dictionary<int, int> cookieCart = JsonConvert.DeserializeObject<Dictionary<int, int>>(cookieCartString);
-                var values = _productReadRepository.GetAll().Where(x => cookieCart.Keys.Contains(x.Id))
-                    .Select(x =>
-                    new { ProductId = x.Id, 
-                        ProductImage = x.Images[0],
-                        ProductName=x.Name,
-                        ProductPrice = x.Price, 
-                        Quantity = cookieCart[x.Id] }).ToList();
-             return Ok(values);
-            }
-            return Ok();
+            var response = await _shoppingCartService.GetListFromCookieAsync();
+            return response.IsSuccess ? Ok(response.Value) : BadRequest(response.Errors);
         }
     }
 }

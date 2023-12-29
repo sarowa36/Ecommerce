@@ -1,8 +1,10 @@
-﻿using EntityLayer.Entities;
+﻿using Azure;
+using EntityLayer.Entities;
 using EntityLayer.ViewModels.IdentityController;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using ServiceLayer.Base.Services;
-using ServiceLayer.ServiceResults.Identity;
+using ServiceLayer.ServiceResults.IdentityService;
 using ToolsLayer.Encoder;
 using ToolsLayer.ErrorModel;
 
@@ -11,14 +13,16 @@ namespace ServiceLayer.Services
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        readonly IHttpContextAccessor _httpContextAccessor;
         readonly SignInManager<ApplicationUser> _signInManager;
         readonly IMailService _mailService;
-
-        public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IMailService mailService)
+        HttpContext HttpContext { get { return _httpContextAccessor.HttpContext; } }
+        public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IMailService mailService, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mailService = mailService;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<CreateUserResponse> CreateUserAsync(RegisterVM model)
         {
@@ -62,10 +66,35 @@ namespace ServiceLayer.Services
 
             if (user != null)
             {
-                response.Value = (await _userManager.GetRolesAsync(user)).ToArray();
+                response.Value = (await _userManager.GetRolesAsync(user)).ToList();
             }
             else
                 response.Errors.Add("ModelOnly","User Not Found");
+            return response;
+        }
+        public async Task<GetUserRolesResponse> GetUserRolesAsync(ApplicationUser user)
+        {
+           var response = new GetUserRolesResponse();
+           
+            if (user != null)
+            {
+                response.Value = (await _userManager.GetRolesAsync(user)).ToList();
+            }
+            else
+                response.Errors.Add("ModelOnly", "User Not Found");
+            return response;
+        }
+        public async Task<GetUserRolesResponse> GetUserRolesAsync()
+        {
+            var response = new GetUserRolesResponse();
+            var getUserResponse=await GetCurrentUserAsync();
+            response.BindResponse(getUserResponse);
+            if (response.IsSuccess)
+            {
+                response.Value = (await _userManager.GetRolesAsync(getUserResponse.Value)).ToList();
+            }
+            else
+                response.Errors.Add("ModelOnly", "User Not Found");
             return response;
         }
         public async Task<LoginResponse> LoginAsync(string usernameOrEmail, string password)
@@ -79,6 +108,31 @@ namespace ServiceLayer.Services
                 SignInResult result = await _signInManager.PasswordSignInAsync(user, password, true, false);
                 response.Value = user;
                 response.Errors = result.ToErrorModel();
+            }
+            else
+                response.Errors.Add("ModelOnly", "User Not Found");
+            return response;
+        }
+        public async Task<LoginResponse> LoginAsync(ApplicationUser user, string password)
+        {
+            var response = new LoginResponse();
+            if (user != null)
+            {
+                SignInResult result = await _signInManager.PasswordSignInAsync(user, password, true, false);
+                response.Value = user;
+                response.Errors = result.ToErrorModel();
+            }
+            else
+                response.Errors.Add("ModelOnly", "User Not Found");
+            return response;
+        }
+        public async Task<LoginResponse> LoginAsync(ApplicationUser user)
+        {
+            var response = new LoginResponse();
+            if (user != null)
+            {
+                await _signInManager.SignInAsync(user, true);
+                response.Value = user;
             }
             else
                 response.Errors.Add("ModelOnly", "User Not Found");
@@ -116,7 +170,6 @@ namespace ServiceLayer.Services
                 response.Errors.Add("ModelOnly", "User Not Found");
             return response;
         }
-
         public async Task<bool> VerifyResetTokenAsync(string resetToken, string userId)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(userId);
@@ -128,6 +181,13 @@ namespace ServiceLayer.Services
             }
             return false;
         }
-
+        public async Task<GetCurrentUserResponse> GetCurrentUserAsync()
+        {
+            var response = new GetCurrentUserResponse();
+            response.Value= await _userManager.GetUserAsync(HttpContext.User);
+            if (response.Value == null)
+                response.Errors.Add("ModelOnly", "User Not Found");
+            return response;
+        }
     }
 }

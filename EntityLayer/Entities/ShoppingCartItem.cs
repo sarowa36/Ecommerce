@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace EntityLayer.Entities
 {
-    public class ShoppingCartItem : IIntIdentity, ICreateDate
+    public class ShoppingCartItem :ICreateDate
     {
-        public int Id { get; set; }
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]
         public Product Product { get; set; }

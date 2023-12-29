@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServiceLayer.ServiceResults.Identity
+namespace ServiceLayer.ServiceResults.ShoppingCartService
 {
-    public class UpdatePasswordResponse:AbstractResponseWithErrors
+    public class AddOrUpdateOrRemoveProductResponse:AbstractResponseWithErrors
     {
     }
 }

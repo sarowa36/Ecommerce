@@ -8,7 +8,12 @@ namespace ServiceLayer.Base.ServiceResults
 {
     public abstract class AbstractResponseWithErrors
     {
-        public bool IsSuccess { get { return Errors.Count ==0; } }
-        public Dictionary<string, string> Errors { get; set; }=new Dictionary<string, string>();
+        public bool IsSuccess { get { return Errors.Count == 0; } }
+        public Dictionary<string, string> Errors { get; set; } = new Dictionary<string, string>();
+        public virtual void BindResponse(AbstractResponseWithErrors response)
+        {
+            if (this.IsSuccess)
+                this.Errors = response.Errors;
+        }
     }
 }

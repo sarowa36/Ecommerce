@@ -28,6 +28,7 @@ namespace DataAccessLayer
             modelBuilder.ApplyGlobalDefaultSqlValue<ICreateDate, DateTime>(x => x.CreateDate, "getdate()");
             modelBuilder.ApplyGlobalFilters<ISoftDeletable>(x => !x.IsDeleted);
             modelBuilder.Entity<Product>().Property(x => x.Images).HasConversion(x=>JsonConvert.SerializeObject(x),x=>JsonConvert.DeserializeObject<List<string>>(x));
+            modelBuilder.Entity<ShoppingCartItem>().HasKey(x => new { x.ProductId, x.UserId });
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<Product> Products { get; set; }

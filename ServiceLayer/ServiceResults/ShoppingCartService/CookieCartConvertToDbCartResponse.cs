@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServiceLayer.ServiceResults.Identity
+namespace ServiceLayer.ServiceResults.ShoppingCartService
 {
-    public class GetUserRolesResponse : AbstractResponseWithErrorsAndValue<string[]>
+    public class CookieCartConvertToDbCartResponse:AbstractResponseWithErrors
     {
     }
 }

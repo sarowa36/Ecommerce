@@ -15,6 +15,7 @@ namespace ServiceLayer
         {
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IMailService, MailService>();
+            services.AddScoped<IShoppingCartService, ShoppingCartService>();
         }
     }
 }

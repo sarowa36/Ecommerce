@@ -6,9 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServiceLayer.ServiceResults.Identity
+namespace ServiceLayer.ServiceResults.IdentityService
 {
-    public class LoginResponse:AbstractResponseWithErrorsAndValue<ApplicationUser>
+    public class CreateUserResponse:AbstractResponseWithErrorsAndValue<ApplicationUser>
     {
+    
     }
 }
