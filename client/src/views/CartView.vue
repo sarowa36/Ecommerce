@@ -21,7 +21,7 @@ import axios from 'axios';
                                 <div><strong>Price</strong></div>
                                 <div>{{ item.productPrice }}$</div>
                             </div>
-                            <QuantityCounterComponent v-model="item.quantity" @increaseCartCount="increaseCartCount(item)" @decreaseCartCount="decreaseCartCount(item)" :loading="loading" />
+                            <QuantityCounterComponent v-model="item.quantity" @increaseCartCount="increaseCartCount(item)" @decreaseCartCount="decreaseCartCount(item)" />
                             <div class="cart_product_total">
                                 <div><strong>Total</strong></div>
                                 <div>{{ item.productPrice * item.quantity }}$</div>
@@ -141,7 +141,6 @@ export default {
             productCartCount: 1,
             cartStore: useCartStore(),
             loginStore:useLoginStore(),
-            loading:false,
             products: [
                 new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman1.png"], name: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
                 new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman2.png"], name: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
@@ -150,27 +149,21 @@ export default {
     },
     methods: {
        async increaseCartCount(item) {
-            this.loading=true;
             var res=await this.cartStore.updateCartItem(item.productId,item.quantity+1);
-            if(res.status==200){
+            if(res.isSuccess){
                 this.cartStore.loadCart();
-                this.loading=false;
             } 
         },
         async decreaseCartCount(item) {
-            this.loading=true;
             var res=await this.cartStore.updateCartItem(item.productId,item.quantity-1);
-            if(res.status==200){
+            if(res.isSuccess){
                 this.cartStore.loadCart();
-                this.loading=false;
             } 
         },
         async deleteCartItem(item){
-            this.loading=true;
             var res=await this.cartStore.updateCartItem(item.productId,0);
-            if(res.status==200){
+            if(res.isSuccess){
                 this.cartStore.loadCart();
-                this.loading=false;
             } 
         }
     }

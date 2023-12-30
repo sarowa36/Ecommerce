@@ -78,11 +78,9 @@ namespace Ecommerce.Controllers
             if (getCurrentUserResponse.IsSuccess)
             {
                 returnValue = _mapper.Map<ApplicationUser, GetUserVM>(getCurrentUserResponse.Value);
-                var getUserRolesResponse=await _identityService.GetUserRolesAsync();
-                getCurrentUserResponse.BindResponse(getUserRolesResponse);
-                returnValue.Roles = getUserRolesResponse.Value;
+                returnValue.Roles = (await _identityService.GetUserRolesAsync()).Value;
             }
-            return getCurrentUserResponse.IsSuccess ? Ok(returnValue) :BadRequest(getCurrentUserResponse.Errors);
+            return Ok(returnValue);
         }
     }
 }

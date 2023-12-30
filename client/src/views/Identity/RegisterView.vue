@@ -67,12 +67,12 @@ export default {
         async sendRequest() {
             var response = (await axios.postForm("Identity/Register", this.model));
             this.errors = {};
-            if (response.status != 200)
-                this.errors = response.data;
-            else{
+             if (response.isSuccess) {
                 this.loginStore.loadUser();
                 router.push("/")
             }
+            else
+                this.errors = response.data;
         }
     }
 }

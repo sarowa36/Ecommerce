@@ -46,12 +46,13 @@ export default {
         showFilter(prop) {
             this[prop].show = !this[prop].show;
         },
-        getProductList(){
-            axios.get("/Anonym/Product/GetList").then(x=>{
-                x.data.forEach(element => {
+        async getProductList(){
+            var res= await axios.get("/Anonym/Product/GetList");
+            if(res.isSuccess){
+                res.data.forEach(element => {
                     this.products.push(new ProductComponentValue(element))
                 });
-            })
+            }
         }
     },
     computed: {

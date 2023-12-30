@@ -36,7 +36,7 @@ import QuantityCounterComponent from "@/components/quantityCounterComponent";
                 <div class="product_cart_section">
                     <QuantityCounterComponent class="me-3" v-model="productCartCount" @decreaseCartCount="decreaseCartCount"
                         @increaseCartCount="increaseCartCount" />
-                    <button class="btn btn-primary" @click="addToCart" :disabled="loading">
+                    <button class="btn btn-primary" @click="addToCart" :disabled="isLoading">
                         <FontAwesomeIcon icon="cart-shopping" /> Add Cart
                     </button>
                 </div>
@@ -56,9 +56,8 @@ import QuantityCounterComponent from "@/components/quantityCounterComponent";
                     <button class="btn">
                         <FontAwesomeIcon :icon="['far', 'heart']" /> Like
                     </button>
-                    <div class="save_btn_outer">
-                        <button :class="'btn show_list_dropdown' + (showListDropdown ? ' active' : '')"
-                            @click="toggleShowListDropdown">
+                    <div class="save_btn_outer" v-on-click-outside-handler="()=>{ showListDropdown = false;}">
+                        <button :class="'btn show_list_dropdown' + (showListDropdown ? ' active' : '')" @click="toggleShowListDropdown">
                             <FontAwesomeIcon :icon="['far', 'bookmark']" /> Save
                         </button>
                         <div v-if="showListDropdown" class="save_btn_dropdown">
@@ -76,7 +75,7 @@ import QuantityCounterComponent from "@/components/quantityCounterComponent";
                             </ul>
                         </div>
                     </div>
-                    <div class="share_btn_outer">
+                    <div class="share_btn_outer" v-on-click-outside-handler="()=>{ showShareDropdown = false;}">
                         <button :class="'btn' + (showShareDropdown ? ' active' : '')" @click="toggleShowShareDropdown">
                             <FontAwesomeIcon icon="share" /> Share
                         </button>
@@ -429,7 +428,6 @@ export default {
     data: () => {
         return {
             productCartCount: 1,
-            loading: false,
             product: {
                 images: [],
                 name: "",
@@ -444,34 +442,32 @@ export default {
             showListDropdown: false,
             showShareDropdown: false,
             cartStore: useCartStore(),
-            loginStore:useLoginStore()
+            loginStore: useLoginStore()
         }
     },
     beforeMount() {
         this.getProduct()
     },
-    mounted() {
-        window.addEventListener("click", this.windowClickEvent)
-    },
-    unmounted() {
-        window.removeEventListener("click", this.windowClickEvent)
-    },
     methods: {
         async getProduct() {
             var res = await axios.get("Anonym/Product/Get", { params: { id: this.$route.params.id } })
-            if (res.status == 200) {
+            if (res.isSuccess) {
                 this.product = res.data;
                 this.productCartCount = this.cartStore.items.filter(x => x.productId == this.product.id)[0]?.quantity ?? 1;
             }
         },
+        async getProducts() {
+            var res = await axios.get("Anonym/Product/GetList", { params: { id: this.$route.params.id } })
+            if (res.isSuccess) {
+                this.products = res.data;
+            }
+        },
         async addToCart() {
-            this.loading = true;
-           var res=await this.cartStore.updateCartItem(this.product.id,this.productCartCount);
-            if (res.status == 200) {
-                    this.cartStore.loadCart();
-                    this.toast.success("Your request was successful");
-                    this.loading=false;
-                }
+            var res = await this.cartStore.updateCartItem(this.product.id, this.productCartCount);
+            if (res.isSuccess) {
+                this.cartStore.loadCart();
+                this.toast.success("Your request was successful");
+            }
         },
         increaseCartCount() {
             this.productCartCount++;
@@ -485,16 +481,6 @@ export default {
         },
         toggleShowShareDropdown() {
             this.showShareDropdown = !this.showShareDropdown;
-        },
-        windowClickEvent(e) {
-            /*show_share_dropdown  show_list_dropdown*/
-            var eventNode = e.target;
-            if (!eventNode.closest(".share_btn_outer") && this.showShareDropdown) {
-                this.showShareDropdown = false;
-            }
-            if (!eventNode.closest(".save_btn_outer") && this.showListDropdown) {
-                this.showListDropdown = false;
-            }
         },
     }
 }

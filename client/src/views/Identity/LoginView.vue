@@ -20,7 +20,8 @@ import router from '../../router';
                         <TextBox placeholder="Email" v-model="model.email" :errorMessage="errors.email" />
                     </div>
                     <div class="col-md-7 form-group">
-                        <TextBox placeholder="Password" type="password" v-model="model.password" :errorMessage="errors.password" />
+                        <TextBox placeholder="Password" type="password" v-model="model.password"
+                            :errorMessage="errors.password" />
                     </div>
                     <div class="col-md-7 form-group identity_form_buttons">
                         <button class="btn btn-outline-primary" @click="sendRequest">Sign In</button>
@@ -50,12 +51,12 @@ export default {
         async sendRequest() {
             var response = (await axios.postForm("Identity/Login", this.model));
             this.errors = {};
-            if (response.status != 200)
-                this.errors = response.data;
-            else {
+            if (response.isSuccess) {
                 this.loginStore.loadUser();
                 router.push("/")
             }
+            else
+                this.errors = response.data;
         }
     }
 }

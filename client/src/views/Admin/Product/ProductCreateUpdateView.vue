@@ -46,8 +46,8 @@ export default {
         price: "",
         description: "",
       },
-      errors:{},
-      toast:useToast()
+      errors: {},
+      toast: useToast()
     }
   },
   async mounted() {
@@ -73,11 +73,12 @@ export default {
           response = await axios.postForm('Admin/Product/Update', data);
           break;
       }
-      if(response!=null){
-        if(response.status==400)
-        this.errors=response.data;
-        else if(response.status==200)
-        this.toast.success("Your request was successful");
+      if (response != null) {
+
+        if (response.isSuccess)
+          this.toast.success("Your request was successful");
+        else
+          this.errors = response.data;
       }
     }
   }

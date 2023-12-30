@@ -29,7 +29,7 @@ const useCartStore = defineStore('cart', {
         res = await axios.get('Anonym/ShoppingCart/GetList');
       }
       this.items = new Array<CartItem>();
-      if (res.data) {
+      if (res.isSuccess && res.data.length>0) {
         res.data.forEach((element: object) => {
           this.items.push(new CartItem(element));
         });

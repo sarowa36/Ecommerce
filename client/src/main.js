@@ -8,7 +8,7 @@ import '@mdi/font/css/materialdesignicons.css'
 
 // Import the CSS or use your own!
 
-import { createApp } from 'vue'
+import { createApp, ref } from 'vue'
 import { createPinia } from 'pinia'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -19,7 +19,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 // Vuetify
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
-import {VDataTableServer,VBtn,VCard,VImg,VRating} from 'vuetify/components'
+import { VDataTableServer, VBtn, VCard, VImg, VRating } from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
 import { default as Toast, useToast } from 'vue-toastification'
@@ -34,15 +34,20 @@ import router from './router'
   window.jQuery = window.$ = jQuery
 
   const app = createApp(App)
+  const isLoading=ref(false);
 
   axios.defaults.baseURL = location.origin + '/api/'
   axios.defaults.validateStatus = (status) => status >= 200 && status <= 600
+  axios.interceptors.request.use((request)=>{
+    isLoading.value=true;
+    return request;
+  })
   axios.interceptors.response.use(function (response) {
     var toast = useToast()
-    var serverErrorGroup=response.status >= 500;
-    var requestErrorGroup=response.status>=400 && response.status<500;
-    if(response.data.redirect){
-      window.location.href=response.data.redirect;
+    var serverErrorGroup = response.status >= 500
+    var requestErrorGroup = response.status >= 400 && response.status < 500
+    if (response.data.redirect) {
+      window.location.href = response.data.redirect
     }
     if (serverErrorGroup)
       toast.error(
@@ -50,6 +55,8 @@ import router from './router'
       )
     else if (requestErrorGroup)
       toast.warning('You have made a false request. Check your request again.')
+    response.isSuccess = !serverErrorGroup && !requestErrorGroup
+    isLoading.value=false;
     return response
   }, undefined)
 
@@ -61,7 +68,7 @@ import router from './router'
   library.add(far)
   library.add(fas)
   library.add(fab)
-  
+
   if (import.meta.env.DEV) app.config.compilerOptions.comments = true
 
   app.component('tabs', Tabs)
@@ -74,12 +81,32 @@ import router from './router'
   app.use(VueScreen, 'bootstrap')
 
   const vuetify = createVuetify({
-    components:{VDataTableServer,VBtn,VCard,VImg,VRating},
-    directives,
+    components: { VDataTableServer, VBtn, VCard, VImg, VRating },
+    directives
   })
-  app.use(vuetify);
-  
+  app.use(vuetify)
+
   app.use(router)
 
+  app.directive("OnClickOutsideHandler",{
+    mounted(el, binding, vnode) {
+        el.clickOutsideEvent=(e)=>{
+            var eventNode = e.target;
+            if (!el.contains(eventNode)) {
+                binding.value();
+            }
+        }
+        window.addEventListener("click",el.clickOutsideEvent)
+    },
+    beforeUnmount(el,bindign,vnode){
+        window.removeEventListener("click",el.clickOutsideEvent)
+    }
+})
+
+  app.mixin({
+    data() {
+      return { isLoading }
+    },
+  })
   app.mount('#app')
 })()

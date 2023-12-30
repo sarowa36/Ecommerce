@@ -5,10 +5,6 @@ defineProps({
     modelValue: {
         type: Number,
         default: 1
-    },
-    loading: {
-        type: Boolean,
-        default:false
     }
 })
 </script>
@@ -23,7 +19,7 @@ defineProps({
         <button class="btn btn-outline-dark" @click="$emit('increaseCartCount')">
             <FontAwesomeIcon icon="plus" />
         </button>
-        <div v-if="loading" class="cart_counter_overlay">
+        <div v-if="isLoading" class="cart_counter_overlay">
             <FontAwesomeIcon icon="circle-notch" />
         </div>
     </div>

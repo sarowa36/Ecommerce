@@ -1,13 +1,14 @@
 <script setup>
-import {FilterValueArray,FilterTypeEnum} from "./";
+import { FilterValueArray, FilterTypeEnum } from "./";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Guid } from 'guid-typescript';
-
 import Slider from "@vueform/slider"
+
 </script>
 <template>
-    <div class="filter" :id="filterId">
-        <button :class="'btn' + (active ? ' active' : '')" @click="toggleFilter">
+    <div class="filter" :id="filterId" v-on-click-outside-handler="()=>{ show = false;}">
+        <button :class="'btn' + (active ? ' active' : '')" @click="toggleFilter"
+            >
             <FontAwesomeIcon :icon="icon"></FontAwesomeIcon>
             <span> {{ describeText }}</span>
         </button>
@@ -20,8 +21,8 @@ import Slider from "@vueform/slider"
                     <li v-for="(item) in value"><input type="checkbox" v-model="item.selected"
                             @change="checkboxChanged($event, item)"> {{ item.text }}</li>
                 </ul>
-                <Slider v-if="filterType == FilterTypeEnum.priceRange" :min="minValue" :max="maxValue" class="mt-5 me-2 ms-2"
-                    v-model="priceRangeValue" />
+                <Slider v-if="filterType == FilterTypeEnum.priceRange" :min="minValue" :max="maxValue"
+                    class="mt-5 me-2 ms-2" v-model="priceRangeValue" />
             </div>
             <div class="filter_dropdown_footer">
                 <button class="btn btn-primary" @click="_clearEvent">Clear</button>
@@ -45,10 +46,6 @@ export default {
             this.minValue = this.priceRangeValue[0];
             this.maxValue = this.priceRangeValue[1];
         }
-        window.addEventListener("click", this.windowClickEvent)
-    },
-    beforeUnmount() {
-        window.removeEventListener("click", this.windowClickEvent)
     },
     methods: {
         toggleFilter() {
@@ -72,12 +69,6 @@ export default {
                 });
             }
         },
-        windowClickEvent(e) {
-            var eventNode = e.target;
-            if (!eventNode.closest("#" + this.filterId) && this.show) {
-                this.show = false;
-            }
-        },
         checkboxChanged(e, item) {
             if (this.filterType == FilterTypeEnum.checkboxListOnlyOneSelectable) {
                 this.value.filter(x => x != item).map(x => { x.selected = false; return x })
@@ -88,7 +79,7 @@ export default {
     props: {
         describeText: String,
         icon: String,
-        showSearchInput:true,
+        showSearchInput: true,
         modelValue: FilterValueArray,
         filterType: FilterTypeEnum,
         applyEvent: {
@@ -119,6 +110,7 @@ export default {
             }
         }
     },
+
 }
 </script>
 <style scoped>
@@ -176,4 +168,4 @@ export default {
         width: calc(100vw - 24px);
     }
 }
-</style>./filterComponent/FilterValueArray
+</style>

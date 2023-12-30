@@ -5,7 +5,7 @@ import { useLoginStore } from '../../stores/LoginStore';
 import { useCartStore } from "@/stores/CartStore";
 </script>
 <template>
-  <div class="theme_bg">
+  <div class="theme_bg navigation_outer">
     <div class="container">
       <div class="row navbar pt-4 pb-4">
         <div class="col-3 col-lg-4 logo">
@@ -22,7 +22,7 @@ import { useCartStore } from "@/stores/CartStore";
             <RouterLink to="/">Home</RouterLink>
             <RouterLink to="/Shop">Shop</RouterLink>
             <div class="nav_link_with_dropdown nav_links">
-              <RouterLink to="/">Features</RouterLink> <button class="btn" @click="collapseSubmenu">
+              <a href="#" @click.prevent>Features</a> <button class="btn" @click="collapseSubmenu">
                 <FontAwesomeIcon icon="chevron-down" />
               </button>
               <div class="nav_submenu_outer">
@@ -71,9 +71,16 @@ import { useCartStore } from "@/stores/CartStore";
         </div>
       </div>
     </div>
+    <div v-if="isLoading" class="loading_bar">
+    </div>
   </div>
 </template>
 <style scoped>
+.navigation_outer{
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
 .navigation {
   display: flex;
   justify-content: space-evenly;
@@ -99,7 +106,31 @@ import { useCartStore } from "@/stores/CartStore";
   line-height: normal;
   text-transform: uppercase;
 }
+.loading_bar {
+  width: 100%; /* Örneğin genişlik */
+  height: 3px; /* Örneğin yükseklik */
+  position: relative;
+  overflow: hidden;
+}
 
+.loading_bar::before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--first-color); 
+  animation: loading 2s ease-in-out infinite; 
+}
+
+@keyframes loading {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
 /* NavSubmenu */
 .nav_link_with_dropdown {
   position: relative;

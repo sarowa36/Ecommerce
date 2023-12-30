@@ -1,6 +1,7 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ProductComponent, ProductComponentValue } from '@/components/productComponent';
+import axios from 'axios';
 
 </script>
 
@@ -87,10 +88,10 @@ import { ProductComponent, ProductComponentValue } from '@/components/productCom
         <div class="row">
             <h2 class="section_title">Our Products</h2>
             <div class="product_filters mt-3 mb-3">
-                <a href="#">Sale</a>
-                <a href="#">Hot</a>
-                <a href="#">New Arrivals</a>
-                <a href="#">Accessories</a>
+                <a href="#" @click.prevent>Sale</a>
+                <a href="#" @click.prevent>Hot</a>
+                <a href="#" @click.prevent>New Arrivals</a>
+                <a href="#" @click.prevent>Accessories</a>
             </div>
             <ProductComponent v-for="pr in bestSellingProducts" :value="pr" class="col-sm-6 col-lg-3 mt-3">
             </ProductComponent>
@@ -262,11 +263,25 @@ export default {
     data() {
         return {
             bestSellingProducts: [
-                new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman1.png"], name: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
+                /*new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman1.png"], name: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
                 new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman2.png"], name: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
                 new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman3.png"], name: "Textured Sunset Shirt", price: "49.99", star: "5.0" }),
-                new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman3.png"], name: "Textured Sunset Shirt", price: "49.99", star: "5.0" })
+                new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman3.png"], name: "Textured Sunset Shirt", price: "49.99", star: "5.0" })*/
             ]
+        }
+    },
+    mounted(){
+        this.loadProducts();
+    },
+    methods:{
+        async loadProducts(){
+            this.bestSellingProducts=[];
+            var res=await axios.get("Anonym/Product/GetList");
+            if(res.isSuccess && res.data.length>0){
+                res.data.slice(0,4).forEach(x=>{
+                    this.bestSellingProducts.push(new ProductComponentValue(x));
+                })
+            }
         }
     }
 }

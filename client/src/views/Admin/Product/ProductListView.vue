@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 <template>
   <DashboardLayout>
     <v-data-table-server v-model:items-per-page="itemsPerPage" :headers="headers" :items-length="totalItems"
-      :items="serverItems" :loading="loading" item-value="name" @update:options="loadItems" :page="page">
+      :items="serverItems" :loading="isLoading" item-value="name" @update:options="loadItems" :page="page">
       <template v-slot:item.image="{ item }">
         <v-card class="my-2" elevation="0" rounded>
           <v-img :src="item.image" height="64"></v-img>
@@ -37,7 +37,6 @@ export default {
       { title: "Actions", key: "actions", align: "center", sortable: false },
     ],
     serverItems: [],
-    loading: true,
     totalItems: 0,
     page: 1
   }),
@@ -51,25 +50,25 @@ export default {
         }
         this.$router.push({ query })
       }
-      else{
+      else {
         var queryParams = this.$route.query;
         this.request(queryParams.page, queryParams.itemsPerPage, queryParams.sortByKey, queryParams.sortByOrder);
-        this.initiated=true;
+        this.initiated = true;
       }
-      
+
     },
     request(page = 1, itemsPerPage = this.itemsPerPage, sortByKey, sortByOrder) {
-      this.loading = true;
       var params = { page, itemsPerPage }
       if (sortByKey != null && sortByKey.length > 0) {
         params.sortKey = sortByKey;
         params.sortOrder = sortByOrder;
       }
       axios.get("Admin/Product/GetList", { params: params }).then(response => {
-        this.serverItems = response.data.values;
-        this.totalItems = response.data.totalCount;
+        if (response.isSuccess) {
+          this.serverItems = response.data.values;
+          this.totalItems = response.data.totalCount;
+        }
         this.page = page
-        this.loading = false;
       })
     }
   },

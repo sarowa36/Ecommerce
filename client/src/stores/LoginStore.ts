@@ -21,7 +21,7 @@ const useLoginStore = defineStore('login', {
   actions: {
     async loadUser() {
       var userLogin = await axios.get('Identity/GetUser')
-      if (userLogin.data) {
+      if (userLogin.isSuccess && userLogin.data) {
         this.user = userLogin.data
         this.isLogged = true
       }
