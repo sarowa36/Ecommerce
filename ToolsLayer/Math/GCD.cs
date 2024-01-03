@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ToolsLayer.Math
+﻿namespace ToolsLayer.Math
 {
-	public static class GCD
+    public static class GCD
 	{
 		public static int Calculate(int a, int b)
 		{

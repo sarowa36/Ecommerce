@@ -1,5 +1,4 @@
-﻿
-using AutoMapper;
+﻿using AutoMapper;
 using EntityLayer.Entities;
 using EntityLayer.ViewModels.User.ShoppingCartController;
 

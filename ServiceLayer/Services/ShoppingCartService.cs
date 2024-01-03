@@ -2,20 +2,11 @@
 using DataAccessLayer.Base.Repositories.ShoppingCartItemRepositories;
 using EntityLayer.Entities;
 using EntityLayer.ViewModels.Anonym.AnonymShoppingCartController;
-using EntityLayer.ViewModels.User.ShoppingCartController;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using ServiceLayer.Base;
 using ServiceLayer.Base.Services;
-using ServiceLayer.ServiceResults.AnonymShoppingCartService;
-using ServiceLayer.ServiceResults.ShoppingCartService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceLayer.Services
 {
@@ -25,20 +16,23 @@ namespace ServiceLayer.Services
         readonly IProductReadRepository _productReadRepository;
         readonly IShoppingCartItemReadRepository _shoppingCartItemReadRepository;
         readonly IShoppingCartItemWriteRepository _shoppingCartItemWriteRepository;
-        readonly IIdentityService _identityService;
+        readonly IServiceErrorContainer _serviceErrorContainer;
         HttpContext HttpContext { get { return _httpContextAccessor.HttpContext; } }
         private const string ShoppingCartCookieName = "shoppingCart";
-        public ShoppingCartService(IHttpContextAccessor httpContextAccessor, IProductReadRepository productReadRepository, IShoppingCartItemWriteRepository shoppingCartItemWriteRepository, IShoppingCartItemReadRepository shoppingCartItemReadRepository, IIdentityService identityService)
+        public ShoppingCartService(IHttpContextAccessor httpContextAccessor,
+            IProductReadRepository productReadRepository,
+            IShoppingCartItemWriteRepository shoppingCartItemWriteRepository,
+            IShoppingCartItemReadRepository shoppingCartItemReadRepository,
+            IServiceErrorContainer serviceResponseProvider)
         {
             _httpContextAccessor = httpContextAccessor;
             _productReadRepository = productReadRepository;
             _shoppingCartItemWriteRepository = shoppingCartItemWriteRepository;
             _shoppingCartItemReadRepository = shoppingCartItemReadRepository;
-            _identityService = identityService;
+            _serviceErrorContainer = serviceResponseProvider;
         }
-        public async Task<AddOrUpdateOrRemoveProductToCookieResponse> AddOrUpdateOrRemoveProductToCookieAsync(int productId, int quantity)
+        public async Task AddOrUpdateOrRemoveProductToCookieAsync(int productId, int quantity)
         {
-            var response = new AddOrUpdateOrRemoveProductToCookieResponse();
             Dictionary<int, int> cookieCart = new Dictionary<int, int>();
             if (HttpContext.Request.Cookies.TryGetValue(ShoppingCartCookieName, out var cookieCartString))
             {
@@ -64,19 +58,16 @@ namespace ServiceLayer.Services
                 cookieCart.Add(productId, quantity);
             else
             {
-                response.Errors.Add("ModelOnly", "Quantity Must Be Greater Than 0");
-                return response;
+                _serviceErrorContainer.Errors.Add("ModelOnly", "Quantity Must Be Greater Than 0");
             }
             HttpContext.Response.Cookies.Append(ShoppingCartCookieName, JsonConvert.SerializeObject(cookieCart));
-            return response;
         }
-        public async Task<GetListFromCookieResponse> GetListFromCookieAsync()
+        public async Task<List<AnonymShoppingCartListValueVM>> GetListFromCookieAsync()
         {
-            var response = new GetListFromCookieResponse();
             if (HttpContext.Request.Cookies.TryGetValue(ShoppingCartCookieName, out var cookieCartString))
             {
                 Dictionary<int, int> cookieCart = JsonConvert.DeserializeObject<Dictionary<int, int>>(cookieCartString);
-                response.Value = _productReadRepository.GetAll().Where(x => cookieCart.Keys.Contains(x.Id))
+                return _productReadRepository.GetAll().Where(x => cookieCart.Keys.Contains(x.Id))
                     .Select(x =>
                    new AnonymShoppingCartListValueVM
                    {
@@ -87,82 +78,64 @@ namespace ServiceLayer.Services
                        Quantity = cookieCart[x.Id]
                    }).ToList();
             }
-            return response;
-        }
-        public async Task<AddOrUpdateOrRemoveProductResponse> AddOrUpdateOrRemoveProductAsync(int productId, int quantity)
-        {
-            var response = new AddOrUpdateOrRemoveProductResponse();
-            var getCurrentUserResponse = await _identityService.GetCurrentUserAsync();
-            response.BindResponse(getCurrentUserResponse);
-            if (response.IsSuccess)
+            else
             {
-                var user = getCurrentUserResponse.Value;
-                if (_shoppingCartItemReadRepository.GetWhere(x => x.UserId == user.Id && x.ProductId == productId, out var item))
-                {
-                    if (quantity <= 0)
-                    {
-                        await _shoppingCartItemWriteRepository.DeleteAsync(item);
-                    }
-                    else
-                    {
-                        item.Quantity = quantity;
-                        await _shoppingCartItemWriteRepository.UpdateAsync(item);
-                    }
-                }
-                else if (quantity > 0)
-                {
-                    await _shoppingCartItemWriteRepository.CreateAsync(new ShoppingCartItem() { ProductId = productId, Quantity = quantity, UserId = user.Id });
-                }
-                await _shoppingCartItemWriteRepository.SaveChangesAsync();
+                return new List<AnonymShoppingCartListValueVM>();
             }
-            return response;
         }
-        public async Task<BulkAddItemResponse> BulkAddItemAsync(Dictionary<int, int> values)
+        public async Task AddOrUpdateOrRemoveProductAsync(ApplicationUser user, int productId, int quantity)
         {
-            var response = new BulkAddItemResponse();
-            var getCurrentUserResponse = await _identityService.GetCurrentUserAsync();
-            response.BindResponse(getCurrentUserResponse);
-            if (values.Any(x => x.Value <= 0))
-                response.Errors.Add("ModelOnly", "Quantity Must Be Greater Than 0");
-            if (getCurrentUserResponse.IsSuccess && _shoppingCartItemReadRepository.Exist(x => x.UserId == getCurrentUserResponse.Value.Id && values.Keys.Contains(x.ProductId)))
-                response.Errors.Add("ModelOnly", "Item Already Exist");
-            if (response.IsSuccess)
+
+            if (_shoppingCartItemReadRepository.GetWhere(x => x.UserId == user.Id && x.ProductId == productId, out var item))
             {
-                var user = getCurrentUserResponse.Value;
+                if (quantity <= 0)
+                {
+                    await _shoppingCartItemWriteRepository.DeleteAsync(item);
+                }
+                else
+                {
+                    item.Quantity = quantity;
+                    await _shoppingCartItemWriteRepository.UpdateAsync(item);
+                }
+            }
+            else if (quantity > 0)
+            {
+                await _shoppingCartItemWriteRepository.CreateAsync(new ShoppingCartItem() { ProductId = productId, Quantity = quantity, UserId = user.Id });
+            }
+            await _shoppingCartItemWriteRepository.SaveChangesAsync();
+
+        }
+        public async Task BulkAddItemAsync(ApplicationUser user, Dictionary<int, int> values)
+        {
+            if (values.Any(x => x.Value <= 0))
+                _serviceErrorContainer.Errors.Add("ModelOnly", "Quantity Must Be Greater Than 0");
+            else if (_shoppingCartItemReadRepository.Exist(x => x.UserId == user.Id && values.Keys.Contains(x.ProductId)))
+                _serviceErrorContainer.Errors.Add("ModelOnly", "Item Already Exist");
+            else
+            {
                 await _shoppingCartItemWriteRepository.CreateRangeAsync(values.Select(x => new ShoppingCartItem() { UserId = user.Id, ProductId = x.Key, Quantity = x.Value }));
                 await _shoppingCartItemWriteRepository.SaveChangesAsync();
             }
-            return response;
         }
-        public async Task<CookieCartConvertToDbCartResponse> CookieCartConvertToDbCartAsync(ApplicationUser user)
+        public async Task CookieCartConvertToDbCartAsync(ApplicationUser user)
         {
-            var response = new CookieCartConvertToDbCartResponse();
             if (HttpContext.Request.Cookies.TryGetValue(ShoppingCartCookieName, out var cookieCartString))
             {
                 Dictionary<int, int> cookieCart = JsonConvert.DeserializeObject<Dictionary<int, int>>(cookieCartString);
-                if(cookieCart!= null && cookieCart.All(x=>x.Key>0 && x.Value>0))
+                if (cookieCart != null && cookieCart.All(x => x.Key > 0 && x.Value > 0))
                 {
                     var alreadyAddedValues = _shoppingCartItemReadRepository.GetAll().Where(x => x.UserId == user.Id && cookieCart.Keys.Contains(x.ProductId)).ToList();
-                    var newValues=cookieCart.Keys.Except(alreadyAddedValues.Select(x=>x.ProductId));
+                    var newValues = cookieCart.Keys.Except(alreadyAddedValues.Select(x => x.ProductId));
                     alreadyAddedValues.ForEach(x => x.Quantity = cookieCart[x.ProductId]);
-                    await _shoppingCartItemWriteRepository.CreateRangeAsync(newValues.Select(x=>new ShoppingCartItem() { UserId=user.Id, ProductId = x, Quantity = cookieCart[x] }));
+                    await _shoppingCartItemWriteRepository.CreateRangeAsync(newValues.Select(x => new ShoppingCartItem() { UserId = user.Id, ProductId = x, Quantity = cookieCart[x] }));
                     await _shoppingCartItemWriteRepository.SaveChangesAsync();
                 }
                 HttpContext.Response.Cookies.Delete(ShoppingCartCookieName);
             }
-            return response;
         }
-        public async Task<GetListResponse> GetListAsync()
+        public async Task<List<ShoppingCartItem>> GetListAsync(ApplicationUser user)
         {
-            var response = new GetListResponse();
-            var getCurrentUserResponse = await _identityService.GetCurrentUserAsync();
-            response.BindResponse(getCurrentUserResponse);
-            if (response.IsSuccess)
-            {
-                var user = getCurrentUserResponse.Value;
-                response.Value = _shoppingCartItemReadRepository.GetAll().Where(x => x.UserId == user.Id).Include(x => x.Product).ToList();
-            }
-            return response;
+            return _shoppingCartItemReadRepository.GetAll().Where(x => x.UserId == user.Id).Include(x => x.Product).ToList();
         }
     }
 }

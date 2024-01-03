@@ -1,16 +1,15 @@
 ﻿using EntityLayer.Entities;
-using ServiceLayer.ServiceResults.AnonymShoppingCartService;
-using ServiceLayer.ServiceResults.ShoppingCartService;
+using EntityLayer.ViewModels.Anonym.AnonymShoppingCartController;
 
 namespace ServiceLayer.Base.Services
 {
     public interface IShoppingCartService
     {
-        Task<AddOrUpdateOrRemoveProductResponse> AddOrUpdateOrRemoveProductAsync(int productId, int quantity);
-        Task<AddOrUpdateOrRemoveProductToCookieResponse> AddOrUpdateOrRemoveProductToCookieAsync(int productId, int quantity);
-        Task<BulkAddItemResponse> BulkAddItemAsync(Dictionary<int, int> values);
-        Task<GetListResponse> GetListAsync();
-        Task<CookieCartConvertToDbCartResponse> CookieCartConvertToDbCartAsync(ApplicationUser user);
-        Task<GetListFromCookieResponse> GetListFromCookieAsync();
+        Task AddOrUpdateOrRemoveProductAsync(ApplicationUser user, int productId, int quantity);
+        Task AddOrUpdateOrRemoveProductToCookieAsync(int productId, int quantity);
+        Task BulkAddItemAsync(ApplicationUser user, Dictionary<int, int> values);
+        Task CookieCartConvertToDbCartAsync(ApplicationUser user);
+        Task<List<ShoppingCartItem>> GetListAsync(ApplicationUser user);
+        Task<List<AnonymShoppingCartListValueVM>> GetListFromCookieAsync();
     }
 }

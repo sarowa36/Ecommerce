@@ -1,14 +1,5 @@
-﻿using AutoMapper;
-using Azure;
-using DataAccessLayer.Base.Repositories.ProductRepositories;
-using DataAccessLayer.Base.Repositories.ShoppingCartItemRepositories;
-using EntityLayer.Entities;
-using EntityLayer.ViewModels.User.ShoppingCartController;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Mvc;
+using ServiceLayer.Base;
 using ServiceLayer.Base.Services;
 
 namespace Ecommerce.Areas.Anonym.Controllers
@@ -17,22 +8,24 @@ namespace Ecommerce.Areas.Anonym.Controllers
     public class ShoppingCartController : Controller
     {
         readonly IShoppingCartService _shoppingCartService;
+        readonly IServiceErrorContainer _serviceErrorProvider;
 
-        public ShoppingCartController(IShoppingCartService shoppingCartService)
+        public ShoppingCartController(IShoppingCartService shoppingCartService, IServiceErrorContainer serviceErrorProvider)
         {
             _shoppingCartService = shoppingCartService;
+            _serviceErrorProvider = serviceErrorProvider;
         }
 
         [HttpPost]
         public async Task<IActionResult> Write(int productId, int quantity)
         {
-            var response=await _shoppingCartService.AddOrUpdateOrRemoveProductToCookieAsync(productId,quantity);
-            return response.IsSuccess ? Ok() : BadRequest(response.Errors);
+            _serviceErrorProvider.AddServiceResponse(()=> _shoppingCartService.AddOrUpdateOrRemoveProductToCookieAsync(productId,quantity));
+            return _serviceErrorProvider.IsSuccess ? Ok() : BadRequest(_serviceErrorProvider.Errors);
         }
         public async Task<IActionResult> GetList()
         {
-            var response = await _shoppingCartService.GetListFromCookieAsync();
-            return response.IsSuccess ? Ok(response.Value) : BadRequest(response.Errors);
+            var response =_serviceErrorProvider.AddServiceResponse(()=>_shoppingCartService.GetListFromCookieAsync());
+            return _serviceErrorProvider.IsSuccess ? Ok(response) : BadRequest(_serviceErrorProvider.Errors);
         }
     }
 }

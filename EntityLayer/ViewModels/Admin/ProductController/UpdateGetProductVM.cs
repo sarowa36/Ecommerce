@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EntityLayer.ViewModels.Admin.ProductController
+﻿namespace EntityLayer.ViewModels.Admin.ProductController
 {
     public class UpdateGetProductVM
     {

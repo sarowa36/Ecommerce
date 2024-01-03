@@ -1,14 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Buffers.Text;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using ToolsLayer.FileManagement;
-using ToolsLayer.Math;
 
 
 namespace ToolsLayer.FileManagement

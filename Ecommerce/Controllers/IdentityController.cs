@@ -1,86 +1,76 @@
 ﻿using AutoMapper;
 using BusinessLayer.Validations.IdentityController;
-using DataAccessLayer.Repositories.ShoppingCartItemRepositories;
-using Ecommerce.AutoMappers.IdentityController;
-using ToolsLayer.ErrorModel;
 using EntityLayer.Entities;
 using EntityLayer.ViewModels.IdentityController;
-using FluentValidation;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using ServiceLayer.Base;
 using ServiceLayer.Base.Services;
-using DataAccessLayer.Base.Repositories.ShoppingCartItemRepositories;
-using ServiceLayer.ServiceResults.IdentityService;
-using Azure;
 
 namespace Ecommerce.Controllers
 {
     public class IdentityController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IShoppingCartItemWriteRepository _shoppingCartItemWriteRepository;
         private readonly IServiceProvider _serviceProvider;
         private readonly IMapper _mapper;
         private readonly IIdentityService _identityService;
         readonly IShoppingCartService _shoppingCartService;
-        public IdentityController(UserManager<ApplicationUser> userManager, IServiceProvider serviceProvider, RoleManager<IdentityRole> roleManager, SignInManager<ApplicationUser> signInManager, IMapper mapper, IShoppingCartItemWriteRepository shoppingCartItemWriteRepository, IIdentityService identityService, IShoppingCartService shoppingCartService)
+        readonly IServiceErrorContainer _serviceErrorContainer;
+        readonly IAuthService _authService;
+        public IdentityController(IServiceProvider serviceProvider,
+            IMapper mapper,
+            IIdentityService identityService,
+            IShoppingCartService shoppingCartService,
+            IServiceErrorContainer serviceErrorProvider,
+            IAuthService authService)
         {
-            _userManager = userManager;
             _serviceProvider = serviceProvider;
-            _roleManager = roleManager;
-            _signInManager = signInManager;
             _mapper = mapper;
-            _shoppingCartItemWriteRepository = shoppingCartItemWriteRepository;
             _identityService = identityService;
             _shoppingCartService = shoppingCartService;
+            _serviceErrorContainer = serviceErrorProvider;
+            _authService = authService;
         }
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM model)
         {
-            var validationResult = _serviceProvider.GetService<RegisterVMValidation>().Validate(model);
-            if (!validationResult.IsValid)
-                return BadRequest(validationResult.ToErrorModel());
-            else
-            {
-                var response = await _identityService.CreateUserAsync(model);
+            _serviceErrorContainer.BindValidation(_serviceProvider.GetService<RegisterVMValidation>().Validate(model));
 
-                if (response.IsSuccess)
-                {
-                    response.BindResponse(await _identityService.LoginAsync(response.Value));
-                    response.BindResponse(await _shoppingCartService.CookieCartConvertToDbCartAsync(response.Value));
-                }
-                return response.IsSuccess ? Ok() : BadRequest(response.Errors);
-            }
+            var user = new ApplicationUser()
+            {
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                UserName = model.Email,
+                Name = model.Name,
+                Surname = model.Surname
+            };
+            _serviceErrorContainer.AddServiceResponse(() => _identityService.CreateUserAsync(user, model.Password));
+            _serviceErrorContainer.AddServiceResponse(() => _authService.AssignUserRole(user));
+            _serviceErrorContainer.AddServiceResponse(() => _identityService.LoginAsync(user));
+            _serviceErrorContainer.AddServiceResponse(() => _shoppingCartService.CookieCartConvertToDbCartAsync(user));
+            return _serviceErrorContainer.IsSuccess ? Ok() : BadRequest(_serviceErrorContainer.Errors);
+
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginVM model)
         {
-            var validationResult = _serviceProvider.GetService<LoginVmValidation>().Validate(model);
-            if (!validationResult.IsValid)
-                return BadRequest(validationResult.ToErrorModel());
-            else
-            {
-                var loginResponse = await _identityService.LoginAsync(model.Email, model.Password);
-                if (loginResponse.IsSuccess)
-                {
-                    loginResponse.BindResponse(await _shoppingCartService.CookieCartConvertToDbCartAsync(loginResponse.Value));
-                }
-                return loginResponse.IsSuccess ? Ok() : BadRequest(loginResponse.Errors);
-            }
+            _serviceErrorContainer.BindValidation(_serviceProvider.GetService<LoginVmValidation>().Validate(model));
+            var user = _serviceErrorContainer.AddServiceResponse(() => _identityService.GetUser(model.Email));
+            _serviceErrorContainer.AddServiceResponse(() => _identityService.LoginAsync(user, model.Password));
+            _serviceErrorContainer.AddServiceResponse(() => _shoppingCartService.CookieCartConvertToDbCartAsync(user));
+
+            return _serviceErrorContainer.IsSuccess ? Ok() : BadRequest(_serviceErrorContainer.Errors);
         }
         public async Task<IActionResult> GetUser()
         {
-            var getCurrentUserResponse = await _identityService.GetCurrentUserAsync();
-            GetUserVM? returnValue=null;
-            if (getCurrentUserResponse.IsSuccess)
+            var user = _serviceErrorContainer.AddServiceResponse(() => _identityService.GetCurrentUserAsync());
+            var roles = _serviceErrorContainer.AddServiceResponse(() => _authService.GetUserRolesAsync(user));
+            if (_serviceErrorContainer.IsSuccess)
             {
-                returnValue = _mapper.Map<ApplicationUser, GetUserVM>(getCurrentUserResponse.Value);
-                returnValue.Roles = (await _identityService.GetUserRolesAsync()).Value;
+                var returnValue = _mapper.Map<ApplicationUser, GetUserVM>(user);
+                returnValue.Roles = roles;
+                return Ok(returnValue);
             }
-            return Ok(returnValue);
+            return Ok();
         }
     }
 }

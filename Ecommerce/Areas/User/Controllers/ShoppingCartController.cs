@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using DataAccessLayer.Base.Repositories.ProductRepositories;
-using DataAccessLayer.Base.Repositories.ShoppingCartItemRepositories;
 using EntityLayer.Entities;
 using EntityLayer.ViewModels.User.ShoppingCartController;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using ServiceLayer.Base;
 using ServiceLayer.Base.Services;
 
 namespace Ecommerce.Areas.User.Controllers
@@ -16,22 +13,29 @@ namespace Ecommerce.Areas.User.Controllers
     public class ShoppingCartController : Controller
     {
         readonly IShoppingCartService _shoppingCartService;
-
-        public ShoppingCartController(IShoppingCartService shoppingCartService)
+        readonly IIdentityService _identityService;
+        readonly IServiceErrorContainer _serviceResponseProvider;
+        readonly IMapper _mapper;
+        public ShoppingCartController(IShoppingCartService shoppingCartService, IServiceErrorContainer serviceResponseProvider, IIdentityService identityService, IMapper mapper)
         {
             _shoppingCartService = shoppingCartService;
+            _serviceResponseProvider = serviceResponseProvider;
+            _identityService = identityService;
+            _mapper = mapper;
         }
 
         [HttpPost]
         public async Task<IActionResult> Write(int productId, int quantity)
         {
-            var response = await _shoppingCartService.AddOrUpdateOrRemoveProductAsync(productId, quantity);
-            return response.IsSuccess ? Ok() : BadRequest(response.Errors);
+            var user =  _serviceResponseProvider.AddServiceResponse(() => _identityService.GetCurrentUserAsync());
+             _serviceResponseProvider.AddServiceResponse(()=>_shoppingCartService.AddOrUpdateOrRemoveProductAsync(user,productId, quantity));
+            return _serviceResponseProvider.IsSuccess ? Ok() : BadRequest(_serviceResponseProvider.Errors);
         }
         public async Task<IActionResult> GetList()
         {
-            var response = await _shoppingCartService.GetListAsync();
-            return response.IsSuccess ? Ok(response.Value) : BadRequest(response.Errors);
+            var user = _serviceResponseProvider.AddServiceResponse(() => _identityService.GetCurrentUserAsync());
+            var response = _serviceResponseProvider.AddServiceResponse(()=>_shoppingCartService.GetListAsync(user));
+            return _serviceResponseProvider.IsSuccess ? Ok( response.Select(x=>_mapper.Map<ShoppingCartItem,ShoppingCartItemValueVM>(x)).ToList()) : BadRequest(_serviceResponseProvider.Errors);
         }
     }
 }

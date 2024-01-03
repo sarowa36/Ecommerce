@@ -1,22 +1,18 @@
 ﻿using EntityLayer.Entities;
-using EntityLayer.ViewModels.IdentityController;
-using ServiceLayer.ServiceResults.IdentityService;
+using ServiceLayer.ServiceCommand.MailService;
 
 namespace ServiceLayer.Base.Services
 {
     public interface IIdentityService
     {
-        Task<AssignRolesToUserResponse> AssignRolesToUserAsnyc(string userId, string[] roles);
-        Task<CreateUserResponse> CreateUserAsync(RegisterVM model);
-        Task<CreatePasswordResetResponse> CreatePasswordResetRequestAsync(string email);
-        Task<GetUserRolesResponse> GetUserRolesAsync(string userIdOrName);
-        Task<GetUserRolesResponse> GetUserRolesAsync(ApplicationUser user);
-        Task<GetUserRolesResponse> GetUserRolesAsync();
-        Task<LoginResponse> LoginAsync(string usernameOrEmail, string password);
-        Task<LoginResponse> LoginAsync(ApplicationUser user, string password);
-        Task<LoginResponse> LoginAsync(ApplicationUser user);
-        Task<UpdatePasswordResponse> UpdatePasswordAsync(string userId, string resetToken, string newPassword);
-        Task<bool> VerifyResetTokenAsync(string resetToken, string userId);
-        Task<GetCurrentUserResponse> GetCurrentUserAsync();
+        Task<PasswordResetCommand> CreatePasswordResetRequestAsync(ApplicationUser user);
+        Task CreateUserAsync(ApplicationUser user, string password);
+        Task<ApplicationUser> GetCurrentUserAsync();
+        Task<ApplicationUser> GetUser(string usernameOrEmail);
+        Task LoginAsync(ApplicationUser user);
+        Task LoginAsync(ApplicationUser user, string password);
+        Task LoginAsync(string usernameOrEmail, string password);
+        Task UpdatePasswordAsync(ApplicationUser user, string resetToken, string newPassword);
+        Task VerifyResetTokenAsync(string resetToken, ApplicationUser user);
     }
 }

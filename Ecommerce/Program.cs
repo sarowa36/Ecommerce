@@ -1,17 +1,11 @@
 using DataAccessLayer;
-using Ecommerce.Helpers;
 using Ecommerce.Middlewares;
-using EntityLayer.Entities;
 using FluentValidation;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using System.Reflection;
 using ServiceLayer;
-using DataAccessLayer;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 

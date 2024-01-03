@@ -1,14 +1,10 @@
 ﻿using AutoMapper;
 using BusinessLayer.Validations.Admin.ProductController;
-using DataAccessLayer;
 using DataAccessLayer.Base.Repositories.ProductRepositories;
-using DataAccessLayer.Repositories;
-using ToolsLayer.ErrorModel;
 using EntityLayer.Entities;
 using EntityLayer.ViewModels.Admin.ProductController;
-using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using ToolsLayer.ErrorModel;
 using ToolsLayer.FileManagement;
 
 namespace Ecommerce.Areas.Admin.Controllers

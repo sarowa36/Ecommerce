@@ -1,10 +1,9 @@
-﻿using Azure;
-using EntityLayer.Entities;
-using EntityLayer.ViewModels.IdentityController;
+﻿using EntityLayer.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using ServiceLayer.Base;
 using ServiceLayer.Base.Services;
-using ServiceLayer.ServiceResults.IdentityService;
+using ServiceLayer.ServiceCommand.MailService;
 using ToolsLayer.Encoder;
 using ToolsLayer.ErrorModel;
 
@@ -15,179 +14,87 @@ namespace ServiceLayer.Services
         private readonly UserManager<ApplicationUser> _userManager;
         readonly IHttpContextAccessor _httpContextAccessor;
         readonly SignInManager<ApplicationUser> _signInManager;
-        readonly IMailService _mailService;
+        readonly IServiceErrorContainer _serviceErrorContainer;
         HttpContext HttpContext { get { return _httpContextAccessor.HttpContext; } }
-        public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IMailService mailService, IHttpContextAccessor httpContextAccessor)
+        public IdentityService(UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager, 
+            IHttpContextAccessor httpContextAccessor, 
+            IServiceErrorContainer serviceErrorProvider)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _mailService = mailService;
             _httpContextAccessor = httpContextAccessor;
+            _serviceErrorContainer = serviceErrorProvider;
         }
-        public async Task<CreateUserResponse> CreateUserAsync(RegisterVM model)
+        public async Task CreateUserAsync(ApplicationUser user, string password)
         {
-            var response=new CreateUserResponse();
-            response.Value = new()
-            {
-                Email = model.Email,
-                PhoneNumber = model.PhoneNumber,
-                UserName = model.Email,
-                Name = model.Name,
-                Surname = model.Surname
-            };
-            response.Errors = (await _userManager.CreateAsync(response.Value, model.Password)).ToErrorModel();
-            if (response.IsSuccess)
-            {
-                await _userManager.AddToRoleAsync(response.Value, "User");
-            }
-            return response;
+            _serviceErrorContainer.BindError((await _userManager.CreateAsync(user, password)).ToErrorModel());
         }
 
-        public async Task<AssignRolesToUserResponse> AssignRolesToUserAsnyc(string userId, string[] roles)
-        {
-            ApplicationUser user = await _userManager.FindByIdAsync(userId);
-            var response = new AssignRolesToUserResponse();
-            if (user != null)
-            {
-                var userRoles = await _userManager.GetRolesAsync(user);
-                await _userManager.RemoveFromRolesAsync(user, userRoles);
-                await _userManager.AddToRolesAsync(user, roles);
-            }
-            else
-                response.Errors.Add("ModelOnly", "User Not Found");
-            return response;
-        }
-        public async Task<GetUserRolesResponse> GetUserRolesAsync(string userIdOrName)
-        {
-            ApplicationUser user = await _userManager.FindByIdAsync(userIdOrName);
-            var response = new GetUserRolesResponse();
-            if (user == null)
-                user = await _userManager.FindByNameAsync(userIdOrName);
-
-            if (user != null)
-            {
-                response.Value = (await _userManager.GetRolesAsync(user)).ToList();
-            }
-            else
-                response.Errors.Add("ModelOnly","User Not Found");
-            return response;
-        }
-        public async Task<GetUserRolesResponse> GetUserRolesAsync(ApplicationUser user)
-        {
-           var response = new GetUserRolesResponse();
-           
-            if (user != null)
-            {
-                response.Value = (await _userManager.GetRolesAsync(user)).ToList();
-            }
-            else
-                response.Errors.Add("ModelOnly", "User Not Found");
-            return response;
-        }
-        public async Task<GetUserRolesResponse> GetUserRolesAsync()
-        {
-            var response = new GetUserRolesResponse();
-            var getUserResponse=await GetCurrentUserAsync();
-            response.BindResponse(getUserResponse);
-            if (response.IsSuccess)
-            {
-                response.Value = (await _userManager.GetRolesAsync(getUserResponse.Value)).ToList();
-            }
-            else
-                response.Errors.Add("ModelOnly", "User Not Found");
-            return response;
-        }
-        public async Task<LoginResponse> LoginAsync(string usernameOrEmail, string password)
+        public async Task LoginAsync(string usernameOrEmail, string password)
         {
             ApplicationUser user = await _userManager.FindByNameAsync(usernameOrEmail);
-            var response= new LoginResponse();
             if (user == null)
                 user = await _userManager.FindByEmailAsync(usernameOrEmail);
-            if (user != null)
+            if (user == null)
+            {
+                _serviceErrorContainer.Errors.Add("ModelOnly", "User Not Found");
+            }
+            else
             {
                 SignInResult result = await _signInManager.PasswordSignInAsync(user, password, true, false);
-                response.Value = user;
-                response.Errors = result.ToErrorModel();
+                _serviceErrorContainer.BindError(result.ToErrorModel());
             }
-            else
-                response.Errors.Add("ModelOnly", "User Not Found");
-            return response;
         }
-        public async Task<LoginResponse> LoginAsync(ApplicationUser user, string password)
+        public async Task LoginAsync(ApplicationUser user, string password)
         {
-            var response = new LoginResponse();
-            if (user != null)
-            {
-                SignInResult result = await _signInManager.PasswordSignInAsync(user, password, true, false);
-                response.Value = user;
-                response.Errors = result.ToErrorModel();
-            }
-            else
-                response.Errors.Add("ModelOnly", "User Not Found");
-            return response;
+            SignInResult result = await _signInManager.PasswordSignInAsync(user, password, true, false);
+            _serviceErrorContainer.BindError(result.ToErrorModel());
         }
-        public async Task<LoginResponse> LoginAsync(ApplicationUser user)
+        public async Task LoginAsync(ApplicationUser user)
         {
-            var response = new LoginResponse();
-            if (user != null)
-            {
-                await _signInManager.SignInAsync(user, true);
-                response.Value = user;
-            }
-            else
-                response.Errors.Add("ModelOnly", "User Not Found");
-            return response;
+            await _signInManager.SignInAsync(user, true);
         }
-        public async Task<UpdatePasswordResponse> UpdatePasswordAsync(string userId, string resetToken, string newPassword)
+        public async Task UpdatePasswordAsync(ApplicationUser user, string resetToken, string newPassword)
         {
-            ApplicationUser user = await _userManager.FindByIdAsync(userId);
-            var response = new UpdatePasswordResponse();
-            if (user != null)
-            {
-                resetToken = resetToken.UrlDecode();
-                IdentityResult result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
-                if (result.Succeeded)
-                    await _userManager.UpdateSecurityStampAsync(user);
-                else
-                    response.Errors = result.ToErrorModel();
-            }
+            IdentityResult result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
+            if (result.Succeeded)
+                await _userManager.UpdateSecurityStampAsync(user);
             else
-                response.Errors.Add("ModelOnly", "User Not Found");
-            return response;
+                _serviceErrorContainer.BindError(result.ToErrorModel());
         }
-        public async Task<CreatePasswordResetResponse> CreatePasswordResetRequestAsync(string email)
+        public async Task<PasswordResetCommand> CreatePasswordResetRequestAsync(ApplicationUser user)
         {
-            ApplicationUser user = await _userManager.FindByEmailAsync(email);
-            var response = new CreatePasswordResetResponse();
-            if (user != null)
-            {
-                string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-                resetToken = resetToken.UrlEncode();
+            string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            resetToken = resetToken.UrlEncode();
+            return new PasswordResetCommand() { Email = user.Email, UserId = user.Id, Token = resetToken };
+        }
+        public async Task VerifyResetTokenAsync(string resetToken, ApplicationUser user)
+        {
 
-                await _mailService.SendPasswordResetMailAsync(email, user.Id, resetToken);
-            }
-            else
-                response.Errors.Add("ModelOnly", "User Not Found");
-            return response;
-        }
-        public async Task<bool> VerifyResetTokenAsync(string resetToken, string userId)
-        {
-            ApplicationUser user = await _userManager.FindByIdAsync(userId);
-            if (user != null)
+            resetToken = resetToken.UrlDecode();
+            if (!await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", resetToken))
             {
-                resetToken = resetToken.UrlDecode();
-
-                return await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", resetToken);
+                _serviceErrorContainer.Errors.Add("ModelOnly", "Invalid Request");
             }
-            return false;
         }
-        public async Task<GetCurrentUserResponse> GetCurrentUserAsync()
+        public async Task<ApplicationUser> GetCurrentUserAsync()
         {
-            var response = new GetCurrentUserResponse();
-            response.Value= await _userManager.GetUserAsync(HttpContext.User);
-            if (response.Value == null)
-                response.Errors.Add("ModelOnly", "User Not Found");
-            return response;
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null)
+            {
+                _serviceErrorContainer.Errors.Add("ModelOnly", "User Not Found");
+            }
+            return user;
+        }
+        public async Task<ApplicationUser> GetUser(string usernameOrEmail)
+        {
+            ApplicationUser user = await _userManager.FindByNameAsync(usernameOrEmail);
+            if (user == null)
+                user = await _userManager.FindByEmailAsync(usernameOrEmail);
+            if (user == null)
+                _serviceErrorContainer.Errors.Add("ModelOnly", "User Not Found");
+            return user;
         }
     }
 }

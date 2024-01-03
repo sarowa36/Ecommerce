@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ToolsLayer.Test
+﻿namespace ToolsLayer.Test
 {
     public static class CreateImageContentForTest
     {
         /// <summary>
-        /// Only Useful when debugging
+        /// Creating a image for test purpose
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns><code>ByteArrayContent</code></returns>

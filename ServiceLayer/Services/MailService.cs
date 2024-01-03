@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using ServiceLayer.Base.Services;
+using ServiceLayer.ServiceCommand.MailService;
 using System.Net;
 using System.Net.Mail;
 using System.Text;
@@ -10,12 +10,10 @@ namespace ServiceLayer.Services
     public class MailService : IMailService
     {
         readonly IConfiguration _configuration;
-        readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MailService(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public MailService(IConfiguration configuration)
         {
             _configuration = configuration;
-            _httpContextAccessor = httpContextAccessor;
         }
         public async Task SendMailAsync(string to, string subject, string body, bool isBodyHtml = true)
         {
@@ -40,18 +38,18 @@ namespace ServiceLayer.Services
             await smtp.SendMailAsync(mail);
         }
 
-        public async Task SendPasswordResetMailAsync(string to, string userId, string resetToken)
+        public async Task SendPasswordResetMailAsync(PasswordResetCommand passwordResetCommand)
         {
             StringBuilder mail = new();
             mail.AppendLine("Hello<br>If you have requested a new password, you can renew your password from the link below.<br><strong><a target=\"_blank\" href=\"");
             mail.AppendLine("");
             mail.AppendLine("/updatePassword/");
-            mail.AppendLine(userId);
+            mail.AppendLine(passwordResetCommand.UserId);
             mail.AppendLine("/");
-            mail.AppendLine(resetToken);
+            mail.AppendLine(passwordResetCommand.Token);
             mail.AppendLine("\">Click here for new password request...</a></strong><br><br><span style=\"font-size:12px;\">NOTE : If this request has not been made by you, please do not take this e-mail seriously.</span><br><br><br>Ecommerce By Sarowa36");
 
-            await SendMailAsync(to, "Password Renewal Request", mail.ToString());
+            await SendMailAsync(passwordResetCommand.Email, "Password Renewal Request", mail.ToString());
         }
 
         public async Task SendCompletedOrderMailAsync(string to, string orderCode, DateTime orderDate, string userName)

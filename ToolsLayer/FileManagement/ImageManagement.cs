@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ToolsLayer.Math;
+﻿using ToolsLayer.Math;
 
 namespace ToolsLayer.FileManagement
 {
@@ -21,27 +16,28 @@ namespace ToolsLayer.FileManagement
                 {
                     gcd = GCD.Calculate(gcdwidth, img.Height);
                     gcdwidth--;
-                } while (gcd == 1 && gcdwidth != 0);
+                } while (gcd == 1 && gcdwidth != 0 || gcd > maxwidth);
                 int verticalRatio = img.Height / gcd;
                 int horizontalRatio = img.Width / gcd;
                 int maxgcd = GCD.Calculate(maxheight, maxwidth);
                 if (gcd > 1)
                 {
-                    if (img.Width > maxwidth)
+                    int destwidth = img.Width;
+                    int destheight = img.Height;
+                    if (destwidth > maxwidth)
                     {
-                        int destwidth = 0;
-                        int destheight = 0;
+                        destwidth = 0;
+                        destheight = 0;
                         for (int i = horizontalRatio; i < maxwidth; i += horizontalRatio)
                         {
                             destheight += verticalRatio;
                             destwidth += horizontalRatio;
                         }
-                        img.Mutate(x => x.Resize(destwidth, destheight));
                     }
-                    if (img.Height > maxheight)
+                    if (destheight > maxheight)
                     {
-                        int destwidth = 0;
-                        int destheight = 0;
+                        destwidth = 0;
+                        destheight = 0;
                         for (int i = verticalRatio; i < maxheight; i += verticalRatio)
                         {
                             destheight += verticalRatio;
@@ -49,6 +45,7 @@ namespace ToolsLayer.FileManagement
                         }
                         img.Mutate(x => x.Resize(destwidth, destheight));
                     }
+                    img.Mutate(x => x.Resize(destwidth, destheight));
                 }
             }
         }
