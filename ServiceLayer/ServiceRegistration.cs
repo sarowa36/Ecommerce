@@ -15,6 +15,8 @@ namespace ServiceLayer
             services.AddScoped<IPaymentService , PaymentService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IServiceErrorContainer, ServiceErrorContainer>();
+            services.AddScoped<OrderService>();
+            services.AddScoped<IUserAddressService, UserAddressService>();
         }
     }
 }

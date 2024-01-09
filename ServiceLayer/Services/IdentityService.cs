@@ -1,4 +1,5 @@
 ﻿using EntityLayer.Entities;
+using IdentityLayer.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using ServiceLayer.Base;
@@ -6,18 +7,19 @@ using ServiceLayer.Base.Services;
 using ServiceLayer.ServiceCommand.MailService;
 using ToolsLayer.Encoder;
 using ToolsLayer.ErrorModel;
+using IdentityLayer;
 
 namespace ServiceLayer.Services
 {
     public class IdentityService : IIdentityService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IMyUserManager<ApplicationUser> _userManager;
         readonly IHttpContextAccessor _httpContextAccessor;
-        readonly SignInManager<ApplicationUser> _signInManager;
+        readonly IMySignInManager<ApplicationUser> _signInManager;
         readonly IServiceErrorContainer _serviceErrorContainer;
         HttpContext HttpContext { get { return _httpContextAccessor.HttpContext; } }
-        public IdentityService(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager, 
+        public IdentityService(IMyUserManager<ApplicationUser> userManager,
+            IMySignInManager<ApplicationUser> signInManager, 
             IHttpContextAccessor httpContextAccessor, 
             IServiceErrorContainer serviceErrorProvider)
         {
@@ -38,7 +40,7 @@ namespace ServiceLayer.Services
                 user = await _userManager.FindByEmailAsync(usernameOrEmail);
             if (user == null)
             {
-                _serviceErrorContainer.Errors.Add("ModelOnly", "User Not Found");
+                _serviceErrorContainer.AddError("ModelOnly", "User Not Found");
             }
             else
             {
@@ -75,7 +77,7 @@ namespace ServiceLayer.Services
             resetToken = resetToken.UrlDecode();
             if (!await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", resetToken))
             {
-                _serviceErrorContainer.Errors.Add("ModelOnly", "Invalid Request");
+                _serviceErrorContainer.AddError("ModelOnly", "Invalid Request");
             }
         }
         public async Task<ApplicationUser> GetCurrentUserAsync()
@@ -83,7 +85,7 @@ namespace ServiceLayer.Services
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user == null)
             {
-                _serviceErrorContainer.Errors.Add("ModelOnly", "User Not Found");
+                _serviceErrorContainer.AddError("ModelOnly", "User Not Found");
             }
             return user;
         }
@@ -93,7 +95,7 @@ namespace ServiceLayer.Services
             if (user == null)
                 user = await _userManager.FindByEmailAsync(usernameOrEmail);
             if (user == null)
-                _serviceErrorContainer.Errors.Add("ModelOnly", "User Not Found");
+                _serviceErrorContainer.AddError("ModelOnly", "User Not Found");
             return user;
         }
     }

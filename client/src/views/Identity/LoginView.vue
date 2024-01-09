@@ -1,9 +1,10 @@
 <script setup>
 import { RouterLink } from 'vue-router';
-import TextBox from '../../components/TextBox.vue';
-import { useLoginStore } from './../../stores/LoginStore';
+import TextBox from '@/components/TextBox.vue';
+import { useLoginStore } from '@/stores/LoginStore';
+import {useCartStore} from "@/stores/CartStore"
 import axios from "axios"
-import router from '../../router';
+import router from '@/router';
 </script>
 <template>
     <div class="container mt-5 mb-5 pt-1 pb-1">
@@ -44,6 +45,7 @@ export default {
                 password: ""
             },
             errors: {},
+            cartStore:useCartStore(),
             loginStore: useLoginStore()
         };
     },
@@ -53,6 +55,7 @@ export default {
             this.errors = {};
             if (response.isSuccess) {
                 this.loginStore.loadUser();
+                this.cartStore.loadCart();
                 router.push("/")
             }
             else

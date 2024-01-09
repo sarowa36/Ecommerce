@@ -1,6 +1,6 @@
 using DataAccessLayer;
-using Ecommerce.Middlewares;
 using FluentValidation;
+using IdentityLayer;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -14,7 +14,6 @@ builder.Services.AddMvcCore().AddNewtonsoftJson(x =>
 {
     x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
     x.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-    x.SerializerSettings.Converters.Add(new StringEnumConverter());
 });
 
 builder.Services.AddDbContext<ADC>(options =>
@@ -22,9 +21,7 @@ builder.Services.AddDbContext<ADC>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 
-builder.Services.AddAppAuthorization();
-
-builder.Services.AddAppAuthentication();
+builder.Services.AddMyIdentity();
 
 builder.Services.AddSpaStaticFiles(options =>
 {
@@ -36,6 +33,12 @@ builder.Services.AddValidatorsFromAssembly(Assembly.Load("BusinessLayer"));
 
 builder.Services.AddDataAccessLayerServices();
 builder.Services.AddApplicationServices();
+builder.Services.AddCors(options => {
+    options.AddPolicy("iyzico", policy =>
+    {
+        policy.WithOrigins("https://sandbox-api.iyzipay.com", "https://api.iyzipay.com").AllowAnyMethod().AllowAnyHeader().AllowCredentials();
+    });
+});
 
 var app = builder.Build();
 
@@ -55,6 +58,8 @@ app.UseSpaStaticFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseCors("iyzico");
 
 app.UseAuthentication();
 app.UseAuthorization();

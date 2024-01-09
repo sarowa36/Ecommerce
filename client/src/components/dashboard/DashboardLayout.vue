@@ -67,6 +67,7 @@ export default {
                 new DashboardMenuItemValue({ icon: "box", link: "/Orders", text: "Orders" }),
                 new DashboardMenuItemValue({ icon: "question", link: "", text: "My Questions" }),
                 new DashboardMenuItemValue({ icon: "user-pen", link: "", text: "Profile Detail" }),
+                new DashboardMenuItemValue({ icon: "map", link: "/Address", text: "Address" }),
                 new DashboardMenuItemValue({ icon: "lock", link: "", text: "Change Password" }),
                 new DashboardMenuItemValue({ isHr: true }),
                 new DashboardMenuItemValue({ icon: "heart", link: "", text: "My Favorites" }),

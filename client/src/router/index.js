@@ -6,11 +6,12 @@ import ProductView from '@/views/ProductView.vue'
 import ContactView from '@/views/ContactView.vue'
 import LoginView from '@/views/Identity/LoginView.vue'
 import ProfileView from '@/views/ProfileView.vue'
-import OrdersView from '@/views/OrdersView.vue'
+import OrdersView from '@/views/User/OrdersView.vue'
 import RegisterView from '@/views/Identity/RegisterView.vue'
 import CartView from '@/views/CartView.vue'
 import ProductCreateUpdateView from '@/views/Admin/Product/ProductCreateUpdateView.vue'
 import ProductListView from '@/views/Admin/Product/ProductListView.vue'
+import AddressView from '@/views/User/AddressView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   scrollBehavior(to, from, savedPosition) {
@@ -83,6 +84,11 @@ const router = createRouter({
       path: '/ProductList',
       name: 'productList',
       component: ProductListView
+    },
+    {
+      path:'/Address',
+      name:'address',
+      component:AddressView
     }
   ]
 })

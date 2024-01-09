@@ -22,7 +22,7 @@ defineEmits(["update:modelValue", "pressEnter"])
 </script>
 <template>
     <div class="form_group">
-        <span v-if="errorMessage" class="text-danger">{{ errorMessage }}</span>
+        <span :class="{'active':errorMessage}" class="text-danger">{{ errorMessage ? errorMessage :  "&nbps;" }}</span>
         <input :id="_id" ref="textbox" :type="type" :class="'myinput ' + (value ? 'with_value' : '')" :placeholder="placeholder"
             @blur="checkVal" v-model="value" @keydown="keydownEvent" />
         <label :for="_id" class="input_label text_theme">{{ placeholder }}</label>
@@ -85,6 +85,7 @@ export default {
 .input_label {
     width: fit-content;
     transform: translateY(100%);
+    transform-origin: left;
     cursor: text;
     transition: 0.3s;
     z-index: 50;
@@ -118,8 +119,11 @@ export default {
 
 .form_group>span {
     white-space: pre-line;
+    opacity: 0;
 }
-
+.form_group>span.active{
+    opacity: 1;
+}
 input.myinput::placeholder,
 textarea.myinput::placeholder {
     color: transparent;

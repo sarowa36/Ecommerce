@@ -9,6 +9,7 @@ namespace ServiceLayer.Base
         T? AddServiceResponse<T>(Func<Task<T>> func);
         void AddServiceResponse(Func<Task> func);
         T AddServiceResponse<T>(Func<T> func);
+        void AddError(string key, string message);
         void BindError(Dictionary<string, string> errors);
         void BindValidation(ValidationResult validation);
     }

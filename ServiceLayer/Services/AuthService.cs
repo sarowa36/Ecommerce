@@ -1,4 +1,5 @@
 ﻿using EntityLayer.Entities;
+using IdentityLayer.Base;
 using Microsoft.AspNetCore.Identity;
 using ServiceLayer.Base;
 using ServiceLayer.Base.Services;
@@ -10,9 +11,9 @@ namespace ServiceLayer.Services
     {
 
         readonly IServiceErrorContainer _serviceErrorContainer;
-        readonly UserManager<ApplicationUser> _userManager;
+        readonly IMyUserManager<ApplicationUser> _userManager;
 
-        public AuthService(UserManager<ApplicationUser> userManager,
+        public AuthService(IMyUserManager<ApplicationUser> userManager,
             IServiceErrorContainer serviceErrorProvider)
         {
             _userManager = userManager;

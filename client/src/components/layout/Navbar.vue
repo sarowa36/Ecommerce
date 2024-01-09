@@ -8,9 +8,9 @@ import { useCartStore } from "@/stores/CartStore";
   <div class="theme_bg navigation_outer">
     <div class="container">
       <div class="row navbar pt-4 pb-4">
-        <div class="col-3 col-lg-4 logo">
+        <RouterLink to="/" class="col-3 col-lg-4 logo">
           Salsha
-        </div>
+        </RouterLink>
         <div class="col-4 d-flex d-md-none justify-content-end">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation"
             aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,6 +29,7 @@ import { useCartStore } from "@/stores/CartStore";
                 <div class="nav_submenu_inner">
                   <div class="nav_submenu_links">
                     <RouterLink to="/Orders">Orders</RouterLink>
+                    <RouterLink to="/Address">Address</RouterLink>
                     <RouterLink to="/Register">Register</RouterLink>
                     <RouterLink to="/Cart">Cart</RouterLink>
                     <RouterLink to="/ProductCreate">Create Product</RouterLink>
@@ -107,8 +108,8 @@ import { useCartStore } from "@/stores/CartStore";
   text-transform: uppercase;
 }
 .loading_bar {
-  width: 100%; /* Örneğin genişlik */
-  height: 3px; /* Örneğin yükseklik */
+  width: 100%; 
+  height: 3px; 
   position: relative;
   overflow: hidden;
 }

@@ -34,6 +34,10 @@ namespace ServiceLayer
             }
             return default(T);
         }
+        public void AddError(string key, string message)
+        {
+            Errors.TryAdd(key, message);
+        }
         public void BindError(Dictionary<string,string> errors)
         {
             foreach (var item in errors)

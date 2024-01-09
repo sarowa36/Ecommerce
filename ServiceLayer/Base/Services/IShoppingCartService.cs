@@ -11,5 +11,6 @@ namespace ServiceLayer.Base.Services
         Task CookieCartConvertToDbCartAsync(ApplicationUser user);
         Task<List<ShoppingCartItem>> GetListAsync(ApplicationUser user);
         Task<List<AnonymShoppingCartListValueVM>> GetListFromCookieAsync();
+        Task SetEmptyToCart(string userId);
     }
 }

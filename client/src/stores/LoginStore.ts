@@ -13,6 +13,7 @@ const useLoginStore = defineStore('login', {
       user: {
         name: '',
         surname: '',
+        phoneNumber:'',
         roles:[]
       },
       isLogged: false

@@ -6,7 +6,7 @@ namespace ServiceLayer.Base.Services
 {
     public interface IPaymentService
     {
-        Task<CheckoutFormInitialize> StartPayment(ApplicationUser user);
-        Task<CheckoutForm> RetrivePayment(RetrieveCheckoutFormRequest req);
+        Task<CheckoutFormInitialize> StartPayment(Order order);
+        Task<CheckoutForm> ProcessPayment(RetrieveCheckoutFormRequest req);
     }
 }

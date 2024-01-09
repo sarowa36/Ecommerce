@@ -58,7 +58,7 @@ namespace ServiceLayer.Services
                 cookieCart.Add(productId, quantity);
             else
             {
-                _serviceErrorContainer.Errors.Add("ModelOnly", "Quantity Must Be Greater Than 0");
+                _serviceErrorContainer.AddError("ModelOnly", "Quantity Must Be Greater Than 0");
             }
             HttpContext.Response.Cookies.Append(ShoppingCartCookieName, JsonConvert.SerializeObject(cookieCart));
         }
@@ -108,9 +108,9 @@ namespace ServiceLayer.Services
         public async Task BulkAddItemAsync(ApplicationUser user, Dictionary<int, int> values)
         {
             if (values.Any(x => x.Value <= 0))
-                _serviceErrorContainer.Errors.Add("ModelOnly", "Quantity Must Be Greater Than 0");
+                _serviceErrorContainer.AddError("ModelOnly", "Quantity Must Be Greater Than 0");
             else if (_shoppingCartItemReadRepository.Exist(x => x.UserId == user.Id && values.Keys.Contains(x.ProductId)))
-                _serviceErrorContainer.Errors.Add("ModelOnly", "Item Already Exist");
+                _serviceErrorContainer.AddError("ModelOnly", "Item Already Exist");
             else
             {
                 await _shoppingCartItemWriteRepository.CreateRangeAsync(values.Select(x => new ShoppingCartItem() { UserId = user.Id, ProductId = x.Key, Quantity = x.Value }));
@@ -136,6 +136,10 @@ namespace ServiceLayer.Services
         public async Task<List<ShoppingCartItem>> GetListAsync(ApplicationUser user)
         {
             return _shoppingCartItemReadRepository.GetAll().Where(x => x.UserId == user.Id).Include(x => x.Product).ToList();
+        }
+        public async Task SetEmptyToCart(string userId)
+        {
+            await _shoppingCartItemWriteRepository.DeleteRangeAsync(_shoppingCartItemReadRepository.GetAll().Where(x => x.UserId == userId));
         }
     }
 }
