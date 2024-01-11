@@ -4,7 +4,7 @@ import TextBox from '@/components/TextBox.vue';
 import { useLoginStore } from '@/stores/LoginStore';
 import {useCartStore} from "@/stores/CartStore"
 import axios from "axios"
-import router from '@/router';
+import {router,router_names} from '@/router';
 </script>
 <template>
     <div class="container mt-5 mb-5 pt-1 pb-1">
@@ -26,7 +26,7 @@ import router from '@/router';
                     </div>
                     <div class="col-md-7 form-group identity_form_buttons">
                         <button class="btn btn-outline-primary" @click="sendRequest">Sign In</button>
-                        <RouterLink to="/Register" class="btn btn-outline-primary">Register</RouterLink>
+                        <RouterLink :to="{name:router_names.register}" class="btn btn-outline-primary">Register</RouterLink>
                     </div>
                     <div class="col-md-7 text-center">
                         <RouterLink to="" class="fs-5 font_roboto_mono text_theme">Forgot Password?</RouterLink>

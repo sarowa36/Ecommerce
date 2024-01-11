@@ -1,8 +1,9 @@
 <script setup>
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { createRandomNumber, dateToDateTimeString } from "@/helpers/";
+import {  dateToDateTimeString } from "@/helpers/";
 import { useCitiesAndDistrictsStore } from "@/stores/CitiesAndDistrictsStore";
 import { OrderValue, OrderStatusDescriber, OrderStatus } from ".";
+import { router_names } from "@/router";
 defineProps({
     modelValue: {
         type: OrderValue,
@@ -40,12 +41,12 @@ defineProps({
                             class="order_product">
                             <div class="order_product_card_image">
                                 <RouterLink class="order_product_image_outer"
-                                    :to="{ name: 'product', params: { id: order_product.id } }"><img
+                                    :to="{ name: router_names.product, params: { id: order_product.productId } }"><img
                                         :src="order_product.productImage" alt=""></RouterLink>
                             </div>
                             <div class="order_product_card_content">
                                 <RouterLink class="order_product_image_outer"
-                                    :to="{ name: 'product', params: { id: order_product.productId } }">
+                                    :to="{ name: router_names.product, params: { id: order_product.productId } }">
                                     <h6>{{ order_product.productName }}</h6>
                                 </RouterLink>
 

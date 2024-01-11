@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import {  RouterView } from 'vue-router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useLoginStore } from '@/stores/LoginStore';
 import { useCartStore } from '@/stores/CartStore';

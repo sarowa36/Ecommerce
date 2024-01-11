@@ -11,20 +11,20 @@ defineProps({
 <template>
     <li v-if="!value.isHr" class="dashboard_menu_item">
         <button v-if="value.childItems.length>0" class="btn dashboard_submenu_collapser" @click="collapseSubmenu">
-            <FontAwesomeIcon icon="angle-down" />
+            <FontAwesomeIcon icon="angle-down" class="align-middle" />
         </button>
         <RouterLink :to="value.link">
-            <FontAwesomeIcon :icon="value.icon" />{{ value.text }}
+            <FontAwesomeIcon :icon="value.icon" class="menu_item_link_icon"/>{{ value.text }}
         </RouterLink>
         <ul class="dashboard_submenu"  v-if="value.childItems.length>0">
-            <DashboardMenuItem v-for="item in value.childItems" :value="item" />
+            <DashboardMenuItem v-for="(item,index) in value.childItems" :value="item" :key="index" />
         </ul>
     </li>
     <li v-else class="dashboard_menu_item">
         <hr>
     </li>
 </template>
-<style>
+<style scoped>
 .dashboard_menu_item{
     display: flex;
     flex-direction: row-reverse;
@@ -34,7 +34,7 @@ defineProps({
 .dashboard_menu_item>hr{
     width: 100%;
 }
-.dashboard_menu_item svg{
+.menu_item_link_icon{
     margin-right: 5px;
     width: 30px;
     font-size: 17px;

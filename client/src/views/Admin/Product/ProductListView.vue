@@ -1,7 +1,7 @@
 <script setup>
 import axios from 'axios';
 import { DashboardLayout } from '@/components/dashboard/';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { router_names } from '@/router';
 </script>
 <template>
   <DashboardLayout>
@@ -16,10 +16,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
         <v-rating :model-value="item.rating" color="orange-darken-2" density="compact" size="small" readonly></v-rating>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-btn class="ma-2">Show</v-btn>
-        <v-btn class="ma-2" :to="{ name: 'productUpdate', params: { id: item.id } }">Edit</v-btn>
+        <v-btn class="ma-2" :to="{ name: router_names.product, params: { id: item.id } }" target="_blank">Show</v-btn>
+        <v-btn class="ma-2" :to="{ name: router_names.admin_product_update, params: { id: item.id } }">Edit</v-btn>
         <v-btn class="ma-2" color="red">Delete</v-btn>
-
       </template>
     </v-data-table-server>
   </DashboardLayout>

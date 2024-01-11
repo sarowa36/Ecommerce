@@ -3,12 +3,13 @@ import { RouterLink, RouterView } from 'vue-router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useLoginStore } from '../../stores/LoginStore';
 import { useCartStore } from "@/stores/CartStore";
+import { router_names } from "@/router"
 </script>
 <template>
   <div class="theme_bg navigation_outer">
     <div class="container">
       <div class="row navbar pt-4 pb-4">
-        <RouterLink to="/" class="col-3 col-lg-4 logo">
+        <RouterLink :to="{ name: router_names.home }" class="col-3 col-lg-4 logo">
           Salsha
         </RouterLink>
         <div class="col-4 d-flex d-md-none justify-content-end">
@@ -19,8 +20,8 @@ import { useCartStore } from "@/stores/CartStore";
         </div>
         <div :class="'col-lg-8' + ($screen.width > 992 ? '' : ' collapse')" id="navigation">
           <div class="navigation">
-            <RouterLink to="/">Home</RouterLink>
-            <RouterLink to="/Shop">Shop</RouterLink>
+            <RouterLink :to="{ name: router_names.home }">Home</RouterLink>
+            <RouterLink :to="{ name: router_names.shop }">Shop</RouterLink>
             <div class="nav_link_with_dropdown nav_links">
               <a href="#" @click.prevent>Features</a> <button class="btn" @click="collapseSubmenu">
                 <FontAwesomeIcon icon="chevron-down" />
@@ -28,27 +29,26 @@ import { useCartStore } from "@/stores/CartStore";
               <div class="nav_submenu_outer">
                 <div class="nav_submenu_inner">
                   <div class="nav_submenu_links">
-                    <RouterLink to="/Orders">Orders</RouterLink>
-                    <RouterLink to="/Address">Address</RouterLink>
-                    <RouterLink to="/Register">Register</RouterLink>
-                    <RouterLink to="/Cart">Cart</RouterLink>
-                    <RouterLink to="/ProductCreate">Create Product</RouterLink>
+                    <RouterLink :to="{ name: router_names.user_orders }">Orders</RouterLink>
+                    <RouterLink :to="{ name: router_names.user_address }">Address</RouterLink>
+                    <RouterLink :to="{ name: router_names.register }">Register</RouterLink>
+                    <RouterLink :to="{ name: router_names.user_cart }">Cart</RouterLink>
+                    <RouterLink :to="{ name: router_names.admin_product_create }">Create Product</RouterLink>
                   </div>
                 </div>
               </div>
             </div>
-            <RouterLink to="/Contact">Contact</RouterLink>
+            <RouterLink :to="{ name: router_names.contact }">Contact</RouterLink>
             <div class="nav_link_with_dropdown nav_cart">
-              <RouterLink to="/Cart">
-                <FontAwesomeIcon v-if="$screen.width > 992" icon="bag-shopping"></FontAwesomeIcon><span
-                  v-else>Cart</span>
+              <RouterLink :to="{ name: router_names.user_cart }">
+                <FontAwesomeIcon v-if="$screen.width > 992" icon="bag-shopping"></FontAwesomeIcon><span v-else>Cart</span>
               </RouterLink>
               <div v-if="$screen.width > 992" class="nav_submenu_outer nav_cart_dropdown">
                 <div class="nav_submenu_inner">
                   <h6 class="nav_submenu_title">Cart ({{ cartStore.items.length }})</h6>
                   <div class="nav_cart_products">
                     <RouterLink v-for="(item, key) in cartStore.items" :key="key"
-                      :to="{ name: 'product', params: { id: item.productId } }" class="nav_cart_product">
+                      :to="{ name: router_names.product, params: { id: item.productId } }" class="nav_cart_product">
                       <img :src="item.productImage" alt="">
                       <div class="nav_cart_product_info">
                         <span class="nav_cart_product_title">{{ item.productName }}</span>
@@ -58,16 +58,16 @@ import { useCartStore } from "@/stores/CartStore";
                     </RouterLink>
                   </div>
                   <div class="nav_submenu_buttons">
-                    <RouterLink to="/Cart" class="btn btn-outline-primary">Cart</RouterLink>
-                    <RouterLink to="/" class="btn btn-primary">Order</RouterLink>
+                    <RouterLink :to="{ name: router_names.cart }" class="btn btn-outline-primary">Cart</RouterLink>
+                    <RouterLink :to="{ name: router_names.home }" class="btn btn-primary">Order</RouterLink>
                   </div>
                 </div>
               </div>
             </div>
-            <RouterLink to="/Login" v-if="!loginStore.isLogged"
+            <RouterLink :to="{ name: router_names.login }" v-if="!loginStore.isLogged"
               :class="$screen.width > 992 ? 'btn btn-outline-primary btn_login' : ''">
               Login</RouterLink>
-            <RouterLink to="/Profile" v-else>Profile</RouterLink>
+            <RouterLink :to="{ name: router_names.user_profile }" v-else>Profile</RouterLink>
           </div>
         </div>
       </div>
@@ -77,11 +77,12 @@ import { useCartStore } from "@/stores/CartStore";
   </div>
 </template>
 <style scoped>
-.navigation_outer{
+.navigation_outer {
   position: sticky;
   top: 0;
   z-index: 99;
 }
+
 .navigation {
   display: flex;
   justify-content: space-evenly;
@@ -107,9 +108,10 @@ import { useCartStore } from "@/stores/CartStore";
   line-height: normal;
   text-transform: uppercase;
 }
+
 .loading_bar {
-  width: 100%; 
-  height: 3px; 
+  width: 100%;
+  height: 3px;
   position: relative;
   overflow: hidden;
 }
@@ -120,18 +122,20 @@ import { useCartStore } from "@/stores/CartStore";
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: var(--first-color); 
-  animation: loading 2s ease-in-out infinite; 
+  background-color: var(--first-color);
+  animation: loading 2s ease-in-out infinite;
 }
 
 @keyframes loading {
   0% {
     left: -100%;
   }
+
   100% {
     left: 100%;
   }
 }
+
 /* NavSubmenu */
 .nav_link_with_dropdown {
   position: relative;
@@ -300,7 +304,8 @@ import { useCartStore } from "@/stores/CartStore";
   #navigation {
     position: relative;
   }
-}</style>
+}
+</style>
 <script>
 export default {
   data() {

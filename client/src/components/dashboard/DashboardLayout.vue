@@ -2,6 +2,7 @@
 import { DashboardMenuItemValue, DashboardMenuItem } from './';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useLoginStore, UserRole } from "@/stores/LoginStore";
+import router, { router_names } from '@/router';
 </script>
 <template>
     <div class="container mt-5 mb-5">
@@ -17,10 +18,13 @@ import { useLoginStore, UserRole } from "@/stores/LoginStore";
                     <h6><strong>Daniel Machivelli</strong></h6>
                 </div>
                 <hr>
-                <ul class="dashboard_menu">
-                    <DashboardMenuItem v-if="loginStore.user.roles.includes(UserRole.Admin)" v-for="item in adminMenuItems"
-                        :value="item" />
-                    <DashboardMenuItem v-else v-for="item in userMenuItems" :value="item" />
+                <ul class="dashboard_menu" v-if="loginStore.user.roles.includes(UserRole.Admin)">
+                    <DashboardMenuItem v-for="(item,index) in adminMenuItems"
+                        :value="item" :key="index" />
+                    
+                </ul>
+                <ul class="dashboard_menu" v-else>
+                    <DashboardMenuItem v-for="(item,index) in userMenuItems" :value="item" :key="index" />
                 </ul>
             </div>
             <div class="col-lg-9">
@@ -64,10 +68,10 @@ export default {
             loginStore: useLoginStore(),
             userMenuItems: [
                 new DashboardMenuItemValue({icon: "bell", link: "", text: "Notifications"}),
-                new DashboardMenuItemValue({ icon: "box", link: "/Orders", text: "Orders" }),
+                new DashboardMenuItemValue({ icon: "box", link: {name:router_names.user_orders}, text: "Orders" }),
                 new DashboardMenuItemValue({ icon: "question", link: "", text: "My Questions" }),
                 new DashboardMenuItemValue({ icon: "user-pen", link: "", text: "Profile Detail" }),
-                new DashboardMenuItemValue({ icon: "map", link: "/Address", text: "Address" }),
+                new DashboardMenuItemValue({ icon: "map", link:{name:router_names.user_address}, text: "Address" }),
                 new DashboardMenuItemValue({ icon: "lock", link: "", text: "Change Password" }),
                 new DashboardMenuItemValue({ isHr: true }),
                 new DashboardMenuItemValue({ icon: "heart", link: "", text: "My Favorites" }),
@@ -76,7 +80,7 @@ export default {
                 new DashboardMenuItemValue({ icon: "right-from-bracket", link: "", text: "Exit" }),
             ],
             adminMenuItems: [
-                new DashboardMenuItemValue({icon:"box",text:"Products",link:"/ProductList",childItems:[new DashboardMenuItemValue({icon:"plus",text:"Create",link:"/ProductCreate"})]}),
+                new DashboardMenuItemValue({icon:"box",text:"Products",link:{name:router_names.admin_product_list},childItems:[new DashboardMenuItemValue({icon:"plus",text:"Create",link:{name:router_names.admin_product_create}})]}),
                 new DashboardMenuItemValue({ isHr: true }),
                 new DashboardMenuItemValue({ icon: "right-from-bracket", link: "", text: "Exit" }),
             ]

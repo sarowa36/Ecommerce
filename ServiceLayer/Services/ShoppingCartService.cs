@@ -140,6 +140,7 @@ namespace ServiceLayer.Services
         public async Task SetEmptyToCart(string userId)
         {
             await _shoppingCartItemWriteRepository.DeleteRangeAsync(_shoppingCartItemReadRepository.GetAll().Where(x => x.UserId == userId));
+            await _shoppingCartItemWriteRepository.SaveChangesAsync();
         }
     }
 }

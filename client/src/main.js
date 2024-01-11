@@ -14,7 +14,6 @@ import * as directives from 'vuetify/directives'
 
 import { createApp } from 'vue'
 import { default as Toast } from 'vue-toastification'
-import { Tabs, Tab } from 'vue3-tabs-component'
 import jQuery from 'jquery'
 import VueScreen from 'vue-screen'
 import App from './App.vue'
@@ -22,8 +21,8 @@ import router from './router'
 import AxiosConfigSetter from './configs/axios'
 import FontAwasomeConfigSetter from './configs/fontawasome'
 (async () => {
-  window.jQuery = window.$ = jQuery
-
+  window.jQuery = window.$ = jQuery;
+  
   const app = createApp(App)
 
   AxiosConfigSetter(app);
@@ -33,9 +32,6 @@ import FontAwasomeConfigSetter from './configs/fontawasome'
   await import('bootstrap/dist/js/bootstrap.min.js')
 
   if (import.meta.env.DEV) app.config.compilerOptions.comments = true
-
-  app.component('tabs', Tabs)
-  app.component('tab', Tab)
 
   app.use(createPinia())
 

@@ -13,14 +13,14 @@ namespace Ecommerce.Areas.User.Controllers
 
     public class PaymentController : Controller
     {
-        readonly IPaymentService _paymentService;
+        readonly IIyziPayService _paymentService;
         readonly IShoppingCartService _shoppingCartService;
         readonly IIdentityService _identityService;
         readonly IServiceErrorContainer _serviceErrorContainer;
         readonly IOrderService _orderService;
         readonly IServiceProvider _serviceProvider;
         readonly IUserAddressService _userAddressService;
-        public PaymentController(IPaymentService paymentService,
+        public PaymentController(IIyziPayService paymentService,
             IShoppingCartService shoppingCartService,
             IIdentityService identityService,
             IServiceErrorContainer serviceErrorContainer,
@@ -46,7 +46,7 @@ namespace Ecommerce.Areas.User.Controllers
             var shoppingCartItems = _serviceErrorContainer.AddServiceResponse(() => _shoppingCartService.GetListAsync(user));
             var address = _serviceErrorContainer.AddServiceResponse(() => _userAddressService.Get(user, model.SelectedAddressId));
             var order = _serviceErrorContainer.AddServiceResponse(() => _orderService.CreateOrder(user, shoppingCartItems, address, model.TargetName, model.TargetPhone));
-            var paymentRequest = _serviceErrorContainer.AddServiceResponse(() => _paymentService.StartPayment(order));
+            var paymentRequest = _serviceErrorContainer.AddServiceResponse(() => _paymentService.StartPayment(order,user));
             return _serviceErrorContainer.IsSuccess ? Ok(new { redirect = paymentRequest.PaymentPageUrl }) : BadRequest(_serviceErrorContainer.Errors);
         }
         [HttpPost]
@@ -57,7 +57,7 @@ namespace Ecommerce.Areas.User.Controllers
             _serviceErrorContainer.AddServiceResponse(() => _shoppingCartService.SetEmptyToCart(order.UserId));
             if (_serviceErrorContainer.IsSuccess)
             {
-                return Redirect("/Orders?CurrentOrder=" + result.BasketId);
+                return Redirect("/User/Orders?CurrentOrder=" + result.BasketId);
             }
             else
             {

@@ -1,9 +1,9 @@
 <script setup>
 import { RouterLink } from 'vue-router';
-import TextBox from '../../components/TextBox.vue';
+import TextBox from '@/components/TextBox.vue';
 import axios from "axios"
-import { useLoginStore } from './../../stores/LoginStore';
-import router from '../../router';
+import { useLoginStore } from '@/stores/LoginStore';
+import {router,router_names} from '@/router';
 </script>
 <template>
     <div class="container mt-5 mb-5 pt-1 pb-1">
@@ -40,7 +40,7 @@ import router from '../../router';
                         <button class="btn btn-outline-primary" @click="sendRequest">Register</button>
                     </div>
                     <div class="col-md-12 text-center">
-                        <RouterLink to="/Login" class="fs-5 font_roboto_mono text_theme">Do You Have Account Already?</RouterLink>
+                        <RouterLink :to="{name:router_names.login}" class="fs-5 font_roboto_mono text_theme">Do You Have Account Already?</RouterLink>
                     </div>
                 </div>
             </div>

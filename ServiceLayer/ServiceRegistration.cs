@@ -12,7 +12,7 @@ namespace ServiceLayer
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IMailService, MailService>();
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
-            services.AddScoped<IPaymentService , PaymentService>();
+            services.AddScoped<IIyziPayService , IyziPayService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IServiceErrorContainer, ServiceErrorContainer>();
             services.AddScoped<OrderService>();

@@ -2,7 +2,7 @@
 import { ProductComponentValue } from './';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { RouterLink } from 'vue-router';
-import {Guid} from "guid-typescript"
+import { router_names } from '@/router';
 
 defineProps({
   value: {
@@ -12,7 +12,7 @@ defineProps({
 })
 </script>
 <template>
-  <RouterLink :to="'/Product/'+value.id" class="d-flex flex-wrap text-center">
+  <RouterLink :to="{name:router_names.product,params:{id:value.id}}" class="d-flex flex-wrap text-center">
     <img :src="value.image" alt="" class="col-12 bs_img">
     <span class="col-12 mt-2 bs_title">{{ value.name }}</span>
     <span class="col-6 bs_price">${{ value.price }}</span>

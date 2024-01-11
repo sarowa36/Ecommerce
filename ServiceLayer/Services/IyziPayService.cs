@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Base.Repositories.ShoppingCartItemRepositories;
+﻿using DataAccessLayer.Base.JsonData;
+using DataAccessLayer.Base.Repositories.ShoppingCartItemRepositories;
 using EntityLayer.Entities;
 using Iyzipay;
 using Iyzipay.Model;
@@ -11,16 +12,18 @@ using System.Globalization;
 
 namespace ServiceLayer.Services
 {
-    public class PaymentService : IPaymentService
+    public class IyziPayService : IIyziPayService
     {
         readonly IShoppingCartItemReadRepository _shoppingCartItemReadRepository;
         readonly Options options = new Options();
         readonly IServiceErrorContainer _serviceErrorContainer;
         readonly IHttpContextAccessor _httpContextAccessor;
+        readonly ICitiesAndDistrictsValues _citiesAndDistricts;
         HttpContext HttpContext { get { return _httpContextAccessor.HttpContext; } }
-        public PaymentService(IShoppingCartItemReadRepository shoppingCartItemReadRepository,
+        public IyziPayService(IShoppingCartItemReadRepository shoppingCartItemReadRepository,
             IServiceErrorContainer serviceErrorContainer,
-            IHttpContextAccessor httpContext)
+            IHttpContextAccessor httpContext,
+            ICitiesAndDistrictsValues citiesAndDistricts)
         {
             options = new Options()
             {
@@ -31,10 +34,14 @@ namespace ServiceLayer.Services
             _shoppingCartItemReadRepository = shoppingCartItemReadRepository;
             _serviceErrorContainer = serviceErrorContainer;
             _httpContextAccessor = httpContext;
+            _citiesAndDistricts = citiesAndDistricts;
         }
 
-        public async Task<CheckoutFormInitialize> StartPayment(Order order)
+        public async Task<CheckoutFormInitialize> StartPayment(Order order,ApplicationUser user)
         {
+            var cityName = _citiesAndDistricts.GetCity(order.Address.CityId).Name;
+            var districtName = _citiesAndDistricts.GetDistrict(order.Address.DistrictId).Name;
+            var fullAddress = $"{cityName}/{districtName} Posta Kodu:{order.Address.Zip} {order.Address.Detail}";
             CreateCheckoutFormInitializeRequest request = new CreateCheckoutFormInitializeRequest()
             {
                 Locale = Locale.TR.ToString(),
@@ -47,35 +54,33 @@ namespace ServiceLayer.Services
                 EnabledInstallments = new List<int>() { 1, 2, 3, 4, 5, 6 },
                 Buyer = new Buyer()
                 {
-                    Id = "BY789",
-                    Name = "John",
-                    Surname = "Doe",
-                    GsmNumber = "+905350000000",
-                    Email = "email@email.com",
-                    IdentityNumber = "74300864791",
-                    LastLoginDate = "2015-10-05 12:43:35",
-                    RegistrationDate = "2013-04-21 15:12:09",
-                    RegistrationAddress = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
-                    Ip = "85.34.78.112",
-                    City = "Istanbul",
+                    Id = order.UserId,
+                    Name = user.UserName,
+                    Surname = user.Surname,
+                    GsmNumber = user.PhoneNumber,
+                    Email = user.Email,
+                    IdentityNumber = "11111111111",
+                    RegistrationAddress = fullAddress,
+                    Ip = GetIp(),
+                    City =cityName,
                     Country = "Turkey",
-                    ZipCode = "34732",
+                    ZipCode = order.Address.Zip.ToString(),
                 },
                 ShippingAddress = new Address()
                 {
-                    ContactName = "Jane Doe",
-                    City = "Istanbul",
+                    ContactName = order.TargetName,
+                    City =cityName,
                     Country = "Turkey",
-                    Description = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
-                    ZipCode = "34742",
+                    Description =fullAddress,
+                    ZipCode = order.Address.Zip.ToString(),
                 },
                 BillingAddress = new Address()
                 {
-                    ContactName = "Jane Doe",
-                    City = "Istanbul",
+                    ContactName = order.TargetName,
+                    City = cityName,
                     Country = "Turkey",
-                    Description = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1",
-                    ZipCode = "34742",
+                    Description = fullAddress,
+                    ZipCode = order.Address.Zip.ToString(),
                 },
                 BasketItems = new List<BasketItem>()
             };
@@ -101,6 +106,23 @@ namespace ServiceLayer.Services
         {
             var retrive = CheckoutForm.Retrieve(req, options);
             return retrive;
+        }
+        public string? GetIp()
+        {
+            var ip = HttpContext.Connection.RemoteIpAddress;
+            var addressbytesString = "";
+            int indexer = 1;
+            if (ip == null)
+                return null;
+            var GetAddressBytes = ip.GetAddressBytes();
+            GetAddressBytes.ToList().ForEach(x =>
+            {
+                if (GetAddressBytes.Length != indexer)
+                    addressbytesString += $"{x}.";
+                else
+                    addressbytesString += $"{x}";
+            });
+            return addressbytesString;
         }
     }
 }
