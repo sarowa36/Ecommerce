@@ -32,7 +32,6 @@ export default {
             this.orders = [];
             this.totalPage=data.count/maxCount;
             data.values.forEach(item => {
-                item.createDate = new Date(item.createDate);
                 this.orders.push(new OrderValue(item))
             });
         },

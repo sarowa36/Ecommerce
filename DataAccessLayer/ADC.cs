@@ -24,6 +24,7 @@ namespace DataAccessLayer
             modelBuilder.ApplyGlobalFilters<ISoftDeletable>(x => !x.IsDeleted);
             modelBuilder.Entity<Product>().Property(x => x.Images).HasConversion(x=>JsonConvert.SerializeObject(x),x=>JsonConvert.DeserializeObject<List<string>>(x));
             modelBuilder.Entity<Order>().Property(x => x.PaymentResult).HasConversion(x => JsonConvert.SerializeObject(x), x => JsonConvert.DeserializeObject<Iyzipay.Model.CheckoutForm>(x));
+            modelBuilder.Entity<Order>().Property(x => x.WebhookRequests).HasConversion(x => JsonConvert.SerializeObject(x), x => JsonConvert.DeserializeObject<List<object>>(x));
             modelBuilder.Entity<Order>().Property(x => x.Address).HasConversion(x => JsonConvert.SerializeObject(new {x.CityId,x.Detail,x.DistrictId,x.Id,x.Name,x.UserId,x.Zip }), x => JsonConvert.DeserializeObject<UserAddress>(x));
             modelBuilder.Entity<ShoppingCartItem>().HasKey(x => new { x.ProductId, x.UserId });
             base.OnModelCreating(modelBuilder);

@@ -1,11 +1,15 @@
 ﻿using BusinessLayer.Validations.User.PaymentController;
+using EntityLayer.DTOs.Iyzipay;
+using EntityLayer.Enum;
 using EntityLayer.ViewModels.User.PaymentController;
 using Iyzipay.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ServiceLayer.Base;
 using ServiceLayer.Base.Services;
-using ServiceLayer.Services;
+using System.Text;
+using ToolsLayer.Http;
 
 namespace Ecommerce.Areas.User.Controllers
 {
@@ -20,13 +24,15 @@ namespace Ecommerce.Areas.User.Controllers
         readonly IOrderService _orderService;
         readonly IServiceProvider _serviceProvider;
         readonly IUserAddressService _userAddressService;
+        readonly IWebHostEnvironment _webHostEnvironment;
         public PaymentController(IIyziPayService paymentService,
             IShoppingCartService shoppingCartService,
             IIdentityService identityService,
             IServiceErrorContainer serviceErrorContainer,
-            OrderService orderService,
+            IOrderService orderService,
             IUserAddressService userAddressService,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            IWebHostEnvironment webHostEnvironment)
         {
             _paymentService = paymentService;
             _shoppingCartService = shoppingCartService;
@@ -35,6 +41,7 @@ namespace Ecommerce.Areas.User.Controllers
             _orderService = orderService;
             _userAddressService = userAddressService;
             _serviceProvider = serviceProvider;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [HttpPost]
@@ -46,14 +53,14 @@ namespace Ecommerce.Areas.User.Controllers
             var shoppingCartItems = _serviceErrorContainer.AddServiceResponse(() => _shoppingCartService.GetListAsync(user));
             var address = _serviceErrorContainer.AddServiceResponse(() => _userAddressService.Get(user, model.SelectedAddressId));
             var order = _serviceErrorContainer.AddServiceResponse(() => _orderService.CreateOrder(user, shoppingCartItems, address, model.TargetName, model.TargetPhone));
-            var paymentRequest = _serviceErrorContainer.AddServiceResponse(() => _paymentService.StartPayment(order,user));
+            var paymentRequest = _serviceErrorContainer.AddServiceResponse(() => _paymentService.StartPayment(order, user));
             return _serviceErrorContainer.IsSuccess ? Ok(new { redirect = paymentRequest.PaymentPageUrl }) : BadRequest(_serviceErrorContainer.Errors);
         }
         [HttpPost]
         public async Task<IActionResult> Callback(RetrieveCheckoutFormRequest val)
         {
             var result = _serviceErrorContainer.AddServiceResponse(() => _paymentService.ProcessPayment(val));
-            var order = _serviceErrorContainer.AddServiceResponse(() => _orderService.FinishOrder(result));
+            var order = _serviceErrorContainer.AddServiceResponse(() => _orderService.UpdateOrderFromPaymentCallback(result));
             _serviceErrorContainer.AddServiceResponse(() => _shoppingCartService.SetEmptyToCart(order.UserId));
             if (_serviceErrorContainer.IsSuccess)
             {
@@ -63,6 +70,20 @@ namespace Ecommerce.Areas.User.Controllers
             {
                 return Content(String.Join("<br>", _serviceErrorContainer.Errors.Select(x => x.Key + " => " + x.Value + "\n")), "text/html");
             }
+        }
+        [HttpPost]
+        public async Task<IActionResult> WebHook([FromBody] IyziWebhookDTO model)
+        {
+            var requestObject = await HttpContext.Request.GetAsSeriableObjectAsync(model);
+            _serviceErrorContainer.AddServiceResponse(() =>
+                _orderService.UpdateOrderStatus(
+                    model.Token,
+                    model.Status == "SUCCESS" ? OrderStatus.WaitingApprove : OrderStatus.PaymentFail, 
+                    requestObject)
+                    );
+            
+
+            return Ok();
         }
     }
 }

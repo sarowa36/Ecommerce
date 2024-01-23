@@ -16,7 +16,7 @@ namespace Ecommerce.Areas.User.Controllers
         readonly IServiceErrorContainer _errorContainer;
         readonly IIdentityService _identityService;
         readonly IMapper _mapper;
-        public OrderController(OrderService orderService,
+        public OrderController(IOrderService orderService,
             IIdentityService identityService,
             IServiceErrorContainer errorContainer,
             IMapper mapper)
@@ -33,6 +33,11 @@ namespace Ecommerce.Areas.User.Controllers
             var orders = _errorContainer.AddServiceResponse(() => _orderService.GetUserOrders(user,index, maxCount));
             var orderCount = _errorContainer.AddServiceResponse(() => _orderService.GetUserOrderCount(user));
             return _errorContainer.IsSuccess ? Ok(new { values=_mapper.Map<List<UserOrderVM>>(orders),count=orderCount }) : BadRequest(_errorContainer.Errors);
+        }
+        public async Task<IActionResult> Refund(int[] itemIds)
+        {
+          //  _errorContainer.AddServiceResponse(()=>_orderService)
+            return Ok();
         }
     }
 }

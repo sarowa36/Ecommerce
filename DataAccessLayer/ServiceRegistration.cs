@@ -7,7 +7,7 @@ using DataAccessLayer.JsonData;
 using DataAccessLayer.Repositories.OrderRepositories;
 using DataAccessLayer.Repositories.ProductRepositories;
 using DataAccessLayer.Repositories.ShoppingCartItemRepositories;
-using DataAccessLayer.Repositories.UserOrderRepositories;
+using DataAccessLayer.Repositories.UserAddressRepositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

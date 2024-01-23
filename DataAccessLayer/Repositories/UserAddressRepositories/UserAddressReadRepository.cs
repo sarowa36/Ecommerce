@@ -2,7 +2,7 @@
 using DataAccessLayer.Base.Repositories.UserAddressRepositories;
 using EntityLayer.Entities;
 
-namespace DataAccessLayer.Repositories.UserOrderRepositories
+namespace DataAccessLayer.Repositories.UserAddressRepositories
 {
     public class UserAddressReadRepository : AbstractGenericReadRepository<UserAddress>, IUserAddressReadRepository
     {

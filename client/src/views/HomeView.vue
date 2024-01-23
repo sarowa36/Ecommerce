@@ -87,11 +87,11 @@ import axios from 'axios';
     <section class="container mt-4 mb-5">
         <div class="row">
             <h2 class="section_title">Our Products</h2>
-            <div class="product_filters mt-3 mb-3">
-                <a href="#" @click.prevent>Sale</a>
-                <a href="#" @click.prevent>Hot</a>
-                <a href="#" @click.prevent>New Arrivals</a>
-                <a href="#" @click.prevent>Accessories</a>
+            <div class="link_list mt-3 mb-3">
+                <a href="#" class="font-xl" @click.prevent>Sale</a>
+                <a href="#" class="font-xl" @click.prevent>Hot</a>
+                <a href="#" class="font-xl" @click.prevent>New Arrivals</a>
+                <a href="#" class="font-xl" @click.prevent>Accessories</a>
             </div>
             <ProductComponent v-for="pr in bestSellingProducts" :value="pr" class="col-sm-6 col-lg-3 mt-3">
             </ProductComponent>
@@ -209,24 +209,6 @@ import axios from 'axios';
     font-weight: 500;
 }
 
-.product_filters {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-.product_filters>a {
-    color: var(--third-color);
-    font-size: 22px;
-    transition: 0.3s;
-    border-bottom: 1px solid transparent;
-}
-
-.product_filters>a:where(.active, :hover) {
-    color: var(--first-color);
-    border-bottom: 1px solid var(--first-color);
-}
-
 .offer_img_outer {
     display: flex;
 }
@@ -235,20 +217,13 @@ import axios from 'axios';
     row-gap: 15px;
     padding: 25px 35px;
 }
-
 @media (max-width:992px) {
-
     .offer_img_outer,
     .introduce_img {
         display: none;
     }
 }
-
 @media (max-width: 768px) {
-    .product_filters {
-        flex-direction: column;
-    }
-
     .introduce_title {
         font-size: 60px;
     }

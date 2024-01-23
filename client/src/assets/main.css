@@ -86,3 +86,25 @@ left: calc(50% - 5px);
 top: 4px;
 right: calc(50% - 5px);
 }
+.link_list {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.link_list>a {
+  color: var(--third-color);
+  transition: 0.3s;
+  border-bottom: 1px solid transparent;
+}
+
+.link_list>a:where(.active, :hover) {
+  color: var(--first-color);
+  border-bottom: 1px solid var(--first-color);
+}
+
+@media (max-width: 768px) {
+  .link_list {
+      flex-direction: column;
+  }
+}

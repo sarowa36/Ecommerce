@@ -81,6 +81,7 @@ export default {
             ],
             adminMenuItems: [
                 new DashboardMenuItemValue({icon:"box",text:"Products",link:{name:router_names.admin_product_list},childItems:[new DashboardMenuItemValue({icon:"plus",text:"Create",link:{name:router_names.admin_product_create}})]}),
+                new DashboardMenuItemValue({ icon: "box", link: {name:router_names.admin_order_list}, text: "Orders" }),
                 new DashboardMenuItemValue({ isHr: true }),
                 new DashboardMenuItemValue({ icon: "right-from-bracket", link: "", text: "Exit" }),
             ]

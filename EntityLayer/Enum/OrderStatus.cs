@@ -8,5 +8,6 @@
         Ignored,
         OnCargo,
         Delivered,
+        Cancelled,
     }
 }

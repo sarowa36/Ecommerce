@@ -54,8 +54,8 @@ export default {
             var response = (await axios.postForm("Identity/Login", this.model));
             this.errors = {};
             if (response.isSuccess) {
-                this.loginStore.loadUser();
-                this.cartStore.loadCart();
+               await this.loginStore.loadUser();
+               await this.cartStore.loadCart();
                 router.push("/")
             }
             else

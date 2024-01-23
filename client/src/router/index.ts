@@ -12,6 +12,7 @@ import CartView from '@/views/CartView.vue'
 import ProductCreateUpdateView from '@/views/Admin/Product/ProductCreateUpdateView.vue'
 import ProductListView from '@/views/Admin/Product/ProductListView.vue'
 import AddressView from '@/views/User/AddressView.vue'
+import AdminOrderList from "@/views/Admin/Order/AdminOrderList.vue";
 
 class _router_names {
   home:string= "home";
@@ -24,6 +25,7 @@ class _router_names {
   admin_product_create:string="admin_product_create";
   admin_product_update:string="admin_product_update";
   admin_product_list:string="admin_product_list";
+  admin_order_list:string="admin_order_list";
   user:string="user";
   user_orders:string="user_orders";
   user_profile:string="user_profile";
@@ -96,6 +98,16 @@ const router = createRouter({
               path: 'List',
               name: router_names.admin_product_list,
               component: ProductListView
+            }
+          ]
+        },
+        {
+          path:"Orders",
+          children:[
+            {
+              path:"List",
+              name:router_names.admin_order_list,
+              component:AdminOrderList
             }
           ]
         },

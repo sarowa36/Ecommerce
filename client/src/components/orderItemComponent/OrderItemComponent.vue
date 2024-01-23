@@ -4,6 +4,10 @@ import {  dateToDateTimeString } from "@/helpers/";
 import { useCitiesAndDistrictsStore } from "@/stores/CitiesAndDistrictsStore";
 import { OrderValue, OrderStatusDescriber, OrderStatus } from ".";
 import { router_names } from "@/router";
+import { useLoginStore } from "@/stores/LoginStore";
+import { VDialog,VCard,VBtn,VCardText,VCardActions,VSpacer } from "vuetify/components";
+import TextBox from "@/components/TextBox.vue";
+import axios from "axios";
 defineProps({
     modelValue: {
         type: OrderValue,
@@ -15,19 +19,19 @@ defineProps({
     <div :class="{ 'order_outer': true, 'active': show }">
         <div class="order_mini" @click="toggleOrder()">
             <div class="order_mini_images">
-                <img v-for="imagelink in modelValue.orderItems.map(x => x.productImage)" v-bind:key="imagelink"
+                <img v-for="imagelink in value.orderItems.map(x => x.productImage)" v-bind:key="imagelink"
                     :src="imagelink" alt="">
             </div>
             <div class="order_mini_meta">
-                <span>Order number: <strong class="text_theme">{{ modelValue.id }}</strong></span>
-                <span>{{ dateToDateTimeString(modelValue.createDate) }}</span>
+                <span>Order number: <strong class="text_theme">{{ value.id }}</strong></span>
+                <span>{{ dateToDateTimeString(value.createDate) }}</span>
             </div>
             <div class="order_mini_status">
                 <FontAwesomeIcon icon="check-circle" />
-                <span>{{ OrderStatusDescriber(modelValue.orderStatus) }}</span>
+                <span>{{ OrderStatusDescriber(value.orderStatus) }}</span>
             </div>
             <div class="order_mini_amount text_theme">
-                {{ modelValue.paidPrice }} $
+                {{ value.paidPrice }} $
             </div>
             <div class="order_mini_toggle_icon">
                 <FontAwesomeIcon :icon="show ? 'chevron-up' : 'chevron-down'" />
@@ -37,7 +41,7 @@ defineProps({
             <div v-if="show" class="order_detail_outer">
                 <div class="order_detail_inner">
                     <div class="order_products">
-                        <div v-for="order_product in modelValue.orderItems" v-bind:key="order_product.id"
+                        <div v-for="order_product in value.orderItems" v-bind:key="order_product.id"
                             class="order_product">
                             <div class="order_product_card_image">
                                 <RouterLink class="order_product_image_outer"
@@ -50,48 +54,64 @@ defineProps({
                                     <h6>{{ order_product.productName }}</h6>
                                 </RouterLink>
 
-                                <div class="text-success">{{ order_product.price }} $</div>
+                                <div class="text-success">{{ order_product.price }}$ x {{ order_product.quantity }} piece</div>
                             </div>
                         </div>
                     </div>
-                    <div class="order_action_buttons">
+                    <div class="order_action_buttons" v-if="!loginStore.isAdmin">
                         <a href="#" class="btn btn-outline-primary">
                             <FontAwesomeIcon icon="people-carry-box" />Cargo Tracking
                         </a>
-                        <a href="#" class="btn btn-outline-primary">
-                            <FontAwesomeIcon icon="ban" />Complaint Or Refund
-                        </a>
+                        <button class="btn btn-outline-primary" @click="()=>showRefundDialog=true">
+                            <FontAwesomeIcon icon="ban" />Refund
+                        </button>
+                        <button class="btn btn-outline-primary" @click="()=>showCancelDialog=true">
+                            <FontAwesomeIcon icon="ban" />Cancel
+                        </button>
                         <a href="#" class="btn btn-outline-primary">
                             <FontAwesomeIcon icon="file-invoice" />Show Bill
                         </a>
+                    </div>
+                    <div class="order_action_buttons" v-else-if="value.orderStatus==OrderStatus.WaitingApprove">
+                        <button class="btn btn-success" @click="acceptOrder" :disabled="isLoading"><FontAwesomeIcon icon="check" /> Accept</button>
+                        <button class="btn btn-danger" @click="ignoreOrder" :disabled="isLoading"><FontAwesomeIcon icon="check" /> Ignore</button>
+                    </div>
+                    <div class="order_action_buttons" v-else-if="value.orderStatus==OrderStatus.ApprovedAndPreparing">
+                        <TextBox placeholder="Enter Cargo Code" v-model="cargoCode" :errorMessage="errors.cargoCode" />
+                        <button class="btn btn-success" @click="sendToCargo" :disabled="isLoading"><FontAwesomeIcon icon="check" /> Accept</button>
+                        <button class="btn btn-danger" @click="ignoreOrder" :disabled="isLoading"><FontAwesomeIcon icon="check" /> Cancel</button>
+                    </div>
+                    <div class="order_action_buttons" v-else-if="value.orderStatus==OrderStatus.OnCargo">
+                        <button class="btn btn-success" @click="deliverOrder" :disabled="isLoading"><FontAwesomeIcon icon="check" />Set Delivered</button>
+                        <button class="btn btn-danger" @click="ignoreOrder" :disabled="isLoading"><FontAwesomeIcon icon="check" /> Cancel</button>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="order_delivery_status_box">
                                 <FontAwesomeIcon icon="check-circle" class="text_theme" />
                                 <div class="order_delivery_meta">
-                                    <h6>{{ OrderStatusDescriber(modelValue.orderStatus) }}</h6>
-                                    <span class="text-success" v-if="modelValue.orderStatus==OrderStatus.Delivered">Delivered on: <strong>{{
-                                        modelValue.createDate.toLocaleString()
+                                    <h6>{{ OrderStatusDescriber(value.orderStatus) }}</h6>
+                                    <span class="text-success" v-if="value.orderStatus==OrderStatus.Delivered">Delivered on: <strong>{{
+                                        value.createDate.toLocaleString()
                                     }}</strong></span>
                                 </div>
                             </div>
                             <div class="order_delivery_detail_box mt-3">
                                 <h5 class="text_theme">Delivery Details</h5>
-                                <strong>{{ modelValue.address.name }}</strong>
-                                <span>{{ citiesAndDistricts.getCity(modelValue.address.cityId).name }}, {{
-                                    citiesAndDistricts.getDistrict(modelValue.address.cityId,modelValue.address.districtId).name }}, {{modelValue.address.zip }}</span>
-                                    <span>{{ modelValue.address.detail }}</span>
-                                <strong>{{ modelValue.targetName }} - {{ modelValue.targetPhone }}</strong>
+                                <strong>{{ value.address.name }}</strong>
+                                <span>{{ citiesAndDistricts.getCity(value.address.cityId).name }}, {{
+                                    citiesAndDistricts.getDistrict(value.address.cityId,value.address.districtId).name }}, {{value.address.zip }}</span>
+                                    <span>{{ value.address.detail }}</span>
+                                <strong>{{ value.targetName }} - {{ value.targetPhone }}</strong>
                             </div>
                         </div>
                         <div class="col-md-6 mt-4">
                             <h5 class="text_theme">Payment Information</h5>
                             <ul class="order_payment_detail_list">
-                                <li><span>Cargo: </span><span>{{ modelValue.cargoAmount }}</span></li>
-                                <li><span>Amount: </span><span>$ {{ modelValue.totalPrice }}</span></li>
-                                <li><span>Discount: </span><span>$ {{ modelValue.discount }}</span></li>
-                                <li><span>Total Amount: </span><span>$ {{ modelValue.paidPrice }}</span></li>
+                                <li><span>Cargo: </span><span>{{ value.cargoAmount }}</span></li>
+                                <li><span>Amount: </span><span>$ {{ value.totalPrice }}</span></li>
+                                <li><span>Discount: </span><span>$ {{ value.discount }}</span></li>
+                                <li><span>Total Amount: </span><span>$ {{ value.paidPrice }}</span></li>
                             </ul>
                         </div>
                     </div>
@@ -99,18 +119,113 @@ defineProps({
             </div>
         </Transition>
     </div>
+    <v-dialog :modelValue="showRefundDialog" width="500" @update:modelValue="(val)=>showRefundDialog=val">
+    <v-card title="Refund">
+      <v-card-text>
+        Are you sure for Refund?
+      </v-card-text>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+
+        <v-btn
+          text="Cancel"
+          @click="()=>showRefundDialog = false"
+        ></v-btn>
+        <v-btn
+          text="Refund" color="red"
+          @click="refundOrder"
+        ></v-btn>
+      </v-card-actions>
+    </v-card>   
+</v-dialog>
+<v-dialog :modelValue="showCancelDialog" width="500" @update:modelValue="(val)=>showCancelDialog=val">
+    <v-card title="Cancel">
+      <v-card-text>
+        Are you sure for Cancel?
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          text="Cancel"
+          @click="()=>showCancelDialog = false"
+        ></v-btn>
+        <v-btn
+          text="Cancel" color="red"
+          @click="cancelOrder"
+        ></v-btn>
+      </v-card-actions>
+    </v-card>   
+</v-dialog>
 </template>
 <script>
 export default {
     data() {
         return {
             show: false,
-            citiesAndDistricts: useCitiesAndDistrictsStore()
+            citiesAndDistricts: useCitiesAndDistrictsStore(),
+            loginStore:useLoginStore(),
+            cargoCode:"",
+            errors:{},
+            showRefundDialog:false,
+            showCancelDialog:false
         }
     },
     methods: {
         toggleOrder() {
             this.show = !this.show;
+        },
+        async acceptOrder(){
+           var response=  await axios.postForm("Admin/Order/Accept",{id:this.value.id})
+           if(response.isSuccess){
+            this.value=new OrderValue(response.data);
+           }
+           else{
+            this.errors=response.data;
+           }
+        },
+        async ignoreOrder(){
+            var response= await axios.postForm("Admin/Order/Ignore",{id:this.value.id})
+           if(response.isSuccess){
+            this.value=new OrderValue(response.data);
+           }
+           else{
+            this.errors=response.data;
+           }
+        },
+        async sendToCargo(){
+            var response=await axios.postForm("Admin/Order/SendToCargo",{id:this.value.id,cargoCode:this.cargoCode})
+           if(response.isSuccess){
+            this.value=new OrderValue(response.data);
+           }
+           else{
+            this.errors=response.data;
+           }
+        },
+        async deliverOrder(){
+            var response= await axios.postForm("Admin/Order/Delivered",{id:this.value.id})
+           if(response.isSuccess){
+            this.value=new OrderValue(response.data);
+           }
+           else{
+            this.errors=response.data;
+           }
+        },
+        async refundOrder(){
+
+        },
+        async cancelOrder(){
+
+        }
+    },
+    computed:{
+        value:{
+            get(){
+                return this.modelValue;
+            },
+            set(val){
+            this.$emit("update:modelValue",val);
+            }
         }
     }
 }
@@ -208,9 +323,10 @@ export default {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
+    align-items: center;
 }
 
-.order_action_buttons>a>svg {
+.order_action_buttons>.btn>svg {
     margin-right: 10px;
 }
 

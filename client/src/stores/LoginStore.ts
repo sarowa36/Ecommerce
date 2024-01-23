@@ -27,6 +27,11 @@ const useLoginStore = defineStore('login', {
         this.isLogged = true
       }
     }
+  },
+  getters:{
+    isAdmin(state){
+      return state.isLogged && state.user.roles.includes(UserRole.Admin);
+    }
   }
 })
 

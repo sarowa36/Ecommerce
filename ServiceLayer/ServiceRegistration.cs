@@ -15,7 +15,7 @@ namespace ServiceLayer
             services.AddScoped<IIyziPayService , IyziPayService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IServiceErrorContainer, ServiceErrorContainer>();
-            services.AddScoped<OrderService>();
+            services.AddScoped<IOrderService,OrderService>();
             services.AddScoped<IUserAddressService, UserAddressService>();
         }
     }

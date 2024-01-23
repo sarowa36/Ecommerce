@@ -25,8 +25,12 @@ class OrderValue {
      targetPerson: string = "";
      targetPhone: string = "";
      constructor(p?: OrderValue | null) {
-          if (p)
+          if (p){
                Object.assign(this, p);
+               if(typeof p.createDate==="string"){
+                    this.createDate=new Date(p.createDate);
+               }
+          }
      }
 }
 export default OrderValue;

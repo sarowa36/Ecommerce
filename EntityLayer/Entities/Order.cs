@@ -13,6 +13,8 @@ namespace EntityLayer.Entities
         public decimal TotalPrice { get; set; }
         public decimal PaidPrice { get; set; }
         public CheckoutForm? PaymentResult { get; set; }
+        public string? Token { get; set; }
+        public List<object> WebhookRequests { get; set; }= new List<object>();
         public string? CargoCode { get; set; }
         public UserAddress? Address { get; set; }
         public string TargetName { get; set; }

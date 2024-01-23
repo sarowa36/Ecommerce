@@ -6,6 +6,7 @@ using Iyzipay.Model;
 using Iyzipay.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ServiceLayer.Base;
 using ServiceLayer.Base.Services;
 using System.Globalization;
@@ -19,22 +20,25 @@ namespace ServiceLayer.Services
         readonly IServiceErrorContainer _serviceErrorContainer;
         readonly IHttpContextAccessor _httpContextAccessor;
         readonly ICitiesAndDistrictsValues _citiesAndDistricts;
+        readonly IConfiguration _configuration;
         HttpContext HttpContext { get { return _httpContextAccessor.HttpContext; } }
         public IyziPayService(IShoppingCartItemReadRepository shoppingCartItemReadRepository,
             IServiceErrorContainer serviceErrorContainer,
             IHttpContextAccessor httpContext,
-            ICitiesAndDistrictsValues citiesAndDistricts)
+            ICitiesAndDistrictsValues citiesAndDistricts,
+            IConfiguration configuration)
         {
-            options = new Options()
-            {
-                ApiKey = "sandbox-Zm7KunbUsO9guZthOmg1Ri5aFAqTCgUl",
-                SecretKey = "sandbox-l0zHbCeSwSduPOhpXQDFw6wJ0NMZhUQy",
-                BaseUrl = "https://sandbox-api.iyzipay.com",
-            };
             _shoppingCartItemReadRepository = shoppingCartItemReadRepository;
             _serviceErrorContainer = serviceErrorContainer;
             _httpContextAccessor = httpContext;
             _citiesAndDistricts = citiesAndDistricts;
+            _configuration = configuration;
+            options = new Options()
+            {
+                ApiKey = _configuration["Iyzipay:ApiKey"],
+                SecretKey = _configuration["Iyzipay:SecretKey"],
+                BaseUrl = _configuration["Iyzipay:BaseUrl"],
+            };
         }
 
         public async Task<CheckoutFormInitialize> StartPayment(Order order,ApplicationUser user)

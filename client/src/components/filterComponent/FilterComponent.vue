@@ -25,8 +25,8 @@ import Slider from "@vueform/slider"
                     class="mt-5 me-2 ms-2" v-model="priceRangeValue" />
             </div>
             <div class="filter_dropdown_footer">
-                <button class="btn btn-primary" @click="_clearEvent">Clear</button>
-                <button class="btn btn-outline-primary" @click="_applyEvent">Apply</button>
+                <button class="btn btn-primary" @click="clearEvent">Clear</button>
+                <button class="btn btn-outline-primary" @click="applyEvent">Apply</button>
             </div>
         </div>
     </div>
@@ -51,23 +51,11 @@ export default {
         toggleFilter() {
             this.show = !this.show;
         },
-        _applyEvent() {
-            if (this.applyEvent) {
-                this.applyEvent();
-            }
+        applyEvent() {
+           this.$emit("applyEvent");
         },
-        _clearEvent() {
-            if (this.clearEvent) {
-                this.clearEvent();
-            }
-            else {
-                this.value.map(x => {
-                    if (this.filterType == FilterTypeEnum.priceRange) {
-                    }
-                    x.selected = false;
-                    return x
-                });
-            }
+        clearEvent() {
+            this.$emit("clearEvent");
         },
         checkboxChanged(e, item) {
             if (this.filterType == FilterTypeEnum.checkboxListOnlyOneSelectable) {
@@ -75,21 +63,13 @@ export default {
             }
         }
     },
-    emits: ["update:modelValue"],
+    emits: ["update:modelValue","applyEvent","clearEvent"],
     props: {
         describeText: String,
         icon: String,
         showSearchInput: true,
         modelValue: FilterValueArray,
         filterType: FilterTypeEnum,
-        applyEvent: {
-            type: Function,
-            default: undefined
-        },
-        clearEvent: {
-            type: Function,
-            default: undefined
-        }
     },
     computed: {
         value: {
