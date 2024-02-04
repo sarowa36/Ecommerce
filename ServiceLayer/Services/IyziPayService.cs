@@ -94,7 +94,7 @@ namespace ServiceLayer.Services
                 {
                     request.BasketItems.Add(new BasketItem()
                     {
-                        Id = item.ProductId.ToString(),
+                        Id = item.Id.ToString(),
                         Name = item.Product.Name,
                         ItemType = BasketItemType.PHYSICAL.ToString(),
                         Category1 = "Clothes",
@@ -110,6 +110,24 @@ namespace ServiceLayer.Services
         {
             var retrive = CheckoutForm.Retrieve(req, options);
             return retrive;
+        }
+        public async Task<Refund> RefundOrder(OrderRefund orderRefund)
+        {
+            CreateAmountBasedRefundRequest refundRequest = new CreateAmountBasedRefundRequest() {
+            Ip=GetIp(),
+            PaymentId=orderRefund.Order.PaymentResult.PaymentId,
+            Price=orderRefund.TotalRefundAmount.ToString(CultureInfo.GetCultureInfo("en-US")),
+            };
+            var refund=Refund.CreateAmountBasedRefundRequest(refundRequest, options);
+            if(refund.Status== "success")
+            {
+                return refund;
+            }
+            else
+            {
+                _serviceErrorContainer.AddModelOnlyError(refund.ErrorMessage);
+                return refund;
+            }
         }
         public string? GetIp()
         {

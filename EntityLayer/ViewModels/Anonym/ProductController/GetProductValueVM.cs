@@ -1,4 +1,6 @@
-﻿namespace EntityLayer.ViewModels.Anonym.ProductController
+﻿using EntityLayer.Entities.JsonDbEntities;
+
+namespace EntityLayer.ViewModels.Anonym.ProductController
 {
     public class GetProductValueVM
     {
@@ -6,6 +8,7 @@
         public string Name { get; set; }
         public decimal Price { get; set; }
         public List<string> Images { get; set; }
+        public List<ProductVariation> Variation { get; set; }
         public string Description { get; set; }
     }
 }

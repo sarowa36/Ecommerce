@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessLayer.Validations.Admin.ProductController;
 using DataAccessLayer.Base.Repositories.ProductRepositories;
+using EntityLayer.DTOs.Areas.Admin.ProductController;
 using EntityLayer.Entities;
 using EntityLayer.ViewModels.Admin.ProductController;
 using Microsoft.AspNetCore.Mvc;
@@ -24,10 +25,9 @@ namespace Ecommerce.Areas.Admin.Controllers
             _productReadRepository = productReadRepository;
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CreateProductVM model)
+        public async Task<IActionResult> Create(CreateProductDTO model)
         {
-            var files = HttpContext.Request.Form.Files;
-            var res = _serviceProvider.GetService<CreateProductVMValidation>().Validate(model);
+            var res = _serviceProvider.GetService<CreateProductDTOValidation>().Validate(model);
             if (res.IsValid)
             {
                 var modelAsProduct = _mapper.Map<Product>(model);
@@ -62,13 +62,13 @@ namespace Ecommerce.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Update(int id)
         {
-            return Ok(_mapper.Map<UpdateGetProductVM>(_productReadRepository.Get(id)));
+            return Ok(_mapper.Map<UpdateProductVM>(_productReadRepository.Get(id)));
         }
         [HttpPost]
-        public async Task<IActionResult> Update(UpdatePostProductVM model)
+        public async Task<IActionResult> Update(UpdateProductDTO model)
         {
             var files = HttpContext.Request.Form.Files;
-            var res = _serviceProvider.GetService<UpdatePostProductVMValidation>().Validate(model);
+            var res = _serviceProvider.GetService<UpdatePostProductDTOValidation>().Validate(model);
             var exist = _productReadRepository.Exist(x => x.Id == model.Id);
             if (res.IsValid && exist)
             {

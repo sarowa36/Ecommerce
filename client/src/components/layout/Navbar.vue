@@ -20,27 +20,28 @@ import { router_names } from "@/router"
         </div>
         <div :class="'col-lg-8' + ($screen.width > 992 ? '' : ' collapse')" id="navigation">
           <div class="navigation">
-            <RouterLink :to="{ name: router_names.home }">Home</RouterLink>
-            <RouterLink :to="{ name: router_names.shop }">Shop</RouterLink>
+            <RouterLink class="nav_link" :to="{ name: router_names.home }">Home</RouterLink>
+            <RouterLink class="nav_link" :to="{ name: router_names.shop }">Shop</RouterLink>
             <div class="nav_link_with_dropdown nav_links">
-              <a href="#" @click.prevent>Features</a> <button class="btn" @click="collapseSubmenu">
+              <a href="#" class="nav_link" @click.prevent>Features</a> <button class="btn" @click="collapseSubmenu">
                 <FontAwesomeIcon icon="chevron-down" />
               </button>
               <div class="nav_submenu_outer">
                 <div class="nav_submenu_inner">
                   <div class="nav_submenu_links">
-                    <RouterLink :to="{ name: router_names.user_orders }">Orders</RouterLink>
-                    <RouterLink :to="{ name: router_names.user_address }">Address</RouterLink>
-                    <RouterLink :to="{ name: router_names.register }">Register</RouterLink>
-                    <RouterLink :to="{ name: router_names.user_cart }">Cart</RouterLink>
-                    <RouterLink :to="{ name: router_names.admin_product_create }">Create Product</RouterLink>
+                    <RouterLink class="nav_link" :to="{ name: router_names.user_orders }">Orders</RouterLink>
+                    <RouterLink class="nav_link" :to="{ name: router_names.user_address }">Address</RouterLink>
+                    <RouterLink class="nav_link" :to="{ name: router_names.register }">Register</RouterLink>
+                    <RouterLink class="nav_link" :to="{ name: router_names.user_cart }">Cart</RouterLink>
+                    <RouterLink class="nav_link" :to="{ name: router_names.admin_product_create }">Create Product
+                    </RouterLink>
                   </div>
                 </div>
               </div>
             </div>
-            <RouterLink :to="{ name: router_names.contact }">Contact</RouterLink>
+            <RouterLink class="nav_link" :to="{ name: router_names.contact }">Contact</RouterLink>
             <div class="nav_link_with_dropdown nav_cart">
-              <RouterLink :to="{ name: router_names.user_cart }">
+              <RouterLink class="nav_link" :to="{ name: router_names.user_cart }">
                 <FontAwesomeIcon v-if="$screen.width > 992" icon="bag-shopping"></FontAwesomeIcon><span v-else>Cart</span>
               </RouterLink>
               <div v-if="$screen.width > 992" class="nav_submenu_outer nav_cart_dropdown">
@@ -52,8 +53,8 @@ import { router_names } from "@/router"
                       <img :src="item.productImage" alt="">
                       <div class="nav_cart_product_info">
                         <span class="nav_cart_product_title">{{ item.productName }}</span>
-                        <span class="nav_cart_product_detail">Size: XS</span>
-                        <span class="nav_cart_product_price">{{ item.productPrice }} $</span>
+                        <span class="nav_cart_product_detail" v-for="variation in item.variation" :key="variation.id">{{ variation.name }}: {{ variation.value }}</span>
+                        <span class="nav_cart_product_price">{{ item.productPrice }} $ x {{ item.quantity }} piece</span>
                       </div>
                     </RouterLink>
                   </div>
@@ -65,9 +66,9 @@ import { router_names } from "@/router"
               </div>
             </div>
             <RouterLink :to="{ name: router_names.login }" v-if="!loginStore.isLogged"
-              :class="$screen.width > 992 ? 'btn btn-outline-primary btn_login' : ''">
+              :class="{ 'btn btn-outline-primary btn_login': $screen.width > 992, 'nav_link': true }">
               Login</RouterLink>
-            <RouterLink :to="{ name: router_names.user_profile }" v-else>Profile</RouterLink>
+            <RouterLink class="nav_link" :to="{ name: router_names.user_profile }" v-else>Profile</RouterLink>
           </div>
         </div>
       </div>
@@ -100,7 +101,7 @@ import { router_names } from "@/router"
   color: var(--second-color);
 }
 
-.navigation :where(a, div.nav_link_with_dropdown > a) {
+a.nav_link {
   font-family: var(--first-font);
   font-size: 19px;
   font-style: normal;
@@ -195,6 +196,7 @@ import { router_names } from "@/router"
 
 .nav_cart_product {
   display: flex;
+  align-items: center;
 }
 
 .nav_cart_product:not(:first-child) {
@@ -206,6 +208,8 @@ import { router_names } from "@/router"
   margin-right: 15px;
   border-radius: 3px;
   object-fit: cover;
+  aspect-ratio: 1;
+  height: 100%;
 }
 
 .nav_cart_product_info {
@@ -216,6 +220,7 @@ import { router_names } from "@/router"
 
 .nav_cart_product_detail {
   opacity: .6;
+  font-size: 14px;
 }
 
 .nav_cart_product_price {

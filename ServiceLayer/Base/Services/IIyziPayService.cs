@@ -8,5 +8,6 @@ namespace ServiceLayer.Base.Services
     {
         Task<CheckoutFormInitialize> StartPayment(Order order, ApplicationUser user);
         Task<CheckoutForm> ProcessPayment(RetrieveCheckoutFormRequest req);
+        Task<Refund> RefundOrder(OrderRefund orderRefund);
     }
 }

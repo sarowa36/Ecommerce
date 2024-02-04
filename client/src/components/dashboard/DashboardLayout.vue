@@ -69,6 +69,7 @@ export default {
             userMenuItems: [
                 new DashboardMenuItemValue({icon: "bell", link: "", text: "Notifications"}),
                 new DashboardMenuItemValue({ icon: "box", link: {name:router_names.user_orders}, text: "Orders" }),
+                new DashboardMenuItemValue({ icon: "rotate-left", link: {name:router_names.user_order_refunds}, text: "Order Refunds" }),
                 new DashboardMenuItemValue({ icon: "question", link: "", text: "My Questions" }),
                 new DashboardMenuItemValue({ icon: "user-pen", link: "", text: "Profile Detail" }),
                 new DashboardMenuItemValue({ icon: "map", link:{name:router_names.user_address}, text: "Address" }),
@@ -82,6 +83,7 @@ export default {
             adminMenuItems: [
                 new DashboardMenuItemValue({icon:"box",text:"Products",link:{name:router_names.admin_product_list},childItems:[new DashboardMenuItemValue({icon:"plus",text:"Create",link:{name:router_names.admin_product_create}})]}),
                 new DashboardMenuItemValue({ icon: "box", link: {name:router_names.admin_order_list}, text: "Orders" }),
+                new DashboardMenuItemValue({ icon: "rotate-left", link: {name:router_names.admin_order_refunds_list}, text: "Order Refunds" }),
                 new DashboardMenuItemValue({ isHr: true }),
                 new DashboardMenuItemValue({ icon: "right-from-bracket", link: "", text: "Exit" }),
             ]

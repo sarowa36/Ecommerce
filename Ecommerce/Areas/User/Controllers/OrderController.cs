@@ -34,10 +34,5 @@ namespace Ecommerce.Areas.User.Controllers
             var orderCount = _errorContainer.AddServiceResponse(() => _orderService.GetUserOrderCount(user));
             return _errorContainer.IsSuccess ? Ok(new { values=_mapper.Map<List<UserOrderVM>>(orders),count=orderCount }) : BadRequest(_errorContainer.Errors);
         }
-        public async Task<IActionResult> Refund(int[] itemIds)
-        {
-          //  _errorContainer.AddServiceResponse(()=>_orderService)
-            return Ok();
-        }
     }
 }

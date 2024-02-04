@@ -1,4 +1,4 @@
-﻿using EntityLayer.JsonEntities.CitiesAndDistrics;
+﻿using EntityLayer.Entities.JsonFileEntities.CitiesAndDistrics;
 
 namespace DataAccessLayer.Base.JsonData
 {

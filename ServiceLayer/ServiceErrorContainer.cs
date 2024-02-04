@@ -38,6 +38,10 @@ namespace ServiceLayer
         {
             Errors.TryAdd(key, message);
         }
+        public void AddModelOnlyError(string message)
+        {
+            Errors.TryAdd("ModelOnly", message);
+        }
         public void BindError(Dictionary<string,string> errors)
         {
             foreach (var item in errors)

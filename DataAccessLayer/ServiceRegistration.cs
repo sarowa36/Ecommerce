@@ -1,14 +1,17 @@
 ﻿using DataAccessLayer.Base.JsonData;
+using DataAccessLayer.Base.Repositories.OrderItemRepositories;
+using DataAccessLayer.Base.Repositories.OrderRefundRepositories;
 using DataAccessLayer.Base.Repositories.OrderRepositories;
 using DataAccessLayer.Base.Repositories.ProductRepositories;
 using DataAccessLayer.Base.Repositories.ShoppingCartItemRepositories;
 using DataAccessLayer.Base.Repositories.UserAddressRepositories;
 using DataAccessLayer.JsonData;
+using DataAccessLayer.Repositories.OrderItemRepositories;
+using DataAccessLayer.Repositories.OrderRefundRepositories;
 using DataAccessLayer.Repositories.OrderRepositories;
 using DataAccessLayer.Repositories.ProductRepositories;
 using DataAccessLayer.Repositories.ShoppingCartItemRepositories;
 using DataAccessLayer.Repositories.UserAddressRepositories;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DataAccessLayer
@@ -24,6 +27,10 @@ namespace DataAccessLayer
                 .AddScoped<IShoppingCartItemWriteRepository, ShoppingCartItemWriteRepository>()
                 .AddScoped<IOrderReadRepository, OrderReadRepository>()
                 .AddScoped<IOrderWriteRepository, OrderWriteRepository>()
+                .AddScoped<IOrderItemReadRepository, OrderItemReadRepository>()
+                .AddScoped<IOrderItemWriteRepository, OrderItemWriteRepository>()
+                .AddScoped<IOrderRefundReadRepository, OrderRefundReadRepository>()
+                .AddScoped<IOrderRefundWriteRepository, OrderRefundWriteRepository>()
                 .AddScoped<IUserAddressReadRepository, UserAddressReadRepository>()
                 .AddScoped<IUserAddressWriteRepository, UserAddressWriteRepository>()
                 .AddScoped<ICitiesAndDistrictsValues,CitiesAndDistrictsValues>();

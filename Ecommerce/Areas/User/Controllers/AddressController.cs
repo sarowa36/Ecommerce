@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLayer.Validations.User.AddressController;
+using EntityLayer.DTOs.Areas.User.AddressController;
 using EntityLayer.Entities;
 using EntityLayer.ViewModels.User.AddressController;
 using Microsoft.AspNetCore.Authorization;
@@ -31,9 +32,9 @@ namespace Ecommerce.Areas.User.Controllers
             _mapper = mapper;
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CreateAddressVM model)
+        public async Task<IActionResult> Create(CreateAddressDTO model)
         {
-            _errorContainer.BindValidation(_serviceProvider.GetService<CreateAddressVMValidation>().Validate(model));
+            _errorContainer.BindValidation(_serviceProvider.GetService<CreateAddressDTOValidation>().Validate(model));
             var user = _errorContainer.AddServiceResponse(() => _identityService.GetCurrentUserAsync());
             UserAddress address = new();
             if (_errorContainer.IsSuccess)
@@ -46,9 +47,9 @@ namespace Ecommerce.Areas.User.Controllers
             return _errorContainer.IsSuccess ? Ok(new { id = address.Id }) : BadRequest(_errorContainer.Errors);
         }
         [HttpPost]
-        public async Task<IActionResult> Update(UpdateAddressVM model)
+        public async Task<IActionResult> Update(UpdateAddressDTO model)
         {
-            _errorContainer.BindValidation(_serviceProvider.GetService<UpdateAddressVMValidation>().Validate(model));
+            _errorContainer.BindValidation(_serviceProvider.GetService<UpdateAddressDTOValidation>().Validate(model));
             var user = _errorContainer.AddServiceResponse(() => _identityService.GetCurrentUserAsync());
             UserAddress address = new();
             if (_errorContainer.IsSuccess)

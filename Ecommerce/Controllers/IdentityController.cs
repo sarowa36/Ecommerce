@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLayer.Validations.IdentityController;
+using EntityLayer.DTOs.Controllers.IdentityController;
 using EntityLayer.Entities;
 using EntityLayer.ViewModels.IdentityController;
 using Microsoft.AspNetCore.Mvc;
@@ -15,13 +16,13 @@ namespace Ecommerce.Controllers
         private readonly IIdentityService _identityService;
         readonly IShoppingCartService _shoppingCartService;
         readonly IServiceErrorContainer _serviceErrorContainer;
-        readonly IAuthService _authService;
+        readonly IRoleService _authService;
         public IdentityController(IServiceProvider serviceProvider,
             IMapper mapper,
             IIdentityService identityService,
             IShoppingCartService shoppingCartService,
             IServiceErrorContainer serviceErrorProvider,
-            IAuthService authService)
+            IRoleService authService)
         {
             _serviceProvider = serviceProvider;
             _mapper = mapper;
@@ -31,9 +32,9 @@ namespace Ecommerce.Controllers
             _authService = authService;
         }
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterVM model)
+        public async Task<IActionResult> Register(RegisterDTO model)
         {
-            _serviceErrorContainer.BindValidation(_serviceProvider.GetService<RegisterVMValidation>().Validate(model));
+            _serviceErrorContainer.BindValidation(_serviceProvider.GetService<RegisterDTOValidation>().Validate(model));
 
             var user = new ApplicationUser()
             {
@@ -51,9 +52,9 @@ namespace Ecommerce.Controllers
 
         }
         [HttpPost]
-        public async Task<IActionResult> Login(LoginVM model)
+        public async Task<IActionResult> Login(LoginDTO model)
         {
-            _serviceErrorContainer.BindValidation(_serviceProvider.GetService<LoginVmValidation>().Validate(model));
+            _serviceErrorContainer.BindValidation(_serviceProvider.GetService<LoginDTOValidation>().Validate(model));
             var user = _serviceErrorContainer.AddServiceResponse(() => _identityService.GetUser(model.Email));
             _serviceErrorContainer.AddServiceResponse(() => _identityService.LoginAsync(user, model.Password));
             _serviceErrorContainer.AddServiceResponse(() => _shoppingCartService.CookieCartConvertToDbCartAsync(user));

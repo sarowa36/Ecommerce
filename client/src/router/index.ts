@@ -12,8 +12,9 @@ import CartView from '@/views/CartView.vue'
 import ProductCreateUpdateView from '@/views/Admin/Product/ProductCreateUpdateView.vue'
 import ProductListView from '@/views/Admin/Product/ProductListView.vue'
 import AddressView from '@/views/User/AddressView.vue'
-import AdminOrderList from "@/views/Admin/Order/AdminOrderList.vue";
-
+import AdminOrderListView from "@/views/Admin/Order/AdminOrderListView.vue";
+import AdminOrderRefundsView from '@/views/Admin/OrderRefund/AdminOrderRefundsView.vue'
+import OrderRefundsView from '@/views/User/OrderRefundsView.vue'
 class _router_names {
   home:string= "home";
   shop: string = "shop";
@@ -26,11 +27,13 @@ class _router_names {
   admin_product_update:string="admin_product_update";
   admin_product_list:string="admin_product_list";
   admin_order_list:string="admin_order_list";
+  admin_order_refunds_list:string="admin_order_refunds_list";
   user:string="user";
   user_orders:string="user_orders";
   user_profile:string="user_profile";
   user_cart:string="user_cart";
   user_address:string="user_address";
+  user_order_refunds:string="user_order_refunds";
 }
 const router_names = new _router_names();
 
@@ -107,7 +110,17 @@ const router = createRouter({
             {
               path:"List",
               name:router_names.admin_order_list,
-              component:AdminOrderList
+              component:AdminOrderListView
+            }
+          ]
+        },
+        {
+          path:"OrderRefunds",
+          children:[
+            {
+              path:"List",
+              name:router_names.admin_order_refunds_list,
+              component:AdminOrderRefundsView
             }
           ]
         },
@@ -136,6 +149,11 @@ const router = createRouter({
           path: 'Address',
           name: router_names.user_address,
           component: AddressView
+        },   
+        {
+          path: 'OrderRefunds',
+          name: router_names.user_order_refunds,
+          component: OrderRefundsView
         },
       ]
     },

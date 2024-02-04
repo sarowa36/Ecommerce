@@ -2,10 +2,12 @@
 import { RouterMethodEnum } from '@/router';
 import { DashboardLayout } from '@/components/dashboard/'
 import { FileUploadValueArray, FileUploadComponent, FileUploadValue } from '@/components/fileUploadComponent'
+import { VCombobox } from 'vuetify/components';
 import { ckeditor, ClassicEditor } from "@/components/ckeditorComponent";
 import TextBox from '@/components/TextBox.vue';
 import { useToast } from 'vue-toastification';
 import axios from 'axios'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 </script>
 <template>
   <DashboardLayout class="dashboard_layout">
@@ -23,11 +25,16 @@ import axios from 'axios'
         <ckeditor :editor="ClassicEditor" v-model="formValues.description" rows="150"></ckeditor>
         <span v-if="errors.description" class="text-danger white-space-pre-line">{{ errors.description }}</span>
       </div>
+      <h3 class="text_theme mt-3">Product Variations <button class="btn btn-outline-primary" @click="createVariation"><FontAwesomeIcon icon="plus" /></button></h3>
+      <div v-for="(value,key) in formValues.variation" :key="key" class="row">
+        <TextBox class="col-md-4" v-model="formValues.variation[key].name" placeholder="Name"></TextBox>
+        <v-combobox class="col-md-6" label="Values" v-model:modelValue="formValues.variation[key].value" multiple chips></v-combobox>
+        <div class="col-md-2"><button class="btn btn-primary" @click="removeVariation(key)"><FontAwesomeIcon icon="trash" /></button></div>
+      </div>
       <h3 class="text_theme">Product Images</h3>
       <FileUploadComponent v-model="images" />
       <span v-if="errors.images" class="text-danger white-space-pre-line">{{ errors.images }}</span>
       <button class="btn btn-primary mt-3" @click="request">Send</button>
-
     </div>
   </DashboardLayout>
 </template>
@@ -45,6 +52,7 @@ export default {
         name: "",
         price: "",
         description: "",
+        variation:[{name:"sizes",value:["XS","XL"]}]
       },
       errors: {},
       toast: useToast()
@@ -80,6 +88,12 @@ export default {
         else
           this.errors = response.data;
       }
+    },
+    removeVariation(index){
+      this.formValues.variation=this.formValues.variation.filter((x,i)=>i!=index)
+    },
+    createVariation(){
+      this.formValues.variation.push({name:"New Variation",values:[]})
     }
   }
 }

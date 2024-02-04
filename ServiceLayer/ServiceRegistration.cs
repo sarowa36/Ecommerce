@@ -13,10 +13,11 @@ namespace ServiceLayer
             services.AddScoped<IMailService, MailService>();
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
             services.AddScoped<IIyziPayService , IyziPayService>();
-            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IServiceErrorContainer, ServiceErrorContainer>();
             services.AddScoped<IOrderService,OrderService>();
             services.AddScoped<IUserAddressService, UserAddressService>();
+            services.AddScoped<IOrderRefundService, OrderRefundService>();
         }
     }
 }

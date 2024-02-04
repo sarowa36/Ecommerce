@@ -1,4 +1,5 @@
 ﻿using EntityLayer.M2M;
+using EntityLayer.ViewModels.CommonVM;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EntityLayer.Entities
@@ -14,8 +15,10 @@ namespace EntityLayer.Entities
         public int OrderId { get; set; }
         [ForeignKey("OrderId")]
         public Order Order { get; set; }
-        public List<OrderRefundOrderItem> OrderRefundOrderItems { get; set; }
+        public List<OrderRefundM2MOrderItem> OrderRefundOrderItems { get; set; }
+        public OrderItemStatus OrderItemStatus { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
+        public List<SelectedProductVariation> Variation { get; set; }
     }
 }

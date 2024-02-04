@@ -8,6 +8,7 @@ import { useLoginStore } from "@/stores/LoginStore";
 import axios from "axios";
 import { useToast } from "vue-toastification";
 import QuantityCounterComponent from "@/components/quantityCounterComponent";
+import { VChipGroup, VChip } from "vuetify/components";
 </script> 
 <template>
     <div class="container mb-5">
@@ -32,8 +33,15 @@ import QuantityCounterComponent from "@/components/quantityCounterComponent";
                         16 Review
                     </div>
                 </div>
-
-                <div class="product_cart_section">
+                <div v-for="(variation, index) in product.variation" :key="index">
+                    <h5 class="text_theme m-0">Select {{ variation.name }}</h5>
+                    <v-chip-group selected-class="text-primary" column v-model="selectedVariation[variation.id]">
+                        <v-chip v-for="tag in variation.value" :key="tag" :value="tag" label>
+                            {{ tag }}
+                        </v-chip>
+                    </v-chip-group>
+                </div>
+                <div class="product_cart_section mt-2">
                     <QuantityCounterComponent class="me-3" v-model="productCartCount" @decreaseCartCount="decreaseCartCount"
                         @increaseCartCount="increaseCartCount" />
                     <button class="btn btn-primary" @click="addToCart" :disabled="isLoading">
@@ -56,8 +64,9 @@ import QuantityCounterComponent from "@/components/quantityCounterComponent";
                     <button class="btn">
                         <FontAwesomeIcon :icon="['far', 'heart']" /> Like
                     </button>
-                    <div class="save_btn_outer" v-on-click-outside-handler="()=>{ showListDropdown = false;}">
-                        <button :class="'btn show_list_dropdown' + (showListDropdown ? ' active' : '')" @click="toggleShowListDropdown">
+                    <div class="save_btn_outer" v-on-click-outside-handler="() => { showListDropdown = false; }">
+                        <button :class="'btn show_list_dropdown' + (showListDropdown ? ' active' : '')"
+                            @click="toggleShowListDropdown">
                             <FontAwesomeIcon :icon="['far', 'bookmark']" /> Save
                         </button>
                         <div v-if="showListDropdown" class="save_btn_dropdown">
@@ -75,7 +84,7 @@ import QuantityCounterComponent from "@/components/quantityCounterComponent";
                             </ul>
                         </div>
                     </div>
-                    <div class="share_btn_outer" v-on-click-outside-handler="()=>{ showShareDropdown = false;}">
+                    <div class="share_btn_outer" v-on-click-outside-handler="() => { showShareDropdown = false; }">
                         <button :class="'btn' + (showShareDropdown ? ' active' : '')" @click="toggleShowShareDropdown">
                             <FontAwesomeIcon icon="share" /> Share
                         </button>
@@ -428,11 +437,14 @@ export default {
     data: () => {
         return {
             productCartCount: 1,
+            selectedVariation: {},
+            errors:{},
             product: {
                 images: [],
                 name: "",
                 description: "",
-                price: ""
+                price: "",
+                variation: [{id:"", name: "", value: [""] }]
             },
             products: [
                 new ProductComponentValue({ image: ["http://img.sarowa36.com.tr/woman1.png"], name: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
@@ -463,7 +475,7 @@ export default {
             }
         },
         async addToCart() {
-            var res = await this.cartStore.updateCartItem(this.product.id, this.productCartCount);
+            var res = await this.cartStore.addOrUpdate(this.product.id, this.productCartCount,this.selectedVariation);
             if (res.isSuccess) {
                 this.cartStore.loadCart();
                 this.toast.success("Your request was successful");

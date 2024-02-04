@@ -10,6 +10,7 @@ namespace ServiceLayer.Base
         void AddServiceResponse(Func<Task> func);
         T AddServiceResponse<T>(Func<T> func);
         void AddError(string key, string message);
+        void AddModelOnlyError(string message);
         void BindError(Dictionary<string, string> errors);
         void BindValidation(ValidationResult validation);
     }

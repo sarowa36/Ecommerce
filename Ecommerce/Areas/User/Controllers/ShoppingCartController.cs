@@ -14,28 +14,42 @@ namespace Ecommerce.Areas.User.Controllers
     {
         readonly IShoppingCartService _shoppingCartService;
         readonly IIdentityService _identityService;
-        readonly IServiceErrorContainer _serviceResponseProvider;
+        readonly IServiceErrorContainer _serviceErrorProvider;
         readonly IMapper _mapper;
-        public ShoppingCartController(IShoppingCartService shoppingCartService, IServiceErrorContainer serviceResponseProvider, IIdentityService identityService, IMapper mapper)
+        public ShoppingCartController(IShoppingCartService shoppingCartService, IServiceErrorContainer serviceErrorProvider, IIdentityService identityService, IMapper mapper)
         {
             _shoppingCartService = shoppingCartService;
-            _serviceResponseProvider = serviceResponseProvider;
+            _serviceErrorProvider = serviceErrorProvider;
             _identityService = identityService;
             _mapper = mapper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Write(int productId, int quantity)
+        public async Task<IActionResult> AddOrUpdate(int productId, int quantity,Dictionary<string,string> variation)
         {
-            var user =  _serviceResponseProvider.AddServiceResponse(() => _identityService.GetCurrentUserAsync());
-             _serviceResponseProvider.AddServiceResponse(()=>_shoppingCartService.AddOrUpdateOrRemoveProductAsync(user,productId, quantity));
-            return _serviceResponseProvider.IsSuccess ? Ok() : BadRequest(_serviceResponseProvider.Errors);
+            var user =  _serviceErrorProvider.AddServiceResponse(() => _identityService.GetCurrentUserAsync());
+             _serviceErrorProvider.AddServiceResponse(()=>_shoppingCartService.AddOrUpdateAsync(user,productId, quantity,variation));
+            return _serviceErrorProvider.IsSuccess ? Ok() : BadRequest(_serviceErrorProvider.Errors);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateQuantity(int cartId, int quantity)
+        {
+            var user = _serviceErrorProvider.AddServiceResponse(() => _identityService.GetCurrentUserAsync());
+            _serviceErrorProvider.AddServiceResponse(() => _shoppingCartService.UpdateCartItemQuantity(user,cartId, quantity));
+            return _serviceErrorProvider.IsSuccess ? Ok() : BadRequest(_serviceErrorProvider.Errors);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(int cartId)
+        {
+            var user = _serviceErrorProvider.AddServiceResponse(() => _identityService.GetCurrentUserAsync());
+            _serviceErrorProvider.AddServiceResponse(() => _shoppingCartService.DeleteCartItem(user, cartId));
+            return _serviceErrorProvider.IsSuccess ? Ok() : BadRequest(_serviceErrorProvider.Errors);
         }
         public async Task<IActionResult> GetList()
         {
-            var user = _serviceResponseProvider.AddServiceResponse(() => _identityService.GetCurrentUserAsync());
-            var response = _serviceResponseProvider.AddServiceResponse(()=>_shoppingCartService.GetListAsync(user));
-            return _serviceResponseProvider.IsSuccess ? Ok( response.Select(x=>_mapper.Map<ShoppingCartItem,ShoppingCartItemValueVM>(x)).ToList()) : BadRequest(_serviceResponseProvider.Errors);
+            var user = _serviceErrorProvider.AddServiceResponse(() => _identityService.GetCurrentUserAsync());
+            var response = _serviceErrorProvider.AddServiceResponse(()=>_shoppingCartService.GetListAsync(user));
+            return _serviceErrorProvider.IsSuccess ? Ok( response.Select(x=>_mapper.Map<ShoppingCartItem,ShoppingCartItemValueVM>(x)).ToList()) : BadRequest(_serviceErrorProvider.Errors);
         }
     }
 }

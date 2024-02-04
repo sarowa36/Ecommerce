@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Base.Repositories.OrderItemRepositories;
+using DataAccessLayer.Base.Repositories.OrderRefundRepositories;
 using DataAccessLayer.Base.Repositories.OrderRepositories;
 using EntityLayer.Entities;
 using EntityLayer.Enum;
@@ -16,17 +17,20 @@ namespace ServiceLayer.Services
         readonly IServiceErrorContainer _serviceErrorContainer;
         readonly IOrderItemReadRepository _orderItemReadRepository;
         readonly IOrderItemWriteRepository _orderItemWriteRepository;
+        readonly IOrderRefundWriteRepository _orderRefundWriteRepository;
         public OrderService(IOrderWriteRepository orderWriteRepository,
             IOrderReadRepository orderReadRepository,
             IServiceErrorContainer serviceErrorContainer,
             IOrderItemReadRepository orderItemReadRepository,
-            IOrderItemWriteRepository orderItemWriteRepository)
+            IOrderItemWriteRepository orderItemWriteRepository,
+            IOrderRefundWriteRepository orderRefundWriteRepository)
         {
             _orderWriteRepository = orderWriteRepository;
             _orderReadRepository = orderReadRepository;
             _serviceErrorContainer = serviceErrorContainer;
             _orderItemReadRepository = orderItemReadRepository;
             _orderItemWriteRepository = orderItemWriteRepository;
+            _orderRefundWriteRepository = orderRefundWriteRepository;
         }
         public async Task<Order> CreateOrder(ApplicationUser user, List<ShoppingCartItem> cartItems, UserAddress adress, string targetName, string targetPhone)
         {
@@ -92,18 +96,6 @@ namespace ServiceLayer.Services
             {
                 _serviceErrorContainer.AddError("token", "There is no order with this token");
             }
-        }
-        public async Task<OrderRefund> CreateRefund(List<int> orderItemIds)
-        {
-            if (_orderItemReadRepository.GetAll().Where(x=>orderItemIds.Contains(x.Id)).All(x=>x.OrderRefundId==null && x.Order.OrderStatus==OrderStatus.Delivered))
-            {
-                OrderRefund orderRefund = new OrderRefund();
-            }
-            else
-            {
-
-            }
-            return default;
         }
         public async Task<List<Order>> GetUserOrders(ApplicationUser user, int? index = null, int? count = null)
         {

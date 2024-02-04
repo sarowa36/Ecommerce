@@ -20,8 +20,11 @@ import { AddressItemValue } from '@/components/addressItemComponent';
                             <h3 class="mb-4 text_theme">Your Cart</h3>
                             <div class="cart_products">
                                 <div v-for="(item, key) in cartStore.items" :key="key" class="cart_product">
-                                    <img :src="item.productImage" alt="">
-                                    <h5 class="cart_product_title text_theme">{{ item.productName }}</h5>
+                                    <img class="cart_product_image" :src="item.productImage" alt="">
+                                    <div class="cart_product_meta">
+                                        <h5 class="cart_product_title text_theme">{{ item.productName }}</h5>
+                                        <span class="cart_product_variation" v-for="variation in item.variation" :key="variation.id">{{ variation.name }} : {{ variation.value }}</span>
+                                    </div>
                                     <div class="cart_product_price">
                                         <div><strong>Price</strong></div>
                                         <div>{{ item.productPrice }}$</div>
@@ -71,11 +74,13 @@ import { AddressItemValue } from '@/components/addressItemComponent';
 
                 <template v-slot:item.2>
                     <div class="row">
-                      <TextBox class="col-xl-6" v-model="data.targetName" :errorMessage="errors.targetName" placeholder="Person to take delivery"  />
-                      <TextBox class="col-xl-6" v-model="data.targetPhone" :errorMessage="errors.targetPhone" placeholder="Phone number of the person to receive the delivery" />
-                        <v-select label="Select Address" v-model="data.selectedAddressId" :items="addresses" item-title="name"
-                            item-value="id" :error-messages="errors.selectedAddressId"></v-select>
-                            <div class="col-12 text-right"><button class="btn btn-primary" @click="checkout">Pay</button></div>
+                        <TextBox class="col-xl-6" v-model="data.targetName" :errorMessage="errors.targetName"
+                            placeholder="Person to take delivery" />
+                        <TextBox class="col-xl-6" v-model="data.targetPhone" :errorMessage="errors.targetPhone"
+                            placeholder="Phone number of the person to receive the delivery" />
+                        <v-select label="Select Address" v-model="data.selectedAddressId" :items="addresses"
+                            item-title="name" item-value="id" :error-messages="errors.selectedAddressId"></v-select>
+                        <div class="col-12 text-right"><button class="btn btn-primary" @click="checkout">Pay</button></div>
                     </div>
                 </template>
             </v-stepper>
@@ -89,7 +94,7 @@ import { AddressItemValue } from '@/components/addressItemComponent';
             <div class="col-12 mt-5 mb-5">
                 <Carousel v-if="products.length > 0" :loop="true"
                     :responsive="{ 0: { items: 1, nav: false }, 768: { items: 3 }, 992: { items: 4 } }">
-                    <ProductComponent v-for="pr in products" :value="pr" class="m-3"></ProductComponent>
+                    <ProductComponent v-for="pr in products" :value="pr" class="m-3" :key="pr.id"></ProductComponent>
                 </Carousel>
             </div>
         </div>
@@ -126,6 +131,18 @@ import { AddressItemValue } from '@/components/addressItemComponent';
     padding: 15px;
     width: 100%;
 }
+.cart_product_meta{
+    padding: 0  0 0 15px;
+    
+}
+.cart_product_variation{
+    opacity: 0.8;
+}
+.cart_product_image{
+    aspect-ratio:1;
+    height: 100%;
+    object-fit: cover;
+}
 
 @media (max-width:768px) {
     .cart_product {
@@ -145,7 +162,7 @@ import { AddressItemValue } from '@/components/addressItemComponent';
         grid-row-gap: 10px;
     }
 
-    .cart_product>img {
+    .cart_product_image {
         grid-row: 1/span 3;
     }
 
@@ -167,46 +184,46 @@ export default {
             loginStore: useLoginStore(),
             products: [],
             addresses: [new AddressItemValue()],
-            data:{ 
+            data: {
                 selectedAddressId: null,
-                targetName:null,
-                targetPhone:null
+                targetName: null,
+                targetPhone: null
             },
-            errors:{}
+            errors: {}
         }
     },
-   async mounted() {
+    async mounted() {
         this.loadProducts()
         this.loadAddresses()
-        if(this.loginStore.isLogged){
-            this.data.targetName=this.loginStore.user.name+" "+this.loginStore.user.surname;
-            this.data.targetPhone=this.loginStore.user.phoneNumber;
+        if (this.loginStore.isLogged) {
+            this.data.targetName = this.loginStore.user.name + " " + this.loginStore.user.surname;
+            this.data.targetPhone = this.loginStore.user.phoneNumber;
         }
     },
     methods: {
         async increaseCartCount(item) {
-            var res = await this.cartStore.updateCartItem(item.productId, item.quantity + 1);
+            var res = await this.cartStore.updateQuantity(item.id, item.quantity + 1);
             if (res.isSuccess) {
                 this.cartStore.loadCart();
             }
         },
         async decreaseCartCount(item) {
-            var res = await this.cartStore.updateCartItem(item.productId, item.quantity - 1);
+            var res = await this.cartStore.updateQuantity(item.id, item.quantity - 1);
             if (res.isSuccess) {
                 this.cartStore.loadCart();
             }
         },
         async deleteCartItem(item) {
-            var res = await this.cartStore.updateCartItem(item.productId, 0);
+            var res = await this.cartStore.delete(item.id);
             if (res.isSuccess) {
                 this.cartStore.loadCart();
             }
         },
         async checkout() {
-           var response= await axios.postForm("User/Payment/StartPayment", this.data);
-           if(!response.isSuccess){
-            this.errors=response.data;
-           }
+            var response = await axios.postForm("User/Payment/StartPayment", this.data);
+            if (!response.isSuccess) {
+                this.errors = response.data;
+            }
         },
         async loadProducts() {
             this.products = [];

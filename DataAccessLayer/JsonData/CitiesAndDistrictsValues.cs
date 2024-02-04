@@ -1,5 +1,5 @@
 ﻿using DataAccessLayer.Base.JsonData;
-using EntityLayer.JsonEntities.CitiesAndDistrics;
+using EntityLayer.Entities.JsonFileEntities.CitiesAndDistrics;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System.Text;

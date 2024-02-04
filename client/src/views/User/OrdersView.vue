@@ -1,13 +1,13 @@
 <script setup>
 import { DashboardLayout } from "@/components/dashboard/"
-import { OrderValue, OrderItemComponent } from "@/components/orderItemComponent";
+import { OrderValue, UserOrderItemComponent } from "@/components/userOrderItemComponent";
 import { VPagination } from "vuetify/components";
 import axios from "axios";
 </script>
 <template>
     <DashboardLayout>
         <div class="row pt-5">
-            <OrderItemComponent v-for="(item, key) in orders" v-model="orders[key]" v-bind:key="key"></OrderItemComponent>
+            <UserOrderItemComponent v-for="(item, key) in orders" v-model="orders[key]" v-bind:key="key"></UserOrderItemComponent>
             <v-pagination v-model="page" :length="totalPage" :total-visible="7" @update:modelValue="paginationChange"></v-pagination>
         </div>
     </DashboardLayout>

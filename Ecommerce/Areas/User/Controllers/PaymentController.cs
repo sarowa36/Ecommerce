@@ -1,7 +1,7 @@
 ﻿using BusinessLayer.Validations.User.PaymentController;
-using EntityLayer.DTOs.Iyzipay;
+using EntityLayer.DTOs.Areas.User.PaymentController;
+using EntityLayer.DTOs.Integrations.Iyzipay;
 using EntityLayer.Enum;
-using EntityLayer.ViewModels.User.PaymentController;
 using Iyzipay.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,9 +46,9 @@ namespace Ecommerce.Areas.User.Controllers
 
         [HttpPost]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> StartPayment(StartPaymentVM model)
+        public async Task<IActionResult> StartPayment(StartPaymentDTO model)
         {
-            _serviceErrorContainer.BindValidation(_serviceProvider.GetService<StartPaymentVMValidation>().Validate(model));
+            _serviceErrorContainer.BindValidation(_serviceProvider.GetService<StartPaymentDTOValidation>().Validate(model));
             var user = _serviceErrorContainer.AddServiceResponse(() => _identityService.GetCurrentUserAsync());
             var shoppingCartItems = _serviceErrorContainer.AddServiceResponse(() => _shoppingCartService.GetListAsync(user));
             var address = _serviceErrorContainer.AddServiceResponse(() => _userAddressService.Get(user, model.SelectedAddressId));
