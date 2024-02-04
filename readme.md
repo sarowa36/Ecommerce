@@ -3,10 +3,13 @@ Im creating a side project about E-Commerce. Frontend design based from (only Ho
 
 # Features Im Working On
 ## Backend
-- Crud api's
+- Order Refund (50% done)
+- Category
+- Save List
+- Comment
+- Product Question Answer
 - Localization
 - I will save ILogger logs
 ## Frontend
-- More Pages
 - Mobile design improvments
 - UI/UX improvments
