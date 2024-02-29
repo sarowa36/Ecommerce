@@ -43,7 +43,8 @@ namespace ServiceLayer.Services
                         ProductId = x.ProductId, 
                         Product = x.Product,
                         ProductImage=x.Product.Images.FirstOrDefault()??"",
-                        ProductName=x.Product.Name }).ToList(),
+                        ProductName=x.Product.Name,
+                        Variation=x.Variation }).ToList(),
                     TotalPrice = cartItems.Sum(x => x.Quantity * x.Product.Price),
                     PaidPrice = cartItems.Sum(x => x.Quantity * x.Product.Price),
                     User = user,
@@ -193,6 +194,24 @@ namespace ServiceLayer.Services
                 _serviceErrorContainer.AddError("ModelOnly", "Order Not Exist");
             }
             return null;
+        }
+        public async Task<Order> CancelByUser(int orderId,string userId)
+        {
+            var order=_orderReadRepository.GetWhere(x=>x.Id == orderId && x.UserId == userId);
+            if(order == null)
+            {
+                _serviceErrorContainer.AddModelOnlyError("Order doesnt exist");
+                return default;
+            }
+            if(order.OrderStatus!=OrderStatus.WaitingApprove)
+            {
+                _serviceErrorContainer.AddModelOnlyError("Order cant cancel because approved");
+                return default;
+            }
+            order.OrderStatus = OrderStatus.Cancelled;
+            await _orderWriteRepository.UpdateAsync(order);
+            await _orderWriteRepository.SaveChangesAsync();
+            return order;
         }
     }
 }

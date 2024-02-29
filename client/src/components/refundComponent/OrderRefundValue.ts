@@ -1,9 +1,9 @@
-import type OrderRefundItemValue from "./OrderRefundItemValue";
+import {OrderItemValue} from "@/components/orderItemComponent/";
 import OrderRefundStatus from "./OrderRefundStatus";
 
 class OrderRefundValue {
      id:number  =0
-     refundItems:Array<OrderRefundItemValue>=[]
+     refundItems:Array<OrderItemValue>=[]
      totalRefundAmount:number=0
      createDate:Date=new Date()
      orderRefundStatus:OrderRefundStatus=OrderRefundStatus.WaitingApprove;

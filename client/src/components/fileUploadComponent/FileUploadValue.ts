@@ -7,4 +7,4 @@ class FileUploadValue {
             Object.assign(this, p);
     }
 }
-export default FileUploadValue;
+export {FileUploadValue};

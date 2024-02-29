@@ -59,7 +59,7 @@ namespace ServiceLayer.Services
                 Buyer = new Buyer()
                 {
                     Id = order.UserId,
-                    Name = user.UserName,
+                    Name = user.Name,
                     Surname = user.Surname,
                     GsmNumber = user.PhoneNumber,
                     Email = user.Email,
@@ -127,6 +127,44 @@ namespace ServiceLayer.Services
             {
                 _serviceErrorContainer.AddModelOnlyError(refund.ErrorMessage);
                 return refund;
+            }
+        }
+        public async Task<Refund> RefundOrder(Order order)
+        {
+            CreateAmountBasedRefundRequest refundRequest = new CreateAmountBasedRefundRequest()
+            {
+                Ip = GetIp(),
+                PaymentId = order.PaymentResult.PaymentId,
+                Price = order.TotalPrice.ToString(CultureInfo.GetCultureInfo("en-US")),
+            };
+            var refund = Refund.CreateAmountBasedRefundRequest(refundRequest, options);
+            if (refund.Status == "success")
+            {
+                return refund;
+            }
+            else
+            {
+                _serviceErrorContainer.AddModelOnlyError(refund.ErrorMessage);
+                return refund;
+            }
+        }
+        public async Task<Cancel> CancelOrder(Order order,string description="")
+        {
+            CreateCancelRequest cancelRequest = new CreateCancelRequest()
+            {
+                Ip=GetIp(),
+                PaymentId=order.PaymentResult.PaymentId,
+                Description = description
+            };
+            var cancel=Cancel.Create(cancelRequest,options);
+            if (cancel.Status == "success")
+            {
+                return cancel;
+            }
+            else
+            {
+                _serviceErrorContainer.AddModelOnlyError(cancel.ErrorMessage);
+                return cancel;
             }
         }
         public string? GetIp()

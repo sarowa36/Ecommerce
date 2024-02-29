@@ -7,7 +7,7 @@ import useCartStore from "@/stores/CartStore"
 import { useLoginStore } from "@/stores/LoginStore";
 import axios from "axios";
 import { useToast } from "vue-toastification";
-import QuantityCounterComponent from "@/components/quantityCounterComponent";
+import {QuantityCounterComponent} from "@/components/quantityCounterComponent";
 import { VChipGroup, VChip } from "vuetify/components";
 </script> 
 <template>
@@ -25,8 +25,8 @@ import { VChipGroup, VChip } from "vuetify/components";
                     <div class="d-flex align-items-center">
                         <span class="h4 m-0 me-2">3.6</span>
                         <div class="product_reviews_stars">
-                            <img src="/src/assets/rating_disabled_star.svg" alt="">
-                            <img src="/src/assets/rating_star.svg" class="active" alt="">
+                            <img src="@/assets/img/rating_disabled_star.svg" alt="">
+                            <img src="@/assets/img/rating_star.svg" class="active" alt="">
                         </div>
                     </div>
                     <div class="product_reviews_count">
@@ -125,8 +125,8 @@ import { VChipGroup, VChip } from "vuetify/components";
                             <div class="comment_inner">
                                 <div class="comment_meta_outer">
                                     <div class="product_reviews_stars">
-                                        <img src="/src/assets/rating_disabled_star.svg" alt="">
-                                        <img src="/src/assets/rating_star.svg" class="active" alt="">
+                                        <img src="@/assets/img/rating_disabled_star.svg" alt="">
+                                        <img src="@/assets/img/rating_star.svg" class="active" alt="">
                                     </div>
                                     <div>
                                         12 October, Saturday 2023 | D***** Z*****
@@ -159,8 +159,8 @@ import { VChipGroup, VChip } from "vuetify/components";
                             <div class="comment_inner">
                                 <div class="comment_meta_outer">
                                     <div class="product_reviews_stars">
-                                        <img src="/src/assets/rating_disabled_star.svg" alt="">
-                                        <img src="/src/assets/rating_star.svg" class="active" alt="">
+                                        <img src="@/assets/img/rating_disabled_star.svg" alt="">
+                                        <img src="@/assets/img/rating_star.svg" class="active" alt="">
                                     </div>
                                     <div>
                                         12 October, Saturday 2023 | D***** Z*****

@@ -1,6 +1,6 @@
 <script setup>
 import { DashboardLayout } from '@/components/dashboard';
-import { AdminOrderItemComponent, OrderStatus,OrderStatusDescriber, OrderValue } from '@/components/adminOrderItemComponent';
+import { AdminOrderComponent, OrderStatus,OrderStatusDescriber, OrderValue } from '@/components/orderComponent';
 import axios from 'axios';
 import { FilterValueArray,FilterComponent, FilterTypeEnum, FilterValue } from '@/components/filterComponent';
 import {enumToKeyArray} from "@/helpers/"
@@ -11,7 +11,7 @@ import { VPagination } from 'vuetify/components';
             <div class="col-12 mt-3 mb-3">
                 <FilterComponent v-model="filterValues" describeText="Select List Value" :filterType="FilterTypeEnum.checkboxListOnlyOneSelectable" icon="filter" @applyEvent="loadOrders" />
             </div>
-            <AdminOrderItemComponent v-for="(item,index) in orders" v-model="orders[index]" :key="index"></AdminOrderItemComponent>
+            <AdminOrderComponent v-for="(item,index) in orders" v-model="orders[index]" :key="index"></AdminOrderComponent>
             <v-pagination v-model="page" :length="totalPage" :total-visible="7" @update:modelValue="paginationChange"></v-pagination>
 </DashboardLayout>
 </template>
@@ -51,4 +51,4 @@ export default {
         }
     }
 }
-</script>@/components/adminOorderItemComponent
+</script>

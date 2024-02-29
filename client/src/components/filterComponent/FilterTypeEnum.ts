@@ -3,4 +3,4 @@ checkboxList,
 checkboxListOnlyOneSelectable,
 priceRange
 }
-export default FilterTypeEnum;
+export {FilterTypeEnum};

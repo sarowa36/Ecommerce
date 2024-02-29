@@ -9,4 +9,4 @@ class ProductComponentValue {
         Object.assign(this,p)
     }
 }
-export default ProductComponentValue
+export {ProductComponentValue}

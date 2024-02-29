@@ -1,4 +1,2 @@
-import { AddressItemValue } from "./AddressItemValue";
-import AddressItemComponent  from "./AddressItemComponent.vue"
-
-export { AddressItemComponent, AddressItemValue }
+export * from "./AddressItemValue";
+export {default as AddressItemComponent}  from "./AddressItemComponent.vue"

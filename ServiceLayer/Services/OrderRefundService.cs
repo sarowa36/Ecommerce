@@ -43,11 +43,12 @@ namespace ServiceLayer.Services
                 _serviceErrorContainer.AddModelOnlyError("Order Items not found");
                 return default;
             }
-            if(refundItems.First().Order.CreateDate.AddDays(22)>DateTime.Now) {
+            if(DateTime.Now-refundItems.First().Order.CreateDate>TimeSpan.FromDays(22)) {
                 _serviceErrorContainer.AddModelOnlyError("Acceptable Refund time is passed");
                 return default;
             }
-            if (!refundItems.All(x => x.OrderItemStatus == OrderItemStatus.NotOnRefundProccess && x.Order.OrderStatus == OrderStatus.Delivered && x.OrderId == refundItems.First().OrderId))
+            if (!refundItems.All(x => x.OrderItemStatus == OrderItemStatus.NotOnRefundProccess && x.Order.OrderStatus == OrderStatus.Delivered && x.OrderId == refundItems.First().OrderId)
+                || refundItems.First().Order.OrderStatus!=OrderStatus.Delivered)
             {
                 _serviceErrorContainer.AddError("ModelOnly", "You cant create refund request");
                 return default;
@@ -99,17 +100,20 @@ namespace ServiceLayer.Services
         public async Task CancelRefund(int id, string userId)
         {
             var orderRefund = _orderRefundReadRepository.GetAll().Include(x => x.OrderRefundOrderItems).ThenInclude(x => x.OrderItem).FirstOrDefault(x => x.Id == id && x.UserId == userId);
-            if (orderRefund != null)
-            {
-                orderRefund.OrderRefundOrderItems.ForEach(x => x.OrderItem.OrderItemStatus = OrderItemStatus.NotOnRefundProccess);
-                orderRefund.OrderRefundStatus = OrderRefundStatus.Canceled;
-                await _orderRefundWriteRepository.UpdateAsync(orderRefund);
-                await _orderRefundWriteRepository.SaveChangesAsync();
-            }
-            else
+            if (orderRefund == null)
             {
                 _serviceErrorContainer.AddModelOnlyError("Refund Not Found Or Approved");
+                return;
             }
+            if (orderRefund.OrderRefundStatus != OrderRefundStatus.WaitingApprove)
+            {
+                _serviceErrorContainer.AddModelOnlyError("Refund cant cancel");
+                return;
+            }
+            orderRefund.OrderRefundOrderItems.ForEach(x => x.OrderItem.OrderItemStatus = OrderItemStatus.NotOnRefundProccess);
+            orderRefund.OrderRefundStatus = OrderRefundStatus.Canceled;
+            await _orderRefundWriteRepository.UpdateAsync(orderRefund);
+            await _orderRefundWriteRepository.SaveChangesAsync();
         }
         public async Task IgnoreRefund(int id)
         {

@@ -1,4 +1,4 @@
-import type OrderItemValue from "./OrderItemValue";
+import {OrderItemValue} from "@/components/orderItemComponent/";
 import OrderStatus from "./OrderStatus";
 class OrderAddress{
      id: number | null = null;

@@ -9,4 +9,4 @@ class DashboardMenuItemValue{
         Object.assign(this,p);
     }
 }
-export default DashboardMenuItemValue;
+export {DashboardMenuItemValue};

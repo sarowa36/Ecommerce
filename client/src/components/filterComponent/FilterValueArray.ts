@@ -1,4 +1,4 @@
-import FilterValue from "./FilterValue";
+import {FilterValue} from ".";
 
 class FilterValueArray extends Array<FilterValue>{
 
@@ -6,4 +6,4 @@ class FilterValueArray extends Array<FilterValue>{
         return this.filter(x=>x.selected)
     }
 }
-export default FilterValueArray;
+export  {FilterValueArray};

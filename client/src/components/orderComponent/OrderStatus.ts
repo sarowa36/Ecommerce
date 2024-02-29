@@ -5,6 +5,7 @@ enum OrderStatus {
     Ignored,
     OnCargo,
     Delivered,
+    Cancelled
 }
 function OrderStatusDescriber(p: OrderStatus): string {
     switch (p) {
@@ -20,6 +21,8 @@ function OrderStatusDescriber(p: OrderStatus): string {
             return "Order Ignored";
         case OrderStatus.OnCargo:
             return "Order On Cargo";
+            case OrderStatus.Cancelled:
+            return "Order Cancelled";
     }
 }
 export default OrderStatus;

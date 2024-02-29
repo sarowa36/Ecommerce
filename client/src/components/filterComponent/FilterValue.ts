@@ -13,4 +13,4 @@ class FilterValue {
 
 
 }
-export default FilterValue;
+export  {FilterValue};

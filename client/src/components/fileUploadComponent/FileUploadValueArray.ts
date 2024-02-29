@@ -10,7 +10,6 @@ class FileUploadValueArray extends Array<FileUploadValue>{
             else
             formData.append(valueName+`[${index}].file`,element.file);
         });
-       // this.GetFiles().forEach(x => formData.append(valueName, x))
     }
 }
-export default FileUploadValueArray;
+export {FileUploadValueArray};

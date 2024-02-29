@@ -1,4 +1,1 @@
-import QuantityCounterComponent from "./QuantityCounterComponent.vue"
-
-export default QuantityCounterComponent;
-export {QuantityCounterComponent};
+export {default as QuantityCounterComponent} from "./QuantityCounterComponent.vue"

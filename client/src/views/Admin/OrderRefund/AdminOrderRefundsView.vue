@@ -1,12 +1,12 @@
 <script setup>
-import {AdminOrderRefundItemComponent, OrderRefundValue} from '@/components/adminOrderRefundItemComponent';
+import {AdminRefundComponent, OrderRefundValue} from '@/components/refundComponent';
 import { DashboardLayout } from '@/components/dashboard';
 import axios from 'axios';
 </script>
 <template>
 <DashboardLayout>
     <div class="row">
-        <AdminOrderRefundItemComponent class="col-12" v-for="(item,index) in values" v-model="values[index]" :key="index"></AdminOrderRefundItemComponent>
+        <AdminRefundComponent class="col-12" v-for="(item,index) in values" v-model="values[index]" :key="index"></AdminRefundComponent>
     </div>
 </DashboardLayout>
 </template>

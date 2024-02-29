@@ -1,4 +1,6 @@
-﻿namespace EntityLayer.ViewModels.Admin.OrderRefundController
+﻿using EntityLayer.ViewModels.CommonVM;
+
+namespace EntityLayer.ViewModels.Admin.OrderRefundController
 {
     public class AdminOrderRefundItemVM
     {
@@ -8,6 +10,6 @@
         public string ProductImage { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
-        public OrderItemStatus OrderItemStatus { get; set; }
+        public List<SelectedProductVariationVM> Variation { get; set; }
     }
 }

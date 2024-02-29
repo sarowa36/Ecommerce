@@ -17,5 +17,6 @@ namespace ServiceLayer.Base.Services
         Task<List<Order>> GetUserOrders(ApplicationUser user, int? index = null, int? count = null);
         Task<Order> Ignore(int orderId);
         Task<Order> SendToCargo(int orderId, string cargoCode);
+        Task<Order> CancelByUser(int orderId, string userId);
     }
 }

@@ -2,11 +2,9 @@
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { dateToDateTimeString } from "@/helpers/";
 import { useCitiesAndDistrictsStore } from "@/stores/CitiesAndDistrictsStore";
-import { OrderValue, OrderStatusDescriber, OrderStatus,OrderItemStatus,OrderItemStatusDescriber } from ".";
-import { router_names } from "@/router";
-import { VDialog, VCard, VBtn, VCardText, VCardActions, VSpacer, VDataTable, VImg } from "vuetify/components";
-import TextBox from "@/components/TextBox.vue";
-import axios from "axios";
+import { OrderValue, OrderStatusDescriber, OrderStatus } from ".";
+import {OrderItemComponent,OrderItemStatus} from "@/components/orderItemComponent/index.ts";
+
 defineProps({
     modelValue: {
         type: OrderValue,
@@ -39,38 +37,9 @@ defineProps({
         <Transition name="nested">
             <div v-if="show" class="order_detail_outer">
                 <div class="order_detail_inner">
-                    <div class="order_products">
-                        <div v-for="order_product in value.orderItems" v-bind:key="order_product.id" class="order_product">
-                            <div class="order_product_card_image">
-                                <RouterLink class="order_product_image_outer"
-                                    :to="{ name: router_names.product, params: { id: order_product.productId } }"><img
-                                        :src="order_product.productImage" alt=""></RouterLink>
-                            </div>
-                            <div class="order_product_card_content">
-                                <RouterLink class="order_product_image_outer"
-                                    :to="{ name: router_names.product, params: { id: order_product.productId } }">
-                                    <h6>{{ order_product.productName }}</h6>
-                                </RouterLink>
-
-                                <div class="text-success">{{ order_product.price }}$ x {{ order_product.quantity }} piece
-                                </div>
-                                <div class="text-danger" v-if="order_product.orderItemStatus!=OrderItemStatus.NotOnRefundProccess">{{ OrderItemStatusDescriber(order_product.orderItemStatus) }}</div>
-                            </div>
-                        </div>
-                    </div>
+                    <OrderItemComponent v-model="value.orderItems"></OrderItemComponent> 
                     <div class="order_action_buttons">
-                        <a href="#" class="btn btn-outline-primary">
-                            <FontAwesomeIcon icon="people-carry-box" />Cargo Tracking
-                        </a>
-                        <button class="btn btn-outline-primary" @click="() => showRefundDialog = true">
-                            <FontAwesomeIcon icon="ban" />Refund
-                        </button>
-                        <button class="btn btn-outline-primary" @click="() => showCancelDialog = true">
-                            <FontAwesomeIcon icon="ban" />Cancel
-                        </button>
-                        <a href="#" class="btn btn-outline-primary">
-                            <FontAwesomeIcon icon="file-invoice" />Show Bill
-                        </a>
+                        <slot name="actionButtons"></slot>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -92,6 +61,7 @@ defineProps({
                                     citiesAndDistricts.getDistrict(value.address.cityId, value.address.districtId).name }},
                                     {{ value.address.zip }}</span>
                                 <span>{{ value.address.detail }}</span>
+                                <span v-if="value.cargoCode">Cargo code: {{ value.cargoCode }}</span>
                                 <strong>{{ value.targetName }} - {{ value.targetPhone }}</strong>
                             </div>
                         </div>
@@ -109,39 +79,6 @@ defineProps({
             </div>
         </Transition>
     </div>
-    <v-dialog :modelValue="showRefundDialog" width="100%" @update:modelValue="(val) => showRefundDialog = val">
-        <v-card title="Refund">
-            <v-card-text>
-                Are you sure for Refund?
-            </v-card-text>
-            <v-data-table v-model:modelValue="selectedRefundIds" :items="value.orderItems.filter(x=>x.orderItemStatus==OrderItemStatus.NotOnRefundProccess)" showSelect footer
-                :headers="[{ title: 'Id', key: 'id' }, { title: 'ProductName', key: 'productName' }, { title: 'ProductImage', key: 'productImage' }]">
-                <template #item.productImage="{ item }">
-                    <v-img :src="item.productImage" height="150px" position="left" aspectRatio="1"></v-img>
-                </template>
-                <template #bottom></template>
-            </v-data-table>
-            <TextBox class="col-12 ps-3 pe-3" v-model="message" placeholder="Your Refund Message" :errorMessage="errors.message" />
-            <v-card-actions>
-                <v-spacer></v-spacer>
-
-                <v-btn text="Cancel" @click="() => showRefundDialog = false"></v-btn>
-                <v-btn text="Refund" color="red" @click="refundOrder"></v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
-    <v-dialog :modelValue="showCancelDialog" width="500" @update:modelValue="(val) => showCancelDialog = val">
-        <v-card title="Cancel">
-            <v-card-text>
-                Are you sure for Cancel?
-            </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text="Cancel" @click="() => showCancelDialog = false"></v-btn>
-                <v-btn text="Cancel" color="red" @click="cancelOrder"></v-btn>
-            </v-card-actions>
-        </v-card>
-    </v-dialog>
 </template>
 <script>
 export default {
@@ -149,29 +86,12 @@ export default {
         return {
             show: false,
             citiesAndDistricts: useCitiesAndDistrictsStore(),
-            errors: {},
-            selectedRefundIds: [],
-            message:"",
-            showRefundDialog: false,
-            showCancelDialog: false
         }
     },
     methods: {
         toggleOrder() {
             this.show = !this.show;
         },
-        async refundOrder() {
-            var response=await axios.postForm("User/OrderRefund/CreateRefund",{ids:this.selectedRefundIds,message:this.message})
-            if(response.isSuccess){
-                this.showRefundDialog=false;
-            }
-            else{
-                this.errors=response.data;
-            }
-        },
-        async cancelOrder() {
-
-        }
     },
     computed: {
         value: {
@@ -247,28 +167,6 @@ export default {
     margin: 20px;
 }
 
-.order_product_card_content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.order_product {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    padding: 15px 30px;
-    gap: 15px;
-}
-
-.order_product_card_image {
-    width: 80px;
-}
-
-.order_products {
-    border: 1px solid color-mix(in srgb, var(--first-color) 25%, transparent);
-}
-
 .order_outer.active {
     box-shadow: 0 8px 32px rgba(72, 72, 72, .16);
     border-color: transparent;
@@ -279,10 +177,6 @@ export default {
     flex-wrap: wrap;
     gap: 15px;
     align-items: center;
-}
-
-.order_action_buttons>.btn>svg {
-    margin-right: 10px;
 }
 
 .order_delivery_status_box {

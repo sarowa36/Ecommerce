@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DataAccessLayer;
 using EntityLayer.Enum;
 using EntityLayer.ViewModels.IdentityController;
 using EntityLayer.ViewModels.User.OrderController;
@@ -13,12 +14,16 @@ namespace Ecommerce.Areas.Admin.Controllers
     {
         readonly IOrderService _orderService;
         readonly IServiceErrorContainer _errorContainer;
+        readonly IIyziPayService _payService;
         readonly IMapper _mapper;
-        public OrderController(IOrderService orderService, IServiceErrorContainer errorContainer, IMapper mapper)
+        readonly ADC _db;
+        public OrderController(IOrderService orderService, IServiceErrorContainer errorContainer, IMapper mapper, IIyziPayService payService, ADC db)
         {
             _orderService = orderService;
             _errorContainer = errorContainer;
             _mapper = mapper;
+            _payService = payService;
+            _db = db;
         }
         public async Task<IActionResult> GetList(OrderStatus? orderStatus,int index)
         {
@@ -36,8 +41,10 @@ namespace Ecommerce.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Ignore(int id)
         {
-
+            using var transaction = _db.Database.BeginTransaction();
             var order = _errorContainer.AddServiceResponse(() => _orderService.Ignore(id));
+            _errorContainer.AddServiceResponse(() => DateTime.Now - order.CreateDate < TimeSpan.FromHours(24) ? _payService.CancelOrder(order) : _payService.RefundOrder(order));
+            _errorContainer.AddServiceResponse(()=>transaction.CommitAsync());
             return _errorContainer.IsSuccess ? Ok(_mapper.Map<UserOrderVM>(order)) : BadRequest(_errorContainer.Errors);
         }
         [HttpPost]

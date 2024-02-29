@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessLayer.Validations.User.OrderRefundController;
+using DataAccessLayer;
 using EntityLayer.DTOs.Areas.Admin.OrderRefundController;
 using EntityLayer.ViewModels.Admin.OrderRefundController;
 using Microsoft.AspNetCore.Mvc;
@@ -16,13 +17,15 @@ namespace Ecommerce.Areas.Admin.Controllers
         readonly IServiceProvider _serviceProvider;
         readonly IMapper _mapper;
         readonly IIyziPayService _iyziPayService;
-        public OrderRefundController(IServiceErrorContainer errorContainer, IOrderRefundService orderRefundService, IMapper mapper, IServiceProvider serviceProvider, IIyziPayService iyziPayService)
+        readonly ADC _db;
+        public OrderRefundController(IServiceErrorContainer errorContainer, IOrderRefundService orderRefundService, IMapper mapper, IServiceProvider serviceProvider, IIyziPayService iyziPayService, ADC db)
         {
             _errorContainer = errorContainer;
             _orderRefundService = orderRefundService;
             _mapper = mapper;
             _serviceProvider = serviceProvider;
             _iyziPayService = iyziPayService;
+            _db = db;
         }
         public async Task<IActionResult> GetList()
         {
@@ -44,9 +47,11 @@ namespace Ecommerce.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Accept(int id)
         {
+            using var transaction = _db.Database.BeginTransaction();
             var orderRefund= _errorContainer.AddServiceResponse(() => _orderRefundService.GetOrderRefund(id));
             var refund = _errorContainer.AddServiceResponse(() => _iyziPayService.RefundOrder(orderRefund));
             _errorContainer.AddServiceResponse(() => _orderRefundService.AcceptRefund(orderRefund,refund));
+            _errorContainer.AddServiceResponse(() => transaction.CommitAsync());
             return _errorContainer.IsSuccess ? Ok() : BadRequest(_errorContainer.Errors);
         }
         [HttpPost]

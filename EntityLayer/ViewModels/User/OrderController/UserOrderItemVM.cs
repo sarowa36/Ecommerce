@@ -1,4 +1,6 @@
-﻿namespace EntityLayer.ViewModels.User.OrderController
+﻿using EntityLayer.ViewModels.CommonVM;
+
+namespace EntityLayer.ViewModels.User.OrderController
 {
     public class UserOrderItemVM
     {
@@ -9,5 +11,6 @@
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public OrderItemStatus OrderItemStatus { get; set; }
+        public List<SelectedProductVariationVM> Variation { get; set; }
     }
 }

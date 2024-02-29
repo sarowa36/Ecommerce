@@ -21,7 +21,7 @@ import axios from 'axios';
                     </button>
                 </div>
                 <div class="col-5">
-                    <img class="introduce_img" src="../assets/greenwoman.png" alt="">
+                    <img class="introduce_img" src="@/assets/img/greenwoman.png" alt="">
                 </div>
             </div>
         </div>
@@ -61,7 +61,7 @@ import axios from 'axios';
                     <div></div>
                     <div></div>
                 </div>
-                <img src="/src/assets/offerwoman.png" alt="">
+                <img src="@/assets/img/offerwoman.png" alt="">
             </div>
             <div class="col-lg-6 d-flex flex-column justify-content-evenly offer_details">
                 <h3 class="offer_title">Exclusive offer</h3>

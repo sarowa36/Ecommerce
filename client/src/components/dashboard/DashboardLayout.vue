@@ -14,7 +14,7 @@ import router, { router_names } from '@/router';
                     <label class="form-check-label">Admin</label>
                 </div>
                 <div class="profile_basic_detail">
-                    <img src="@/assets/e.webp" alt="">
+                    <img src="@/assets/img/e.webp" alt="">
                     <h6><strong>Daniel Machivelli</strong></h6>
                 </div>
                 <hr>
