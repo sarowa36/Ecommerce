@@ -2,7 +2,7 @@
 {
     public class OrderRefundCreateDTO
     {
-        public List<int> Ids { get; set; }
+        public Dictionary<int,int> Items { get; set; }
         public string Message { get; set; }
     }
 }

@@ -9,8 +9,12 @@ using ServiceLayer.Base.Services;
 
 namespace Ecommerce.Areas.User.Controllers
 {
+    /// <summary>
+    /// I shelved refund service for a while
+    /// </summary>
     [Area("User")]
     [Authorize(Roles ="User")]
+    [NonController]
     public class OrderRefundController : Controller
     {
         readonly IServiceErrorContainer _errorContainer;
@@ -35,7 +39,7 @@ namespace Ecommerce.Areas.User.Controllers
         {
             _errorContainer.BindValidation(_serviceProvider.GetService<OrderRefundCreateDTOValidation>().Validate(model));
             var user = _errorContainer.AddServiceResponse(() => _identityService.GetCurrentUserAsync());
-            var orderrefund=_errorContainer.AddServiceResponse(()=>_orderRefundService.CreateRefund(model.Ids,model.Message,user.Id));
+            var orderrefund=_errorContainer.AddServiceResponse(()=>_orderRefundService.CreateRefund(model,user.Id));
             return _errorContainer.IsSuccess ? Ok():BadRequest(_errorContainer.Errors);
         }
         public async Task<IActionResult> GetList()

@@ -1,6 +1,6 @@
 <script setup>
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-defineEmits(["increaseCartCount", "decreaseCartCount"])
+defineEmits(["update:modelValue"])
 defineProps({
     modelValue: {
         type: Number,
@@ -12,11 +12,11 @@ defineProps({
     <div class="cart_counter">
         <div class="cart_counter_inner">
         <button :class="{ 'btn btn-outline-dark': true, 'active': modelValue == 1 }" :disabled="modelValue == 1"
-            @click="$emit('decreaseCartCount')">
+            @click="$emit('update:modelValue',modelValue-1)">
             <FontAwesomeIcon icon="minus" />
         </button>
         <input type="text" class="form-control border-dark" :value="modelValue" disabled>
-        <button class="btn btn-outline-dark" @click="$emit('increaseCartCount')">
+        <button class="btn btn-outline-dark" @click="$emit('update:modelValue',modelValue+1)">
             <FontAwesomeIcon icon="plus" />
         </button>
         <div v-if="isLoading" class="cart_counter_overlay">

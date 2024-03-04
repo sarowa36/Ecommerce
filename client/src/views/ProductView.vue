@@ -42,8 +42,7 @@ import { VChipGroup, VChip } from "vuetify/components";
                     </v-chip-group>
                 </div>
                 <div class="product_cart_section mt-2">
-                    <QuantityCounterComponent class="me-3" v-model="productCartCount" @decreaseCartCount="decreaseCartCount"
-                        @increaseCartCount="increaseCartCount" />
+                    <QuantityCounterComponent class="me-3" v-model="productCartCount" />
                     <button class="btn btn-primary" @click="addToCart" :disabled="isLoading">
                         <FontAwesomeIcon icon="cart-shopping" /> Add Cart
                     </button>
@@ -480,13 +479,6 @@ export default {
                 this.cartStore.loadCart();
                 this.toast.success("Your request was successful");
             }
-        },
-        increaseCartCount() {
-            this.productCartCount++;
-        },
-        decreaseCartCount() {
-            if (this.productCartCount > 1)
-                this.productCartCount--;
         },
         toggleShowListDropdown() {
             this.showListDropdown = !this.showListDropdown;

@@ -19,6 +19,7 @@ namespace EntityLayer.Entities
         public OrderItemStatus OrderItemStatus { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
+        public int RefundableQuantity { get; set; }
         public List<SelectedProductVariation> Variation { get; set; }
     }
 }

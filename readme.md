@@ -3,7 +3,7 @@ Im creating a side project about E-Commerce. Frontend design based from (only Ho
 
 # Features Im Working On
 ## Backend
-- Order Refund (90% done)
+- Order Refund (Currently shelved for a while. I will inspect real life scenarios then i will revision.)
 - Category
 - Save List
 - Comment

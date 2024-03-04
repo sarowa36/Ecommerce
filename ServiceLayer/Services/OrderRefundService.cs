@@ -2,6 +2,7 @@
 using DataAccessLayer.Base.Repositories.OrderRefundRepositories;
 using DataAccessLayer.Base.Repositories.OrderRepositories;
 using DataAccessLayer.Repositories.OrderRepositories;
+using EntityLayer.DTOs.Areas.User.OrderRefundController;
 using EntityLayer.Entities;
 using EntityLayer.Enum;
 using Iyzipay.Model;
@@ -35,10 +36,11 @@ namespace ServiceLayer.Services
             _orderRefundReadRepository = orderRefundReadRepository;
         }
 
-        public async Task<OrderRefund> CreateRefund(List<int> orderItemIds, string message, string userId)
+        public async Task<OrderRefund> CreateRefund(OrderRefundCreateDTO model, string userId)
         {
-            var refundItems = _orderItemReadRepository.GetAll().Where(x => orderItemIds.Contains(x.Id) && x.Order.UserId == userId).Include(x => x.Order).ToList();
-            if(refundItems==null && refundItems.Count <= 0)
+            var refundItems = _orderItemReadRepository.GetAll().Where(x => model.Items.Keys.Contains(x.Id) && x.Order.UserId == userId).Include(x => x.Order).ToList();
+            #region Validation
+            if (refundItems==null && refundItems.Count <= 0)
             {
                 _serviceErrorContainer.AddModelOnlyError("Order Items not found");
                 return default;
@@ -53,13 +55,22 @@ namespace ServiceLayer.Services
                 _serviceErrorContainer.AddError("ModelOnly", "You cant create refund request");
                 return default;
             }
-            refundItems.ForEach(x => x.OrderItemStatus = OrderItemStatus.OnRefundProccess);
+            if (refundItems.Any(x => x.RefundableQuantity - model.Items[x.Id] < 0))
+            {
+                _serviceErrorContainer.AddError("ModelOnly", "You are entered higher quantity than avaliable quantity");
+                return default;
+            }
+            #endregion
+            refundItems.ForEach(x => {
+                x.OrderItemStatus = OrderItemStatus.OnRefundProccess;
+                x.RefundableQuantity -= model.Items[x.Id];
+            });
             var refundOrder = new OrderRefund()
             {
-                OrderRefundOrderItems = refundItems.Select(x => new EntityLayer.M2M.OrderRefundM2MOrderItem() { OrderItemId = x.Id, }).ToList(),
+                OrderRefundOrderItems = refundItems.Select(x => new EntityLayer.M2M.OrderRefundM2MOrderItem() { OrderItemId = x.Id,ItemQuantity= model.Items[x.Id] }).ToList(),
                 TotalRefundAmount = refundItems.Sum(x => x.Quantity * x.Price),
                 UserId = userId,
-                UserMessage = message,
+                UserMessage = model.Message,
                 OrderRefundStatus = OrderRefundStatus.WaitingApprove,
                 OrderId = refundItems.First().OrderId,
             };
@@ -110,7 +121,10 @@ namespace ServiceLayer.Services
                 _serviceErrorContainer.AddModelOnlyError("Refund cant cancel");
                 return;
             }
-            orderRefund.OrderRefundOrderItems.ForEach(x => x.OrderItem.OrderItemStatus = OrderItemStatus.NotOnRefundProccess);
+            orderRefund.OrderRefundOrderItems.ForEach(x => { 
+                x.OrderItem.OrderItemStatus = OrderItemStatus.NotOnRefundProccess;
+                x.OrderItem.RefundableQuantity += x.ItemQuantity;
+            });
             orderRefund.OrderRefundStatus = OrderRefundStatus.Canceled;
             await _orderRefundWriteRepository.UpdateAsync(orderRefund);
             await _orderRefundWriteRepository.SaveChangesAsync();
@@ -120,7 +134,10 @@ namespace ServiceLayer.Services
             var orderRefund = _orderRefundReadRepository.GetAll().Include(x => x.OrderRefundOrderItems).ThenInclude(x => x.OrderItem).FirstOrDefault(x => x.Id == id && (x.OrderRefundStatus == OrderRefundStatus.ApprovedAndWaitingDelivery || x.OrderRefundStatus == OrderRefundStatus.WaitingApprove));
             if (orderRefund != null)
             {
-                orderRefund.OrderRefundOrderItems.ForEach(x => x.OrderItem.OrderItemStatus = OrderItemStatus.NotOnRefundProccess);
+                orderRefund.OrderRefundOrderItems.ForEach(x => {
+                    x.OrderItem.OrderItemStatus = OrderItemStatus.NotOnRefundProccess;
+                    x.OrderItem.RefundableQuantity += x.ItemQuantity;
+                });
                 orderRefund.OrderRefundStatus = OrderRefundStatus.Ignored;
                 await _orderRefundWriteRepository.UpdateAsync(orderRefund);
                 await _orderRefundWriteRepository.SaveChangesAsync();

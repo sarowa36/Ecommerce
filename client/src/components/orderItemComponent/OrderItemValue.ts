@@ -12,6 +12,7 @@ export class OrderItemValue {
      productImage: string = "";
      price: number = 0;
      quantity: number = 0; 
+     refundableQuantity:number=0;
      orderItemStatus: OrderItemStatus = 0;
      variation:Array<SelectedVariation>=[];
      constructor(p: OrderItemValue | null) {

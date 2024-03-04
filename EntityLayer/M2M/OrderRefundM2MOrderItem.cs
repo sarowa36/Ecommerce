@@ -8,5 +8,7 @@ namespace EntityLayer.M2M
         public OrderRefund OrderRefund { get; set; }
         public int OrderItemId { get; set; }
         public OrderItem OrderItem { get; set; }
+        public int ItemQuantity { get; set; }
+        public int AcceptedQuantity { get; set; }
     }
 }

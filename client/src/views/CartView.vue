@@ -29,9 +29,7 @@ import { AddressItemValue } from '@/components/addressItemComponent';
                                         <div><strong>Price</strong></div>
                                         <div>{{ item.productPrice }}$</div>
                                     </div>
-                                    <QuantityCounterComponent v-model="item.quantity"
-                                        @increaseCartCount="increaseCartCount(item)"
-                                        @decreaseCartCount="decreaseCartCount(item)" />
+                                    <QuantityCounterComponent v-model="item.quantity" />
                                     <div class="cart_product_total">
                                         <div><strong>Total</strong></div>
                                         <div>{{ item.productPrice * item.quantity }}$</div>

@@ -7,7 +7,7 @@ namespace BusinessLayer.Validations.User.OrderRefundController
     {
         public OrderRefundCreateDTOValidation()
         {
-            RuleFor(x => x.Ids).NotEmpty();
+            RuleFor(x => x.Items).NotEmpty();
             RuleFor(x=>x.Message).NotEmpty().MinimumLength(10).MaximumLength(150);
         }
     }
