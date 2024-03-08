@@ -27,12 +27,7 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            products: [
-              /*  new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman1.png"], title: "Regular Fit Long Sleeve Top", price: "38.99", star: "5.0" }),
-                new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman2.png"], title: "Black Crop Tailored Jacket", price: "62.99", star: "4.3" }),
-                new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" }),
-                new ProductComponentValue({ img: ["http://img.sarowa36.com.tr/woman3.png"], title: "Textured Sunset Shirt", price: "49.99", star: "5.0" })*/
-            ],
+            products: [ ],
             categoryFilterValues: new FilterValueArray(new FilterValue({ value: "XS" }),new FilterValue({ value: "M" }),new FilterValue({ value: "L" }),new FilterValue({ value: "XL" }),new FilterValue({ value: "XXL" }),new FilterValue({ value: "XL" }),new FilterValue({ value: "XXL" }),new FilterValue({ value: "XL" }),new FilterValue({ value: "XXL" }),),
             sizeFilterValues: new FilterValueArray(new FilterValue({ value: "XS" }),new FilterValue({ value: "M" }),new FilterValue({ value: "L" }),new FilterValue({ value: "XL" }),new FilterValue({ value: "XXL" }),new FilterValue({ value: "XL" }),new FilterValue({ value: "XXL" }),new FilterValue({ value: "XL" }),new FilterValue({ value: "XXL" }),),
             sortFilterValues: new FilterValueArray(new FilterValue({ value: "XS" }),new FilterValue({ value: "M" }),new FilterValue({ value: "L" }),new FilterValue({ value: "XL" }),new FilterValue({ value: "XXL" }),new FilterValue({ value: "XL" }),new FilterValue({ value: "XXL" }),new FilterValue({ value: "XL" }),new FilterValue({ value: "XXL" }),),

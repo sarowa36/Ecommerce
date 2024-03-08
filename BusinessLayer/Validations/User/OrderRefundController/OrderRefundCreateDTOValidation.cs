@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace BusinessLayer.Validations.User.OrderRefundController
 {
-    public class OrderRefundCreateDTOValidation:AbstractValidator<OrderRefundCreateDTO>
+    public class OrderRefundCreateDTOValidation:AbstractValidator<CreateOrderRefundDTO>
     {
         public OrderRefundCreateDTOValidation()
         {

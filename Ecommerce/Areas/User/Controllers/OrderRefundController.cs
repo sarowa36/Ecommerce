@@ -35,7 +35,7 @@ namespace Ecommerce.Areas.User.Controllers
             _serviceProvider = serviceProvider;
         }
         [HttpPost]
-        public async Task<IActionResult> CreateRefund(OrderRefundCreateDTO model)
+        public async Task<IActionResult> CreateRefund(CreateOrderRefundDTO model)
         {
             _errorContainer.BindValidation(_serviceProvider.GetService<OrderRefundCreateDTOValidation>().Validate(model));
             var user = _errorContainer.AddServiceResponse(() => _identityService.GetCurrentUserAsync());

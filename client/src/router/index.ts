@@ -15,6 +15,8 @@ import AddressView from '@/views/User/AddressView.vue'
 import AdminOrderListView from "@/views/Admin/Order/AdminOrderListView.vue";
 import AdminOrderRefundsView from '@/views/Admin/OrderRefund/AdminOrderRefundsView.vue'
 import OrderRefundsView from '@/views/User/OrderRefundsView.vue'
+import CategoryListView from "@/views/Admin/Category/CategoryListView.vue"
+import CategoryUpdateCreateView from "@/views/Admin/Category/CategoryUpdateCreateView.vue"
 class _router_names {
   home:string= "home";
   shop: string = "shop";
@@ -28,6 +30,9 @@ class _router_names {
   admin_product_list:string="admin_product_list";
   admin_order_list:string="admin_order_list";
   admin_order_refunds_list:string="admin_order_refunds_list";
+  admin_category_list:string="admin_category_list";
+  admin_category_create:string="admin_category_create";
+  admin_category_update:string="admin_category_update";
   user:string="user";
   user_orders:string="user_orders";
   user_profile:string="user_profile";
@@ -102,6 +107,32 @@ const router = createRouter({
               name: router_names.admin_product_list,
               component: ProductListView
             }
+          ]
+        },
+        {
+          path:"Category",
+          children:[
+            {
+              path:"List/:id(\\d+)?",
+              name:router_names.admin_category_list,
+              component:CategoryListView,
+            },
+            {
+              path: 'Update/:id(\\d+)',
+              name: router_names.admin_category_update,
+              meta: {
+                method: RouterMethodEnum.Update
+              },
+              component: CategoryUpdateCreateView
+            },
+            {
+              path: 'Create',
+              name: router_names.admin_category_create,
+              meta: {
+                method: RouterMethodEnum.Create
+              },
+              component: CategoryUpdateCreateView
+            },
           ]
         },
         {

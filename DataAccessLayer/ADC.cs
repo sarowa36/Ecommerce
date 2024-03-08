@@ -1,4 +1,4 @@
-﻿using DataAccessLayer.Helpers;
+﻿using ToolsLayer.EF;
 using DataAccessLayer.Interceptions;
 using EntityLayer.Base;
 using EntityLayer.Entities;
@@ -43,5 +43,6 @@ namespace DataAccessLayer
         public DbSet<OrderRefund> OrderRefunds { get; set; }
         public DbSet<OrderRefundM2MOrderItem> OrderRefundM2MOrderItems { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }

@@ -62,7 +62,7 @@ defineProps({
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn text="Cancel" @click="() => showCancelDialog = false"></v-btn>
-                <v-btn text="Cancel" color="red" @click="cancelOrder"></v-btn>
+                <v-btn text="Yes" color="red" @click="cancelOrder"></v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>

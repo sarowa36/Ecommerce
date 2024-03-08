@@ -83,6 +83,7 @@ export default {
             adminMenuItems: [
                 new DashboardMenuItemValue({icon:"box",text:"Products",link:{name:router_names.admin_product_list},childItems:[new DashboardMenuItemValue({icon:"plus",text:"Create",link:{name:router_names.admin_product_create}})]}),
                 new DashboardMenuItemValue({ icon: "box", link: {name:router_names.admin_order_list}, text: "Orders" }),
+                new DashboardMenuItemValue({ icon: "list", link: {name:router_names.admin_category_list}, text: "Categories",childItems:[new DashboardMenuItemValue({icon:"plus",text:"Create",link:{name:router_names.admin_category_create}})] }),
                 //new DashboardMenuItemValue({ icon: "rotate-left", link: {name:router_names.admin_order_refunds_list}, text: "Order Refunds" }),
                 new DashboardMenuItemValue({ isHr: true }),
                 new DashboardMenuItemValue({ icon: "right-from-bracket", link: "", text: "Exit" }),
@@ -90,20 +91,6 @@ export default {
         }
     },
     methods: {
-        collapseSubmenu(e) {
-            var listNode = e.currentTarget.nextElementSibling.nextElementSibling;
-            this.active = true;
-            if (listNode.classList.contains("active")) {
-                listNode.classList.remove("active")
-                listNode.style.height = 0 + "px";
-            }
-            else {
-                var totalHeight = 0;
-                listNode.childNodes.forEach(x => totalHeight += x.offsetHeight)
-                listNode.style.height = totalHeight + "px"
-                listNode.classList.add("active")
-            }
-        },
         toggleRole(e) {
             var val = e.currentTarget.checked;
             if (val) {

@@ -86,6 +86,11 @@ namespace Ecommerce.Areas.Admin.Controllers
                 return BadRequest(new { modelOnly = "This value doesnt exist" });
             return BadRequest(res.ToErrorModel());
         }
-
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _productWriteRepository.DeleteAsync(id);
+            await _productWriteRepository.SaveChangesAsync();
+            return Ok();
+        } 
     }
 }

@@ -37,18 +37,6 @@ defineEmits(["remove", "showLightbox"])
     padding: 15px;
 }
 
-.uploaded_file.sortable-ghost {
-    position: relative;
-}
-
-.uploaded_file.sortable-ghost::after {
-    position: absolute;
-    content: '';
-    width: 100%;
-    height: 100%;
-    background-color: color-mix(in srgb, var(--bs-secondary) 10%, transparent);
-}
-
 .uploaded_file:not(:first-child) {
     border-top: 1px solid color-mix(in srgb, var(--first-color) 30%, transparent);
 }

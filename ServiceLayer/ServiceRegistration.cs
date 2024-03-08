@@ -18,6 +18,7 @@ namespace ServiceLayer
             services.AddScoped<IOrderService,OrderService>();
             services.AddScoped<IUserAddressService, UserAddressService>();
             services.AddScoped<IOrderRefundService, OrderRefundService>();
+            services.AddScoped<ICategoryService,CategoryService>();
         }
     }
 }

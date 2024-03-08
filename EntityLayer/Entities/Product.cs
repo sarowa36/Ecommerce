@@ -1,4 +1,5 @@
 ﻿using EntityLayer.Entities.JsonDbEntities;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EntityLayer.Entities
 {
@@ -10,6 +11,9 @@ namespace EntityLayer.Entities
         public decimal Price { get; set; }
         public List<string> Images { get; set; }
         public List<ProductVariation>? Variation { get; set; }
+        public int? CategoryId { get; set;}
+        [ForeignKey(nameof(CategoryId))]
+        public Category? Category { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreateDate { get; set; }
     }

@@ -4,15 +4,11 @@ using System.Linq.Expressions;
 
 namespace ToolsLayer.EF
 {
-    public static class ModelBuilderExtensions
+       public static class ModelBuilderExtension
     {
         public static void ApplyGlobalFilters<TInterface>(this ModelBuilder modelBuilder, Expression<Func<TInterface, bool>> expression)
         {
-            var entities = modelBuilder.Model
-                .GetEntityTypes()
-                .Where(t => t.BaseType == null)
-                .Select(t => t.ClrType)
-                .Where(t => typeof(TInterface).IsAssignableFrom(t));
+            var entities = modelBuilder.GetEntitiesFromBaseType<TInterface>();
             foreach (var entity in entities)
             {
                 var newParam = Expression.Parameter(entity);
@@ -22,27 +18,24 @@ namespace ToolsLayer.EF
         }
         public static void ApplyGlobalInclude<TInterface, TProperty>(this ModelBuilder modelBuilder, Expression<Func<TInterface, TProperty>> expression) where TProperty : class
         {
-            var entities = modelBuilder.Model
-                .GetEntityTypes()
-                .Where(t => t.BaseType == null)
-                .Select(t => t.ClrType)
-                .Where(t => typeof(TInterface).IsAssignableFrom(t));
+            var entities = modelBuilder.GetEntitiesFromBaseType<TInterface>();
             foreach (var entity in entities)
             {
                 modelBuilder.Entity(entity).Navigation(((MemberExpression)expression.Body).Member.Name).AutoInclude();
             }
         }
-        public static void ApplyGlobalDefaultSqlValue<TInterface, TProperty>(this ModelBuilder modelBuilder, Expression<Func<TInterface, TProperty>> expression,string sql)
+        public static void ApplyGlobalDefaultSqlValue<TInterface, TProperty>(this ModelBuilder modelBuilder, Expression<Func<TInterface, TProperty>> expression, string sql)
         {
-            var entities = modelBuilder.Model
+            var entities = modelBuilder.GetEntitiesFromBaseType<TInterface>();
+            foreach (var entity in entities)
+            {
+                modelBuilder.Entity(entity).Property(((MemberExpression)expression.Body).Member.Name).HasDefaultValueSql(sql);
+            }
+        }
+        private static IEnumerable<Type> GetEntitiesFromBaseType<TBase>(this ModelBuilder modelBuilder) => modelBuilder.Model
                 .GetEntityTypes()
                 .Where(t => t.BaseType == null)
                 .Select(t => t.ClrType)
-                .Where(t => typeof(TInterface).IsAssignableFrom(t));
-            foreach (var entity in entities)
-            {   
-                modelBuilder.Entity(entity).Property(((MemberExpression)expression.Body).Member.Name).HasDefaultValueSql(sql); 
-            }
-        }
+                .Where(t => typeof(TBase).IsAssignableFrom(t));
     }
 }

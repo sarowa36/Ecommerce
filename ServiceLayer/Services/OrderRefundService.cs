@@ -36,7 +36,7 @@ namespace ServiceLayer.Services
             _orderRefundReadRepository = orderRefundReadRepository;
         }
 
-        public async Task<OrderRefund> CreateRefund(OrderRefundCreateDTO model, string userId)
+        public async Task<OrderRefund> CreateRefund(CreateOrderRefundDTO model, string userId)
         {
             var refundItems = _orderItemReadRepository.GetAll().Where(x => model.Items.Keys.Contains(x.Id) && x.Order.UserId == userId).Include(x => x.Order).ToList();
             #region Validation
