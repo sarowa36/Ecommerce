@@ -1,20 +1,22 @@
 <script setup>
-import { CategoryItemComponent, CategoryItemValue } from '@/components/categoryItemComponent';
-import { DashboardLayout } from '@/components/dashboard';
-import { VDialog, VCard, VCardText, VCardActions, VSpacer, VBtn, } from 'vuetify/components';
-import axios from 'axios';
-import draggable from 'vuedraggable';
+    import { CategoryItemComponent, CategoryItemValue } from '@/components/categoryItemComponent';
+    import { DashboardLayout } from '@/components/dashboard';
+    import { VDialog, VCard, VCardText, VCardActions, VSpacer, VBtn, } from 'vuetify/components';
+    import { useCategoryStore } from '@/stores/CategoryStore';
+    import axios from 'axios';
+    import draggable from 'vuedraggable';
 </script>
 <template>
     <DashboardLayout>
-        <draggable v-model="values" @update:modelValue="draggableUpdate" handle=".btn-sortable" item-key="id">
+        <draggable v-if="categories" v-model="categories" @update:modelValue="draggableUpdate" handle=".btn-sortable"
+            item-key="id">
             <template #item="{ element, index }">
-                <CategoryItemComponent v-model="values[index]" @delete-category="showDeleteDialog(index)">
+                <CategoryItemComponent v-model="categories[index]" @delete-category="showDeleteDialog(element.id)">
                 </CategoryItemComponent>
             </template>
         </draggable>
-        <div v-if="values.length==0">
-        There is no category
+        <div v-if="categories.length == 0">
+            There is no category
         </div>
     </DashboardLayout>
     <v-dialog :modelValue="toggleDeleteDialog" width="500" @update:modelValue="(val) => toggleDeleteDialog = val">
@@ -31,40 +33,37 @@ import draggable from 'vuedraggable';
     </v-dialog>
 </template>
 <script>
-export default {
-    data() {
-        return {
-            values: [new CategoryItemValue()],
-            onDeleteIndex: 0,
-            toggleDeleteDialog: false
-        }
-    },
-    methods: {
-        async loadValues() {
-            this.values = (await axios.get("Admin/Category/GetList", { params: { id: this.$route.params.id } })).data
+    export default {
+        data() {
+            return {
+                onDeleteId: 0,
+                toggleDeleteDialog: false,
+                categoryStore: useCategoryStore()
+            }
         },
-        showDeleteDialog(index) {
-            this.onDeleteIndex = index;
-            this.toggleDeleteDialog = true;
+        methods: {
+            showDeleteDialog(id) {
+                this.onDeleteId = id;
+                this.toggleDeleteDialog = true;
+            },
+            deleteCategory() {
+                axios.get("Admin/Category/Delete", { params: { id: this.onDeleteId } })
+                this.categoryStore.load();
+                this.toggleDeleteDialog = false
+            },
+            async draggableUpdate(ary) {
+                console.log(arguments)
+                var itemsWithSortIndex = {};
+                ary.forEach((item, index) => itemsWithSortIndex[item.id] = index);
+                await axios.postForm("Admin/Category/UpdateSortIndex", itemsWithSortIndex)
+                this.categoryStore.load();
+            }
         },
-        deleteCategory() {
-            axios.get("Admin/Category/Delete", { params: { id: this.values[this.onDeleteIndex].id } })
-            this.values.splice(this.onDeleteIndex, 1)
-            this.toggleDeleteDialog = false
+        computed: {
+            categories() {
+                var id = parseInt(this.$route.params.id);
+                return id ? this.categoryStore.get(id).childrens : this.categoryStore.values.filter(x => x.parentId == null);
+            }
         },
-        draggableUpdate(){
-            var itemsWithSortIndex={};
-            this.values.forEach((item,index)=>itemsWithSortIndex[item.id]=index);
-            axios.postForm("Admin/Category/UpdateSortIndex",itemsWithSortIndex)
-        }
-    },
-    mounted() {
-        this.loadValues()
-    },
-    watch: {
-        '$route.query'(to, from) {
-            this.loadValues();
-        }
-    },
-}
+    }
 </script>

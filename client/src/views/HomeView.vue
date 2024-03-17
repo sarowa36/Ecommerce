@@ -252,8 +252,8 @@ export default {
         async loadProducts(){
             this.bestSellingProducts=[];
             var res=await axios.get("Anonym/Product/GetList");
-            if(res.isSuccess && res.data.length>0){
-                res.data.slice(0,4).forEach(x=>{
+            if(res.isSuccess){
+                res.data.values.slice(0,4).forEach(x=>{
                     this.bestSellingProducts.push(new ProductComponentValue(x));
                 })
             }

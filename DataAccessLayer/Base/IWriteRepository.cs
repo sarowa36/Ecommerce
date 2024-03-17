@@ -13,6 +13,5 @@ namespace DataAccessLayer.Base
         Task DeleteAsync(object id);
         Task DeleteRangeAsync(IEnumerable<T> values);
         Task<int> SaveChangesAsync();
-
     }
 }

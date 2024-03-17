@@ -24,7 +24,7 @@ defineEmits(["update:modelValue", "pressEnter"])
     <div class="form_group">
         <span :class="{'active':errorMessage}" class="text-danger">{{ errorMessage ? errorMessage :  "&nbps;" }}</span>
         <input :id="_id" ref="textbox" :type="type" :class="'myinput ' + (value ? 'with_value' : '')" :placeholder="placeholder"
-            @blur="checkVal" v-model="value" @keydown="keydownEvent" />
+            @blur="checkVal" v-model="value" @keydown="keydownEvent" @input="inputEvent" />
         <label :for="_id" class="input_label text_theme">{{ placeholder }}</label>
     </div>
 </template> 
@@ -49,6 +49,13 @@ export default {
             if (e.keyCode == 13) {
                 this.$emit("pressEnter")
             }
+        },
+        inputEvent(){
+            const node = this.$refs.textbox;
+            if(this.type=="number"){
+            node.value=node.value.replace(/[^0-9]/g,'')
+        }
+            
         }
     },
     mounted() {
@@ -101,7 +108,14 @@ export default {
 .myinput.with_value+.input_label {
     transform: scale(85%);
 }
-
+input.myinput::-webkit-outer-spin-button,
+input.myinput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.myinput[type="number"]{
+    -moz-appearance: textfield;
+}
 .myinput {
     background-color: transparent;
     border: 0 var(--first-color) solid;

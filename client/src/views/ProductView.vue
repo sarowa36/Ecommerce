@@ -9,8 +9,12 @@ import axios from "axios";
 import { useToast } from "vue-toastification";
 import {QuantityCounterComponent} from "@/components/quantityCounterComponent";
 import { VChipGroup, VChip } from "vuetify/components";
+import { useCategoryStore } from "@/stores/CategoryStore";
+import {PageBannerComponent,BreadcrumbValue} from "@/components/pageBannerComponent";
+import { router_names } from "@/router";
 </script> 
 <template>
+    <PageBannerComponent :breadcrumbList="breadcrumbList" :title="product.name"></PageBannerComponent>
     <div class="container mb-5">
         <div class="row justify-content-center theme_bg_3 mt-5 pt-4 pb-4">
             <div class="col-md-8 col-lg-5">
@@ -119,7 +123,7 @@ import { VChipGroup, VChip } from "vuetify/components";
                     <Tab name="Comments">
                         <div class="comment_outer">
                             <div class="comment_picture">
-                                <img src="@/assets/e.webp" alt="">
+                                <img src="@/assets/img/e.webp" alt="">
                             </div>
                             <div class="comment_inner">
                                 <div class="comment_meta_outer">
@@ -153,7 +157,7 @@ import { VChipGroup, VChip } from "vuetify/components";
                         </div>
                         <div class="comment_outer">
                             <div class="comment_picture">
-                                <img src="@/assets/e.webp" alt="">
+                                <img src="@/assets/img/e.webp" alt="">
                             </div>
                             <div class="comment_inner">
                                 <div class="comment_meta_outer">
@@ -453,7 +457,8 @@ export default {
             showListDropdown: false,
             showShareDropdown: false,
             cartStore: useCartStore(),
-            loginStore: useLoginStore()
+            loginStore: useLoginStore(),
+            categoryStore:useCategoryStore(),
         }
     },
     beforeMount() {
@@ -486,6 +491,11 @@ export default {
         toggleShowShareDropdown() {
             this.showShareDropdown = !this.showShareDropdown;
         },
+    },
+    computed:{
+        breadcrumbList(){
+            return this.categoryStore.parentCategories(this.product.categoryId).map(x=>new BreadcrumbValue({text:x.name,link:{name:router_names.shop,params:{category:x.id}}})).concat([new BreadcrumbValue({text:this.product.name})])
+        }
     }
 }
 </script>

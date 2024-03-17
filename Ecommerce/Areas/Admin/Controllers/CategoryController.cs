@@ -3,6 +3,7 @@ using BusinessLayer.Validations.Admin.CategoryController;
 using EntityLayer.DTOs.Areas.Admin.CategoryController;
 using EntityLayer.Entities;
 using EntityLayer.ViewModels.Admin.CategoryController;
+using EntityLayer.ViewModels.Anonym.CategoryController;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.Base;
 using ServiceLayer.Base.Services;
@@ -23,9 +24,9 @@ namespace Ecommerce.Areas.Admin.Controllers
             _errorContainer = errorContainer;
             _mapper = mapper;
         }
-        public async Task<IActionResult> GetList(int? id)
+        public async Task<IActionResult> GetList()
         {
-            return Ok(_mapper.Map<List<CategoryListValueVM>>(await _categoryService.GetAll(id)));
+            return Ok(_mapper.Map<List<CategoryListValueVM>>(await _categoryService.GetAll()));
         }
         public async Task<IActionResult> GetListWithParentNames(int? id)
         {

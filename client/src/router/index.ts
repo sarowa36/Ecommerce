@@ -44,9 +44,9 @@ const router_names = new _router_names();
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  scrollBehavior(to, from, savedPosition) {
+/*  scrollBehavior(to, from, savedPosition) {
     return { top: 0 }
-  },
+  },*/
   routes: [
     {
       path: '/',
@@ -55,7 +55,7 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/Shop',
+      path: '/Shop/:category(\\d+)?',
       name: router_names.shop,
       component: ShopView
     },

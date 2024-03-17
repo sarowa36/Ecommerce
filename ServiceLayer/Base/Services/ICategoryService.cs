@@ -5,7 +5,7 @@ namespace ServiceLayer.Base.Services
     public interface ICategoryService
     {
         Task Create(Category category);
-        Task<List<Category>> GetAll(int? id);
+        Task<List<Category>> GetAll();
         Task<List<Category>> GetAllWithParentName(int? id = null, bool JustChild = false);
         Task<Category> Get(int id);
         Task Update(Category category);

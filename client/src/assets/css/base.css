@@ -106,6 +106,9 @@ font-size:1rem;
 .font-3xl{
   font-size: 2rem;
 }
+.rotate-180{
+  transform: rotate(180deg);
+}
 .Vue-Toastification__toast-body{
   color: white;
 }

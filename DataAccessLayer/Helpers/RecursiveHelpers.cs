@@ -1,6 +1,6 @@
 ﻿using EntityLayer.Base;
 
-namespace ServiceLayer.Helpers
+namespace DataAccessLayer.Helpers
 {
     public static class RecursiveHelpers
     {

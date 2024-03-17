@@ -5,7 +5,7 @@ using EntityLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using ServiceLayer.Base;
 using ServiceLayer.Base.Services;
-using ServiceLayer.Helpers;
+using DataAccessLayer.Helpers;
 
 namespace ServiceLayer.Services
 {
@@ -22,7 +22,12 @@ namespace ServiceLayer.Services
             _errorContainer = errorContainer;
             _db = db;
         }
-        public async Task<List<Category>> GetAll(int? id) => _categoryReadRepository.GetAll().Where(x => x.ParentId == id).Include(x=>x.Childrens).OrderBy(x=>x.SortIndex).ToList();
+        public async Task<List<Category>> GetAll() 
+        {
+            var allCategories = _categoryReadRepository.GetAll().Include(x => x.Childrens).OrderBy(x => x.SortIndex).ToList();
+            allCategories.ForEach(x => x.Childrens = x.Childrens.OrderBy(y => y.SortIndex).ToList());
+            return allCategories.ToList(); 
+        }
         /// <summary>
         /// Returns list with categories with parent category names like child1.name="child1" instead child1.name="parent1/parent2/child1". 
         /// <paramref name="id"/> paramater for removing from list which category have this id. In short id paramater prevents recursive confusion like upper category cannot refer to their children.
@@ -83,9 +88,7 @@ namespace ServiceLayer.Services
         }
         public async Task UpdateSortIndex(Dictionary<int, int> model)
         {
-            foreach (var keypair in model) { 
-            _db.Categories.Where(x => keypair.Key==x.Id).ExecuteUpdate(x => x.SetProperty(y=>y.SortIndex, keypair.Value));
-            }
+            _categoryWriteRepository.UpdateSortIndex(model);
             await _categoryWriteRepository.SaveChangesAsync();
         }
         public async Task Delete(int id)

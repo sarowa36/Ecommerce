@@ -2,6 +2,7 @@
 using EntityLayer.DTOs.Areas.Admin.CategoryController;
 using EntityLayer.Entities;
 using EntityLayer.ViewModels.Admin.CategoryController;
+using EntityLayer.ViewModels.Anonym.CategoryController;
 
 namespace Ecommerce.AutoMappers.Admin
 {

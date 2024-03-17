@@ -1,9 +1,6 @@
 <script setup>
 import {  RouterView } from 'vue-router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { useLoginStore } from '@/stores/LoginStore';
-import { useCartStore } from '@/stores/CartStore';
-import { useCitiesAndDistrictsStore } from './stores/CitiesAndDistrictsStore';
 import Navbar from './components/layout/Navbar.vue';
 </script>
 
@@ -162,19 +159,3 @@ import Navbar from './components/layout/Navbar.vue';
   }
 }
 </style>
-<script>
-export default {
-  data() {
-    return {
-      loginStore: useLoginStore(),
-      cartStore:useCartStore(),
-      cityAndDistricts:useCitiesAndDistrictsStore()
-    }
-  },
- async beforeMount(){
-   await this.loginStore.loadUser();
-   await this.cartStore.loadCart();
-   this.cityAndDistricts.loadCitiesAndDistricts()
-  }
-}
-</script>

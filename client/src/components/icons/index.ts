@@ -1,0 +1,1 @@
+export {default as TabsIcon} from "./TabsIcon.vue"
