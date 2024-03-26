@@ -19,6 +19,9 @@ namespace IdentityLayer
         }
         public static void AddAppAuthentication(this IServiceCollection services)
         {
+            services.Configure<IdentityOptions>(options => {
+                options.SignIn.RequireConfirmedEmail = true;
+            });
             services.AddAuthentication()
                 .AddApplicationCookie()
                 .PostConfigure(opt =>
@@ -35,7 +38,10 @@ namespace IdentityLayer
                 .AddScoped<IMyUserManager<ApplicationUser>, MyUserManager<ApplicationUser>>()
                 .AddScoped<IMyRoleManager<IdentityRole>, MyRoleManager<IdentityRole>>()
                 .AddScoped<IMySignInManager<ApplicationUser>, MySignInManager<ApplicationUser>>()
-                .AddIdentityCore<ApplicationUser>()
+                .AddIdentityCore<ApplicationUser>(option =>
+                {
+                    option.SignIn.RequireConfirmedEmail = true;
+                })
                 .AddRoles<IdentityRole>()
                 .AddUserManager<MyUserManager<ApplicationUser>>()
                 .AddSignInManager<MySignInManager<ApplicationUser>>()

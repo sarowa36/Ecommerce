@@ -53,7 +53,7 @@ import { router_names } from "@/router";
                 </div>
                 <div class="product_boxs_section">
                     <div>
-                        <FontAwesomeIcon icon="truck" /> Fast Delivery
+                        <FontAwesomeIcon icon="truck" /> Hızlı Teslimat
                     </div>
                     <div>
                         <FontAwesomeIcon icon="shield-halved" /> 14 Day Return Guarantee

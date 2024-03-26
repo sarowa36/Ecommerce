@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using ServiceLayer.Base;
 using ServiceLayer.Base.Services;
-using ServiceLayer.ServiceCommand.MailService;
 using ToolsLayer.Encoder;
 using ToolsLayer.ErrorModel;
 using IdentityLayer;
@@ -32,7 +31,15 @@ namespace ServiceLayer.Services
         {
             _serviceErrorContainer.BindError((await _userManager.CreateAsync(user, password)).ToErrorModel());
         }
-
+        public async Task<string> EmailConfirmationTokenCreate(ApplicationUser user)
+        {
+            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        }
+        public async Task EmailConfirm(ApplicationUser user, string token)
+        {
+            _serviceErrorContainer.BindError( (await _userManager.ConfirmEmailAsync(user, token)).ToErrorModel());
+        }
+        #region Login
         public async Task LoginAsync(string usernameOrEmail, string password)
         {
             ApplicationUser user = await _userManager.FindByNameAsync(usernameOrEmail);
@@ -57,7 +64,12 @@ namespace ServiceLayer.Services
         {
             await _signInManager.SignInAsync(user, true);
         }
-        public async Task UpdatePasswordAsync(ApplicationUser user, string resetToken, string newPassword)
+        #endregion
+        public async Task<string> CreatePasswordResetTokenAsync(ApplicationUser user)
+        {
+            return await _userManager.GeneratePasswordResetTokenAsync(user);
+        }
+        public async Task PasswordResetAsync(ApplicationUser user, string resetToken, string newPassword)
         {
             IdentityResult result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
             if (result.Succeeded)
@@ -65,21 +77,7 @@ namespace ServiceLayer.Services
             else
                 _serviceErrorContainer.BindError(result.ToErrorModel());
         }
-        public async Task<PasswordResetCommand> CreatePasswordResetRequestAsync(ApplicationUser user)
-        {
-            string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-            resetToken = resetToken.UrlEncode();
-            return new PasswordResetCommand() { Email = user.Email, UserId = user.Id, Token = resetToken };
-        }
-        public async Task VerifyResetTokenAsync(string resetToken, ApplicationUser user)
-        {
-
-            resetToken = resetToken.UrlDecode();
-            if (!await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", resetToken))
-            {
-                _serviceErrorContainer.AddError("ModelOnly", "Invalid Request");
-            }
-        }
+       
         public async Task<ApplicationUser> GetCurrentUserAsync()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);

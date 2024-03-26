@@ -11,9 +11,11 @@ namespace ServiceLayer.Base.Services
         Task<Order> Delivered(int orderId);
         Task<Order> UpdateOrderFromPaymentCallback(CheckoutForm checkoutForm);
         Task UpdateOrderStatus(string token, OrderStatus orderStatus, object? requestValue);
+        Task<Order> GetOrder(int id);
         Task<List<Order>> GetAllOrders(OrderStatus? orderStatus, int? index = null, int? count = null);
         Task<int> GetAllOrdersCount();
         Task<int> GetUserOrderCount(ApplicationUser user);
+        Task<Order> GetUserOrder(ApplicationUser user, int id);
         Task<List<Order>> GetUserOrders(ApplicationUser user, int? index = null, int? count = null);
         Task<Order> Ignore(int orderId);
         Task<Order> SendToCargo(int orderId, string cargoCode);

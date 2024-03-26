@@ -1,0 +1,6 @@
+﻿@using System.Net;
+@using ToolsLayer.Http;
+@{
+    ViewData["Title"] = "Üyelik onaylama";
+}
+<span class="description">Merhabalar, üyeliğinizi onaylamak için <a href="@(Context.GetOriginUrl()+"/EmailConfirm/"+WebUtility.UrlEncode( ViewData["userId"].ToString())+"/"+WebUtility.UrlEncode( ViewData["token"].ToString()))">bu linke tıklayınız</a></span>

@@ -1,0 +1,112 @@
+﻿@using DataAccessLayer.Base.JsonData;
+@using ToolsLayer.Http
+@using EntityLayer.Entities;
+@inject ICitiesAndDistrictsValues _ctdv 
+@model Order
+@section style{
+    <style>
+        .order_table {
+            width: 100%;
+        }
+
+        .order_item_image {
+            width: 70px;
+        }
+
+        .order_item_variation {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+}
+@{
+    ViewData["Title"] = "Siparişiniz Alındı";
+}
+<h3>Sipariş detayı</h3>
+<hr class="divider" />
+<table class="order_table">
+    <thead>
+        <tr>
+            <td>Görsel</td>
+            <td>İsim</td>
+            <td>Varyasyon</td>
+            <td>Adet*Fiyat</td>
+            <td>Total</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td colspan="100%">
+                <hr class="divider" />
+            </td>
+        </tr>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td><img src="@Context.GetOriginUrl()@item.ProductImage" class="order_item_image" /></td>
+                <td><a href="@Context.GetOriginUrl()/Product/@item.ProductId">@item.ProductName</a></td>
+                <td>
+                    <div class="order_item_variation">
+                        @if (item.Variation != null && item.Variation.Count > 0)
+                        {
+                            foreach (var varia in item.Variation)
+                            {
+                                <span>@varia.Name : @varia.Value</span>
+                            }
+                        }
+                    </div>
+                </td>
+                <td>@item.Quantity * @item.Price TL</td>
+                <td>@(item.Quantity * item.Price) TL</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<h3>Teslimat bilgileri</h3>
+<hr class="divider" />
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+    <tbody>
+        <tr>
+            <td class="kvl kvl-key">Adres adı :</td>
+            <td class="kvl kvl-value">@Model.Address.Name</td>
+        </tr>
+        <tr>
+            <td class="kvl kvl-key">Şehir :</td>
+            <td class="kvl kvl-value">@_ctdv.GetCity( Model.Address.CityId).Name</td>
+        </tr>
+        <tr>
+            <td class="kvl kvl-key">İlçe :</td>
+            <td class="kvl kvl-value">@_ctdv.GetDistrict( Model.Address.DistrictId).Name</td>
+        </tr>
+        <tr>
+            <td class="kvl kvl-key">Posta kodu :</td>
+            <td class="kvl kvl-value">@Model.Address.Zip</td>
+        </tr>
+        <tr>
+            <td class="kvl kvl-key">Detay :</td>
+            <td class="kvl kvl-value">@Model.Address.Detail</td>
+        </tr>
+        <tr>
+            <td class="kvl kvl-key">Teslim edilecek kişi :</td>
+            <td class="kvl kvl-value">@Model.TargetName</td>
+        </tr>
+        <tr>
+            <td class="kvl kvl-key">Teslim edilecek kişinin telefon numarası :</td>
+            <td class="kvl kvl-value">@Model.TargetPhone</td>
+        </tr>
+    </tbody>
+</table>
+<h3>Ödeme bilgileri</h3>
+<hr class="divider" />
+<table role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
+    <tbody>
+        <tr>
+            <td class="kvl kvl-key">Ödenen tutar :</td>
+            <td class="kvl kvl-value">@Model.PaidPrice TL</td>
+        </tr>
+        <tr>
+            <td class="kvl kvl-key">Toplam Tutar :</td>
+            <td class="kvl kvl-value">@Model.TotalPrice</td>
+        </tr>
+    </tbody>
+</table>

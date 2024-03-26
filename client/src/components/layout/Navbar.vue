@@ -12,7 +12,7 @@ import { router_names } from "@/router"
         <RouterLink :to="{ name: router_names.home }" class="col-3 col-lg-4 logo">
           Salsha
         </RouterLink>
-        <div class="col-4 d-flex d-md-none justify-content-end">
+        <div class="col-4 d-flex d-lg-none justify-content-end">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navigation"
             aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -81,7 +81,7 @@ import { router_names } from "@/router"
 .navigation_outer {
   position: sticky;
   top: 0;
-  z-index: 99;
+  z-index: 999;
 }
 
 .navigation {
@@ -89,7 +89,7 @@ import { router_names } from "@/router"
   justify-content: space-evenly;
   align-items: center;
   gap: 25px;
-  z-index: 999;
+  z-index: 9999;
 }
 
 .navigation a:not(.btn) {
@@ -299,6 +299,8 @@ a.nav_link {
     width: 100%;
     background-color: white;
     padding: 15px;
+    border: 1px solid color-mix(in srgb, var(--first-color) 25%, transparent);
+    box-shadow: 0px 0px 80px rgba(0, 0, 0, 0.15);
   }
 
   .navigation>* {

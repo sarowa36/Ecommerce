@@ -6,7 +6,7 @@ import Navbar from './components/layout/Navbar.vue';
 
 <template>
 <Navbar />
-  <RouterView />
+  <RouterView class="main" />
   <footer class="theme_bg_2">
     <div class="container">
       <div class="row footer_menu_row justify-content-between pt-5">
@@ -63,6 +63,9 @@ import Navbar from './components/layout/Navbar.vue';
 
 
 <style scoped>
+.main{
+  min-height: 50vh;
+}
 .footer_bottom_links>a {
   color: var(--white-color);
   font-family: var(--first-font);

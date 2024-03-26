@@ -98,6 +98,16 @@ namespace ServiceLayer.Services
                 _serviceErrorContainer.AddError("token", "There is no order with this token");
             }
         }
+        public async Task<Order> GetUserOrder(ApplicationUser user, int id)
+        {
+            var order = _orderReadRepository.Table.Include(x => x.OrderItems).FirstOrDefault(x =>user.Id==x.UserId && x.Id == id);
+            if (order == null)
+            {
+                _serviceErrorContainer.AddModelOnlyError("Order doesnt exist");
+                return default;
+            }
+            return order;
+        }
         public async Task<List<Order>> GetUserOrders(ApplicationUser user, int? index = null, int? count = null)
         {
             var query = _orderReadRepository.GetAll().Where(x => x.UserId == user.Id).Include(x => x.OrderItems).OrderByDescending(x => x.CreateDate).AsQueryable();
@@ -110,6 +120,16 @@ namespace ServiceLayer.Services
         public async Task<int> GetUserOrderCount(ApplicationUser user)
         {
             return _orderReadRepository.GetAll().Where(x => x.UserId == user.Id).Count();
+        }
+        public async Task<Order> GetOrder(int id)
+        {
+            var order = _orderReadRepository.Table.Include(x => x.OrderItems).FirstOrDefault(x=>x.Id==id);
+            if(order == null)
+            {
+                _serviceErrorContainer.AddModelOnlyError("Order doesnt exist");
+                return default;
+            }
+            return order;
         }
         public async Task<List<Order>> GetAllOrders(OrderStatus? orderStatus, int? index = null, int? count = null)
         {
@@ -128,7 +148,7 @@ namespace ServiceLayer.Services
         {
             if (_orderReadRepository.Exist(x => x.Id == orderId && x.OrderStatus == OrderStatus.WaitingApprove))
             {
-                var order = _orderReadRepository.GetAll().Include(x => x.OrderItems).FirstOrDefault(x => x.Id == orderId && x.OrderStatus == OrderStatus.WaitingApprove);
+                var order = _orderReadRepository.GetAll().Include(x => x.OrderItems).Include(x=>x.User).FirstOrDefault(x => x.Id == orderId && x.OrderStatus == OrderStatus.WaitingApprove);
                 order.OrderStatus = OrderStatus.ApprovedAndPreparing;
                 await _orderWriteRepository.UpdateAsync(order);
                 await _orderWriteRepository.SaveChangesAsync();

@@ -11,7 +11,7 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddMvcCore().AddNewtonsoftJson(x =>
+builder.Services.AddMvc().AddNewtonsoftJson(x =>
 {
     x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
     x.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();

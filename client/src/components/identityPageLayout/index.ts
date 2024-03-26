@@ -1,0 +1,1 @@
+export {default as IdentityPageLayout} from "./IdentityPageLayout.vue"

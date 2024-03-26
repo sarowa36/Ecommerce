@@ -1,79 +1,84 @@
 <script setup>
-import { RouterLink } from 'vue-router';
-import TextBox from '@/components/TextBox.vue';
-import axios from "axios"
-import { useLoginStore } from '@/stores/LoginStore';
-import {router,router_names} from '@/router';
+    import { RouterLink } from 'vue-router';
+    import TextBox from '@/components/TextBox.vue';
+    import axios from "axios"
+    import { useLoginStore } from '@/stores/LoginStore';
+    import { router, router_names } from '@/router';
+    import { IdentityPageLayout } from "@/components/identityPageLayout"
+    import { VProgressCircular } from 'vuetify/components';
 </script>
 <template>
-    <div class="container mt-5 mb-5 pt-1 pb-1">
-        <div class="row mt-5 mb-5 justify-content-center">
-            <div class="col-lg-6 p-0 identity_image_section">
-                <img src="@/assets/img/registerimage.svg" alt="">
+    <identity-page-layout img="/registerimage.svg">
+
+        <template v-if="registerIsSuccess">
+            <div class="font_roboto_mono">Kayıt işleminiz başarılı. Lütfen eposta adresinize gönderilen linke tıklayarak
+                hesabınızı onaylayınız.</div>
+        </template>
+        <template v-else>
+            <h4 class="col-12 text-center font_roboto_mono text_theme">Register</h4>
+            <span class="col-12 text-danger white-space-pre-line text-center">{{ errors.modelOnly }}</span>
+            <div class="col-12">
+                <TextBox placeholder="Name" v-model="model.name" :errorMessage="errors.name" />
             </div>
-            <div class="col-lg-6 p-0 theme_bg_3 position-relative">
-                <img class="identity_form_mobile_background" src="@/assets/img/registerimage.svg" alt="">
-                <div class="row identity_form_inner h-100 p-4 justify-content-center align-content-center gap-4">
-                    <h4 class="col-12 text-center font_roboto_mono text_theme">Register {{ loginStore.user.name }}</h4>
-                    <span class="col-12 text-danger white-space-pre-line text-center">{{ errors.modelOnly }}</span>
-                    <div class="col-12">
-                        <TextBox placeholder="Name" v-model="model.name" :errorMessage="errors.name" />
-                    </div>
-                    <div class="col-12">
-                        <TextBox placeholder="Surname" v-model="model.surname" :errorMessage="errors.surname" />
-                    </div>
-                    <div class="col-12">
-                        <TextBox placeholder="Email" v-model="model.email" :errorMessage="errors.email" />
-                    </div>
-                    <div class="col-12">
-                        <TextBox placeholder="Phone Number" v-model="model.phoneNumber"
-                            :errorMessage="errors.phoneNumber" />
-                    </div>
-                    <div class="col-12">
-                        <TextBox placeholder="Password" type="password" v-model="model.password" :errorMessage="errors.password" />
-                    </div>
-                    <div class="col-12">
-                        <TextBox placeholder="Password Confirm" type="password" v-model="model.passwordConfirm"
-                            :errorMessage="errors.passwordConfirm" />
-                    </div>
-                    <div class="col-md-7 identity_form_buttons">
-                        <button class="btn btn-outline-primary" @click="sendRequest">Register</button>
-                    </div>
-                    <div class="col-md-12 text-center">
-                        <RouterLink :to="{name:router_names.login}" class="fs-5 font_roboto_mono text_theme">Do You Have Account Already?</RouterLink>
-                    </div>
-                </div>
+            <div class="col-12">
+                <TextBox placeholder="Surname" v-model="model.surname" :errorMessage="errors.surname" />
             </div>
-        </div>
-    </div>
+            <div class="col-12">
+                <TextBox placeholder="Email" v-model="model.email" :errorMessage="errors.email" />
+            </div>
+            <div class="col-12">
+                <TextBox placeholder="Phone Number" v-model="model.phoneNumber" :errorMessage="errors.phoneNumber" />
+            </div>
+            <div class="col-12">
+                <TextBox placeholder="Password" type="password" v-model="model.password"
+                    :errorMessage="errors.password" />
+            </div>
+            <div class="col-12">
+                <TextBox placeholder="Password Confirm" type="password" v-model="model.passwordConfirm"
+                    :errorMessage="errors.passwordConfirm" />
+            </div>
+            <div class="col-md-7 p-2">
+                <button class="btn btn-outline-primary p-3 w-100" @click="sendRequest" :disabled="isLoading">
+                    <template v-if="isLoading">
+                        <VProgressCircular indeterminate />
+                    </template>
+                    <template v-else>Register</template></button>
+            </div>
+            <div class="col-md-12 text-center">
+                <RouterLink :to="{ name: router_names.login }" class="fs-5 font_roboto_mono text_theme">
+                    Do You Have Account Already?
+                </RouterLink>
+            </div>
+        </template>
+    </identity-page-layout>
 </template>
 <script>
-export default {
-    data() {
-        return {
-            model: {
-                name: "",
-                surname: "",
-                email: "",
-                phoneNumber: "",
-                password: "",
-                passwordConfirm: "",
-            },
-            errors: {},
-            loginStore: useLoginStore()
-        }
-    },
-    methods: {
-        async sendRequest() {
-            var response = (await axios.postForm("Identity/Register", this.model));
-            this.errors = {};
-             if (response.isSuccess) {
-                this.loginStore.loadUser();
-                router.push("/")
+    export default {
+        data() {
+            return {
+                model: {
+                    name: "",
+                    surname: "",
+                    email: "",
+                    phoneNumber: "",
+                    password: "",
+                    passwordConfirm: "",
+                },
+                errors: {},
+                registerIsSuccess: false,
+                loginStore: useLoginStore()
             }
-            else
-                this.errors = response.data;
+        },
+        methods: {
+            async sendRequest() {
+                var response = (await axios.postForm("Identity/Register", this.model));
+                this.errors = {};
+                if (response.isSuccess) {
+                    this.registerIsSuccess = true;
+                }
+                else
+                    this.errors = response.data;
+            }
         }
     }
-}
 </script>
