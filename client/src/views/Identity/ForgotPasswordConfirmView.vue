@@ -8,10 +8,10 @@
 <template>
     <IdentityPageLayout img="/registerimage.svg">
         <span class="col-12 text-danger white-space-pre-line text-center">{{ errors.modelOnly }}</span>
-        <div class="col-md-7 form-control">
+        <div class="col-md-7">
             <TextBox v-model="newPassword" placeholder="Yeni şifre" :error-message="errors.newPassword" />
         </div>
-        <div class="col-md-7 form-control">
+        <div class="col-md-7">
             <TextBox v-model="newPasswordConfirm" placeholder="Yeni şifre" :error-message="errors.newPasswordConfirm" />
         </div>
         <div class="col-md-7 p-2">

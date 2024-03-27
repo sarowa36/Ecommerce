@@ -43,7 +43,7 @@
         @foreach (var item in Model.OrderItems)
         {
             <tr>
-                <td><img src="@Context.GetOriginUrl()@item.ProductImage" class="order_item_image" /></td>
+                <td><img src="cid:product_@item.ProductId" class="order_item_image" /></td>
                 <td><a href="@Context.GetOriginUrl()/Product/@item.ProductId">@item.ProductName</a></td>
                 <td>
                     <div class="order_item_variation">

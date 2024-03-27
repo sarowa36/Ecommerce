@@ -39,7 +39,7 @@ namespace Ecommerce.Areas.Admin.Controllers
         {
             var order = _errorContainer.AddServiceResponse(() => _orderService.Accept(id));
             if (_errorContainer.IsSuccess)
-                _mailService.SendApprovedOrderMail(order.User.Email, order.Id);
+                _mailService.SendApprovedOrderMail(order.User.Email, order);
             return _errorContainer.IsSuccess ? Ok(_mapper.Map<UserOrderVM>(order)) : BadRequest(_errorContainer.Errors);
         }
         [HttpPost]
