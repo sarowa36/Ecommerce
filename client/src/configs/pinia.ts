@@ -10,16 +10,13 @@ export default async function piniaConfigSetter(app:App<Element>) {
     const pinia=createPinia();
 
     const category=useCategoryStore(pinia);
-    await category.load()
 
     const login=useLoginStore(pinia);
-    await login.loadUser()
 
     const cart=useCartStore(pinia);
-    await cart.loadCart();
 
     const cityAndDistricts=useCitiesAndDistrictsStore(pinia);
-    await cityAndDistricts.loadCitiesAndDistricts();
-    
+
+   await Promise.all([category.load(),login.loadUser(),cart.loadCart(),cityAndDistricts.loadCitiesAndDistricts()]/*.map(x=>x())/*/)
     app.use(pinia)
 }
