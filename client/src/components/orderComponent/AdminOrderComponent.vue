@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { OrderValue, OrderLayout,OrderStatus } from ".";
 import { VDialog, VCard, VBtn, VCardText, VCardActions, VSpacer } from "vuetify/components";
 import axios from "axios";
-
+import TextBox from "../TextBox.vue";
 defineProps({
     modelValue: {
         type: OrderValue,
@@ -24,7 +24,7 @@ defineProps({
         <template #actionButtons v-else-if="value.orderStatus == OrderStatus.ApprovedAndPreparing">
             <TextBox placeholder="Enter Cargo Code" v-model="cargoCode" :errorMessage="errors.cargoCode" />
             <button class="btn btn-success" @click="sendToCargo" :disabled="isLoading">
-                <FontAwesomeIcon icon="check" /> Accept
+                <FontAwesomeIcon icon="check" /> Kargo girişi
             </button>
             <button class="btn btn-danger" @click="ignoreOrder" :disabled="isLoading">
                 <FontAwesomeIcon icon="check" /> Cancel

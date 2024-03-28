@@ -12,7 +12,7 @@
             <TextBox v-model="newPassword" placeholder="Yeni şifre" :error-message="errors.newPassword" />
         </div>
         <div class="col-md-7">
-            <TextBox v-model="newPasswordConfirm" placeholder="Yeni şifre" :error-message="errors.newPasswordConfirm" />
+            <TextBox v-model="newPasswordConfirm" placeholder="Yeni şifre tekrar" :error-message="errors.newPasswordConfirm" />
         </div>
         <div class="col-md-7 p-2">
             <button class="btn btn-outline-primary p-3 w-100" @click="sendRequest" :disabled="isLoading">

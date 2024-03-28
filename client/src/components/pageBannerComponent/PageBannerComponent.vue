@@ -1,8 +1,8 @@
 <script setup>
-defineProps({
+const props=defineProps({
   img:{
     type:String,
-    default:"/src/assets/img/123.svg"
+    default:"/123.svg"
   },
   title:String,
   breadcrumbList:[]

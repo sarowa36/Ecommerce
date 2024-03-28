@@ -58,6 +58,7 @@ namespace ServiceLayer.Services
             smtp.EnableSsl = true;
             smtp.Host = _configuration["Mail:Host"];
             await smtp.SendMailAsync(mail);
+            images.ForEach(x=>x.Dispose());
             PictureRes.Dispose();
         }
         public async Task SendConfirmationMail(ApplicationUser user,string token)
@@ -73,7 +74,7 @@ namespace ServiceLayer.Services
                 order.OrderItems.GroupBy(x => x.ProductId).Select(x =>
                 {
                     var item = x.FirstOrDefault();
-                    var res = new LinkedResource(Path.Combine(_iwhe.WebRootPath, item.ProductImage),MimeTypes.GetMimeType( Path.GetExtension(item.ProductImage)));
+                    var res = new LinkedResource(Path.Join(_iwhe.WebRootPath, item.ProductImage),MimeTypes.GetMimeType( Path.GetExtension(item.ProductImage)));
                     res.ContentId = "product_" + item.ProductId;
                     res.ContentType.Name = item.ProductName+ Path.GetExtension(item.ProductImage);
                     return res;

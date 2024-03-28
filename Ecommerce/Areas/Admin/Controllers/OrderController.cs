@@ -38,8 +38,8 @@ namespace Ecommerce.Areas.Admin.Controllers
         public async Task<IActionResult> Accept(int id)
         {
             var order = _errorContainer.AddServiceResponse(() => _orderService.Accept(id));
-            if (_errorContainer.IsSuccess)
-                _mailService.SendApprovedOrderMail(order.User.Email, order);
+
+            _errorContainer.AddServiceResponse(()=>_mailService.SendApprovedOrderMail(order.User.Email, order));
             return _errorContainer.IsSuccess ? Ok(_mapper.Map<UserOrderVM>(order)) : BadRequest(_errorContainer.Errors);
         }
         [HttpPost]
