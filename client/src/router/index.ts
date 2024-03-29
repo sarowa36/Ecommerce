@@ -20,16 +20,20 @@ import CategoryUpdateCreateView from "@/views/Admin/Category/CategoryUpdateCreat
 import EmailConfirmView from '@/views/Identity/EmailConfirmView.vue'
 import ForgotPasswordRequestView from "@/views/Identity/ForgotPasswordRequestView.vue"
 import ForgotPasswordConfirmView from "@/views/Identity/ForgotPasswordConfirmView.vue"
+import PasswordChangeView from '@/views/Identity/PasswordChangeView.vue'
+import LogoutView from '@/views/Identity/LogoutView.vue'
 class _router_names {
   home:string= "home";
   shop: string = "shop";
   product: string = "product";
   contact: string = "contact";
   login: string = "login";
+  logout:string="logout";
   register: string = "register";
   email_confirm:string="email_confirm";
   forgot_password_request:string="forgot_password_request";
   forgot_password_confirm:string="forgot_password_confirm";
+  password_change:string="password_change";
   admin:string="admin";
   admin_product_create:string="admin_product_create";
   admin_product_update:string="admin_product_update";
@@ -81,6 +85,11 @@ const router = createRouter({
       component: LoginView
     },
     {
+      path: '/Logout',
+      name: router_names.logout,
+      component: LogoutView
+    },
+    {
       path: '/Register',
       name: router_names.register,
       component: RegisterView
@@ -99,6 +108,11 @@ const router = createRouter({
       path:"/ForgotPasswordConfirm/:userId/:token",
       name:router_names.forgot_password_confirm,
       component:ForgotPasswordConfirmView
+    },
+    {
+      path:"/PasswordChange",
+      name:router_names.password_change,
+      component:PasswordChangeView
     },
     {
       path: '/Admin',

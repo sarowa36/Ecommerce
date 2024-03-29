@@ -58,7 +58,8 @@ namespace ServiceLayer.Services
             smtp.EnableSsl = true;
             smtp.Host = _configuration["Mail:Host"];
             await smtp.SendMailAsync(mail);
-            images.ForEach(x=>x.Dispose());
+            if (images != null && images.Count > 0)
+                images.ForEach(x=>x.Dispose());
             PictureRes.Dispose();
         }
         public async Task SendConfirmationMail(ApplicationUser user,string token)

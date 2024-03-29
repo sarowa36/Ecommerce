@@ -17,6 +17,6 @@ export default async function piniaConfigSetter(app:App<Element>) {
 
     const cityAndDistricts=useCitiesAndDistrictsStore(pinia);
 
-   await Promise.all([category.load(),login.loadUser(),cart.loadCart(),cityAndDistricts.loadCitiesAndDistricts()]/*.map(x=>x())/*/)
+   await Promise.all([category.load(),login.loadUser(),cart.loadCart(),cityAndDistricts.loadCitiesAndDistricts()])
     app.use(pinia)
 }

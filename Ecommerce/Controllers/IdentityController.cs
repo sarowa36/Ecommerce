@@ -3,6 +3,7 @@ using BusinessLayer.Validations.IdentityController;
 using EntityLayer.DTOs.Controllers.IdentityController;
 using EntityLayer.Entities;
 using EntityLayer.ViewModels.IdentityController;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using ServiceLayer.Base;
@@ -99,6 +100,21 @@ namespace Ecommerce.Controllers
             var user = _serviceErrorContainer.AddServiceResponse(() => _identityService.GetUser(model.UserId));
             _serviceErrorContainer.AddServiceResponse(()=>_identityService.PasswordResetAsync(user,model.Token,model.NewPassword));
             return _serviceErrorContainer.IsSuccess ? Ok() : BadRequest(_serviceErrorContainer.Errors);
+        }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> PasswordChange(ChangePasswordDTO model)
+        {
+            _serviceErrorContainer.BindValidation(_serviceProvider.GetService<ChangePasswordDTOValidation>().Validate(model));
+            var user = _serviceErrorContainer.AddServiceResponse(() => _identityService.GetCurrentUserAsync());
+            _serviceErrorContainer.AddServiceResponse(() => _identityService.PasswordResetAsync(user,model));
+            return _serviceErrorContainer.IsSuccess ? Ok(new{redirect="/Login" }) : BadRequest(_serviceErrorContainer.Errors);
+        }
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            _serviceErrorContainer.AddServiceResponse(_identityService.Logout);
+            return Ok(new {redirect="/"});
         }
     }
 }

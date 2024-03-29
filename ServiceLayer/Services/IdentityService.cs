@@ -7,6 +7,8 @@ using ServiceLayer.Base.Services;
 using ToolsLayer.Encoder;
 using ToolsLayer.ErrorModel;
 using IdentityLayer;
+using EntityLayer.DTOs.Controllers.IdentityController;
+using Microsoft.AspNetCore.Authentication;
 
 namespace ServiceLayer.Services
 {
@@ -31,6 +33,7 @@ namespace ServiceLayer.Services
         {
             _serviceErrorContainer.BindError((await _userManager.CreateAsync(user, password)).ToErrorModel());
         }
+        #region EmailConfirm
         public async Task<string> EmailConfirmationTokenCreate(ApplicationUser user)
         {
             return await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -39,6 +42,7 @@ namespace ServiceLayer.Services
         {
             _serviceErrorContainer.BindError( (await _userManager.ConfirmEmailAsync(user, token)).ToErrorModel());
         }
+        #endregion
         #region Login
         public async Task LoginAsync(string usernameOrEmail, string password)
         {
@@ -65,6 +69,7 @@ namespace ServiceLayer.Services
             await _signInManager.SignInAsync(user, true);
         }
         #endregion
+        #region PasswordReset
         public async Task<string> CreatePasswordResetTokenAsync(ApplicationUser user)
         {
             return await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -77,7 +82,14 @@ namespace ServiceLayer.Services
             else
                 _serviceErrorContainer.BindError(result.ToErrorModel());
         }
-       
+       public async Task PasswordResetAsync(ApplicationUser user,ChangePasswordDTO model)
+        {
+            _serviceErrorContainer.BindError((await _userManager.ChangePasswordAsync(user,model.OldPassword, model.NewPassword)).ToErrorModel());
+            if(_serviceErrorContainer.IsSuccess)
+                await _userManager.UpdateSecurityStampAsync(user);
+        }
+        #endregion
+        #region GetUser
         public async Task<ApplicationUser> GetCurrentUserAsync()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -95,6 +107,11 @@ namespace ServiceLayer.Services
             if (user == null)
                 _serviceErrorContainer.AddError("ModelOnly", "User Not Found");
             return user;
+        }
+        #endregion
+        public async Task Logout()
+        {
+            await HttpContext.SignOutAsync();
         }
     }
 }

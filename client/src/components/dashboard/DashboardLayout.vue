@@ -15,7 +15,7 @@ import router, { router_names } from '@/router';
                 </div>
                 <div class="profile_basic_detail">
                     <img src="@/assets/img/e.webp" alt="">
-                    <h6><strong>Daniel Machivelli</strong></h6>
+                    <h6><strong>{{ loginStore.user.name }} {{ loginStore.user.surname }}</strong></h6>
                 </div>
                 <hr>
                 <ul class="dashboard_menu" v-if="loginStore.user.roles.includes(UserRole.Admin)">
@@ -73,20 +73,21 @@ export default {
                 new DashboardMenuItemValue({ icon: "question", link: "", text: "My Questions" }),
                 new DashboardMenuItemValue({ icon: "user-pen", link: "", text: "Profile Detail" }),
                 new DashboardMenuItemValue({ icon: "map", link:{name:router_names.user_address}, text: "Address" }),
-                new DashboardMenuItemValue({ icon: "lock", link: "", text: "Change Password" }),
+                new DashboardMenuItemValue({ icon: "lock", link: {name:router_names.password_change}, text: "Change Password" }),
                 new DashboardMenuItemValue({ isHr: true }),
                 new DashboardMenuItemValue({ icon: "heart", link: "", text: "My Favorites" }),
                 new DashboardMenuItemValue({ icon: "bookmark", link: "", text: "My Lists" }),
                 new DashboardMenuItemValue({ isHr: true }),
-                new DashboardMenuItemValue({ icon: "right-from-bracket", link: "", text: "Exit" }),
+                new DashboardMenuItemValue({ icon: "right-from-bracket", link: {name:router_names.logout}, text: "Exit" }),
             ],
             adminMenuItems: [
                 new DashboardMenuItemValue({icon:"box",text:"Products",link:{name:router_names.admin_product_list},childItems:[new DashboardMenuItemValue({icon:"plus",text:"Create",link:{name:router_names.admin_product_create}})]}),
                 new DashboardMenuItemValue({ icon: "box", link: {name:router_names.admin_order_list}, text: "Orders" }),
                 new DashboardMenuItemValue({ icon: "list", link: {name:router_names.admin_category_list}, text: "Categories",childItems:[new DashboardMenuItemValue({icon:"plus",text:"Create",link:{name:router_names.admin_category_create}})] }),
                 //new DashboardMenuItemValue({ icon: "rotate-left", link: {name:router_names.admin_order_refunds_list}, text: "Order Refunds" }),
+                new DashboardMenuItemValue({ icon: "lock", link: {name:router_names.password_change}, text: "Change Password" }),
                 new DashboardMenuItemValue({ isHr: true }),
-                new DashboardMenuItemValue({ icon: "right-from-bracket", link: "", text: "Exit" }),
+                new DashboardMenuItemValue({ icon: "right-from-bracket", link: {name:router_names.logout}, text: "Exit" }),
             ]
         }
     },

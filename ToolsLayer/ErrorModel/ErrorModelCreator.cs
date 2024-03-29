@@ -31,13 +31,13 @@ namespace ToolsLayer.ErrorModel
         {
             string str = "";
             if (!result.Succeeded)
-                str = "Email or Password is invalid";
-            else if (result.IsLockedOut)
-                str = "Your account is locked out";
-            else if (result.RequiresTwoFactor)
-                str = "Your account is require two factor enterance";
-            else if (result.IsNotAllowed)
-                str = "Your account is not allowed";
+                str += "Email or Password is invalid\n";
+            if (result.IsLockedOut)
+                str += "Your account is locked out\n";
+            if (result.RequiresTwoFactor)
+                str += "Your account is require two factor enterance\n";
+            if (result.IsNotAllowed)
+                str += "Your account is not allowed\n";
             if (string.IsNullOrWhiteSpace(str))
                 return new Dictionary<string, string>();
             return new Dictionary<string, string>() { { "ModelOnly", str } }; ;
