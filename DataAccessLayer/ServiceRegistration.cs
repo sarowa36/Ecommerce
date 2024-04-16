@@ -1,5 +1,7 @@
 ﻿using DataAccessLayer.Base.JsonData;
 using DataAccessLayer.Base.Repositories.CategoryRepositories;
+using DataAccessLayer.Base.Repositories.CustomerSaveItemRepositories;
+using DataAccessLayer.Base.Repositories.CustomerSaveRepositories;
 using DataAccessLayer.Base.Repositories.OrderItemRepositories;
 using DataAccessLayer.Base.Repositories.OrderRefundRepositories;
 using DataAccessLayer.Base.Repositories.OrderRepositories;
@@ -8,6 +10,8 @@ using DataAccessLayer.Base.Repositories.ShoppingCartItemRepositories;
 using DataAccessLayer.Base.Repositories.UserAddressRepositories;
 using DataAccessLayer.JsonData;
 using DataAccessLayer.Repositories.CategoryRepositories;
+using DataAccessLayer.Repositories.CustomerSaveItemRepositories;
+using DataAccessLayer.Repositories.CustomerSaveRepositories;
 using DataAccessLayer.Repositories.OrderItemRepositories;
 using DataAccessLayer.Repositories.OrderRefundRepositories;
 using DataAccessLayer.Repositories.OrderRepositories;
@@ -37,7 +41,11 @@ namespace DataAccessLayer
                 .AddScoped<IUserAddressWriteRepository, UserAddressWriteRepository>()
                 .AddScoped<ICitiesAndDistrictsValues,CitiesAndDistrictsValues>()
                 .AddScoped<ICategoryReadRepository,CategoryReadRepository>()
-                .AddScoped<ICategoryWriteRepository,CategoryWriteRepository>();
+                .AddScoped<ICategoryWriteRepository,CategoryWriteRepository>()
+                .AddScoped<ICustomerSaveItemReadRepository,CustomerSaveItemReadRepository>()
+                .AddScoped<ICustomerSaveItemWriteRepository,CustomerSaveItemWriteRepository>()
+                .AddScoped<ICustomerSaveReadRepository,CustomerSaveReadRepository>()
+                .AddScoped<ICustomerSaveWriteRepository,CustomerSaveWriteRepository>();
         }
     }
 }

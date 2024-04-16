@@ -44,5 +44,7 @@ namespace DataAccessLayer
         public DbSet<OrderRefundM2MOrderItem> OrderRefundM2MOrderItems { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<CustomerSave> CustomerSaves { get; set; }
+        public DbSet<CustomerSaveItem> CustomerSaveItems { get; set; }
     }
 }

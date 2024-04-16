@@ -40,7 +40,7 @@ namespace IdentityLayer
                 .AddScoped<IMySignInManager<ApplicationUser>, MySignInManager<ApplicationUser>>()
                 .AddIdentityCore<ApplicationUser>(option =>
                 {
-                    option.SignIn.RequireConfirmedEmail = true;
+                    //option.SignIn.RequireConfirmedEmail = true;
                 })
                 .AddRoles<IdentityRole>()
                 .AddUserManager<MyUserManager<ApplicationUser>>()
