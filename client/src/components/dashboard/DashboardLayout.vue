@@ -76,7 +76,7 @@ export default {
                 new DashboardMenuItemValue({ icon: "lock", link: {name:router_names.password_change}, text: "Change Password" }),
                 new DashboardMenuItemValue({ isHr: true }),
                 new DashboardMenuItemValue({ icon: "heart", link: "", text: "My Favorites" }),
-                new DashboardMenuItemValue({ icon: "bookmark", link: "", text: "My Lists" }),
+                new DashboardMenuItemValue({ icon: "bookmark", link: {name:router_names.user_savelist}, text: "My Lists" }),
                 new DashboardMenuItemValue({ isHr: true }),
                 new DashboardMenuItemValue({ icon: "right-from-bracket", link: {name:router_names.logout}, text: "Exit" }),
             ],

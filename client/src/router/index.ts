@@ -22,6 +22,8 @@ import ForgotPasswordRequestView from "@/views/Identity/ForgotPasswordRequestVie
 import ForgotPasswordConfirmView from "@/views/Identity/ForgotPasswordConfirmView.vue"
 import PasswordChangeView from '@/views/Identity/PasswordChangeView.vue'
 import LogoutView from '@/views/Identity/LogoutView.vue'
+import SaveListView from '@/views/User/SaveListView.vue'
+import SaveView from "@/views/User/SaveView.vue"
 class _router_names {
   home:string= "home";
   shop: string = "shop";
@@ -49,6 +51,8 @@ class _router_names {
   user_cart:string="user_cart";
   user_address:string="user_address";
   user_order_refunds:string="user_order_refunds";
+  user_savelist:string="user_savelist";
+  user_save:string="user_save";
 }
 const router_names = new _router_names();
 
@@ -220,6 +224,16 @@ const router = createRouter({
           path: 'OrderRefunds',
           name: router_names.user_order_refunds,
           component: OrderRefundsView
+        },
+        {
+          path: 'SaveList',
+          name: router_names.user_savelist,
+          component: SaveListView
+        },
+        {
+          path: 'Save',
+          name: router_names.user_save,
+          component: SaveView
         },
       ]
     },

@@ -64,9 +64,6 @@ import { router_names } from "@/router";
                 </div>
                 <hr>
                 <div class="product_buttons_section">
-                    <button class="btn">
-                        <FontAwesomeIcon :icon="['far', 'heart']" /> Like
-                    </button>
                     <div class="save_btn_outer" v-on-click-outside-handler="() => { showListDropdown = false; }">
                         <button :class="'btn show_list_dropdown' + (showListDropdown ? ' active' : '')"
                             @click="toggleShowListDropdown">
