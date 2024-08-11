@@ -1,6 +1,8 @@
 <script setup>
 import { DashboardLayout } from "@/components/dashboard/"
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
+import { VDialog, VCard, VCardText, VSpacer, VCardActions, VBtn } from "vuetify/components";
+import TextBox from "@/components/TextBox.vue";
 </script>
 <template>
     <DashboardLayout>
@@ -10,9 +12,9 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
                 <div class="font-size-s">5 product</div>
             </div>
             <div class="col-md-6 savelist_actions">
-                <button class="btn btn-outline-primary" click="CreateAddress">Edit List <FontAwesomeIcon class="ms-1"
+                <button class="btn btn-outline-primary" @click="showEditListDialog=true">Edit List <FontAwesomeIcon class="ms-1"
                         icon="pen"></FontAwesomeIcon></button>
-                <button class="btn btn-outline-danger" click="CreateAddress">Delete List <FontAwesomeIcon class="ms-1"
+                <button class="btn btn-outline-danger" @click="showDeleteListDialog=true">Delete List <FontAwesomeIcon class="ms-1"
                         icon="trash"></FontAwesomeIcon></button>
             </div>
             <hr class="mt-3 mb-4">
@@ -32,10 +34,45 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome"
                 <div class="save_product_name font-lg">Product</div>
                 <div class="save_product_price">17.99$</div>
                 <div class="save_product_actions"> <button class="btn btn-outline-primary">Go Product</button><button
-                        class="btn btn-danger">Delete Product</button></div>
+                        class="btn btn-danger" @click="showDeleteItemDialog=true">Delete Product</button></div>
             </div>
         </div>
     </DashboardLayout>
+    <v-dialog :modelValue="showEditListDialog" width="500" @update:modelValue="(val) => showEditListDialog = val">
+        <v-card title="Edit list">
+            <VSpacer></VSpacer>
+            <text-box class="me-3 ms-3" placeholder="List Name" v-model="editListForm.name" :error-message="errors.creatLeistForm?.name"></text-box>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text="Cancel" @click="() => showEditListDialog = false"></v-btn>
+                <v-btn text="Edit" color="red" @click="editList"></v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+    <v-dialog :modelValue="showDeleteListDialog" width="500" @update:modelValue="(val) => showDeleteListDialog = val">
+        <v-card title="Cancel">
+            <v-card-text>
+               This <u>list</u> will be deleted forever. Are you sure for Delete?
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text="No" @click="() => showDeleteListDialog = false"></v-btn>
+                <v-btn text="Yes" color="red" @click="deleteSaveList"></v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
+    <v-dialog :modelValue="showDeleteItemDialog" width="500" @update:modelValue="(val) => showDeleteItemDialog = val">
+        <v-card title="Cancel">
+            <v-card-text>
+                This <u>item</u> will be deleted forever. Are you sure for Delete?
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text="No" @click="() => showDeleteItemDialog = false"></v-btn>
+                <v-btn text="Yes" color="red" @click="deleteSaveList"></v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 <style scoped>
 .save_product {
@@ -98,5 +135,22 @@ grid-column: 1/span 2;
 </style>
 <script>
 export default {
+    data(){
+        return{
+            showEditListDialog:false,
+            showDeleteListDialog:false,
+            showDeleteItemDialog:false,
+            editListForm:{},
+            errors:{},
+        }
+    },
+    methods: {
+        editList() {
+            this.showEditListDialog=false;
+        },
+        deleteSaveList(){
+            this.showDeleteListDialog=false;
+        }
+    }
 }
 </script>
